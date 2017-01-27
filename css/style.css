@@ -1,0 +1,75 @@
+
+* { outline: none !important; }
+
+body{margin:40px;}
+
+.delete_streaming {
+  background-color: "red" !important;
+}
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 12px;
+  line-height: 1.428571429;
+  border-radius: 15px;
+}
+.btn-circle.btn-lg {
+  width: 50px;
+  height: 50px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 25px;
+}
+.btn-circle.btn-xl {
+  width: 70px;
+  height: 70px;
+  padding: 10px 16px;
+  font-size: 24px;
+  line-height: 1.33;
+  border-radius: 35px;
+}
+
+/*
+https://fr.wikipedia.org/wiki/Mod%C3%A8le:M%C3%A9tro_de_Paris/couleur_fond
+*
+1 	ffcd00
+5 	ff7e2e
+7 	fa9aba
+10 	c9910d
+9 	b6bd00
+8 	e19bdf
+4 	cf009e
+3 	837902
+11 	704b1c
+b
+c
+3bis
+13 	6ec4e8
+2s
+6
+7 bis
+7bis 	6eca97
+ancienne 14
+14 	62259d
+a
+12 	007852
+2
+2n 	003ca6
+*/
+
+
+
+
+/* 
+
+RATP :
+
+http://www.clementoriol.com/metrosdna/#telecharger
+
+Bus :
+http://wiki.openstreetmap.org/wiki/WikiProject_France/Bus_RATP
+*/

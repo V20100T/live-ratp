@@ -1,0 +1,117 @@
+.rer_line,
+.tramways_line,
+.tramway_line{
+  line-height: 0px !important;
+  background-color: #ffffff;
+  font-weight: 900 !important;
+  border-style: solid !important;
+  border-width: 4px !important;
+}
+
+.tramways_line:active,
+.tramways_line:focus,
+.tramways_line:hover {
+  background-color: #00000 !important;
+}
+
+.tramway_line3a,
+ .tramways_line3a,
+.tramway_line3A,
+ .tramways_line3A {
+  border-color: #F58A49 !important;
+  color: #F58A49 !important;
+}
+
+.tramway_line1,
+ .tramways_line1 {
+  color: #0064AD !important;
+  border-color: #0064AD !important;
+}
+
+.tramway_line2,
+ .tramways_line2 {
+  color: #BA3187 !important;
+  border-color: #BA3187 !important;
+}
+
+.tramway_line3b,
+ .tramways_line3b,
+.tramway_line3B,
+ .tramways_line3B {
+  color: #00A962 !important;
+  border-color: #00A962 !important;
+}
+
+.tramway_line4,
+ .tramways_line4 {
+  color: #FBC525 !important;
+  border-color: #FBC525 !important;
+}
+
+.tramway_line5,
+ .tramways_line5 {
+  color: #662C91 !important;
+  border-color: #662C91 !important;
+}
+
+.tramway_line6,
+ .tramways_line6 {
+  color: #ED5839 !important;
+  border-color: #ED5839 !important;
+}
+
+.tramway_line7,
+ .tramways_line7 {
+  color: #B98B59 !important;
+  border-color: #B98B59 !important;
+}
+
+.tramway_line8,
+ .tramways_line8 {
+  color: #B1A245 !important;
+  border-color: #B1A245 !important;
+}
+
+.tramway_line9,
+ .tramways_line9 {
+  color: #1CAFC9 !important;
+  border-color: #1CAFC9 !important;
+}
+
+.tramway_line10,
+ .tramways_line10 {
+  color: #C4D887 !important;
+  border-color: #C4D887 !important;
+}
+
+
+/***************
+*
+*  RER
+*
+***************/
+
+.rer_lineA {
+  color: #E9002D !important;
+  border-color: #E9002D !important;
+}
+
+.rer_lineB {
+  color: #468FCC !important;
+  border-color: #468FCC !important;
+}
+
+.rer_lineC {
+  color: #F4D416 !important;
+  border-color: #F4D416 !important;
+}
+
+.rer_lineD {
+  color: #39A641 !important;
+  border-color: #39A641 !important;
+}
+
+.rer_lineE {
+  color: #D582B1 !important;
+  border-color: #D582B1 !important;
+}
