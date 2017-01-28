@@ -18,6 +18,10 @@
   line-height: 1.428571429;
   border-radius: 15px; 
 }
+/* Station */
+.metros_line_station {
+  margin: 5px;
+}
 
 .metros_line1,
 .metro_line1 {

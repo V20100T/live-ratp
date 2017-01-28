@@ -35,9 +35,32 @@ function jq( myid ) {
 
 var $ = jQuery;
 
+
+
+/**********************************************
+ * 
+ * STREAM TIMER
+ * 
+ * *******************************************/
+
+
+var stream_ratp_timer = null;
+var stream_ratp_time = 35*1000;
+function startStreamRatp() {
+  ratpStreamRefreshAll();
+  stream_ratp_timer = setInterval(function(){ ratpStreamRefreshAll() }, stream_ratp_time);
+
+}
+
+function stopStreamRatp() {
+    clearInterval(stream_ratp_timer);
+}
+
+
+
 /************************************************
  * 
- * HTML cleanup
+ * HTML FROM cleanup
  * 
  * ***********************************************/
 function clearLines() {
@@ -65,7 +88,7 @@ function clearDestinations() {
 
 /************************************************
  * 
- * ADD STATION
+ * HTML ADD
  * 
  * ***********************************************/
 function addStation(transport, line, st, destinations = null) {
@@ -74,27 +97,6 @@ function addStation(transport, line, st, destinations = null) {
   console.log(JSON.stringify(destinations));
 
   clearDestinations();
-
-
-
-
-  var css_types = {
-    metros: 'metro',
-    buss: 'bus',
-    rers: 'rer',
-    tramways: 'tram'
-
-  };
-  var css_line = '';
-  var css_line = line;
-  // var css_line = css_line;
-
-
-
-  var css_type = transport;
-  if (css_types[transport]) {
-    var css_type = css_types[transport];
-  }
 
 
   $.map(destinations, function(dest, key) {
@@ -111,14 +113,14 @@ function addStation(transport, line, st, destinations = null) {
   });
 
 
-var station_class = transport +'_line '+transport+'_line'+line;
+var station_class = transport +'_line_station '+transport+'_line'+line;
 
 
   $("#list_stations").append(
 
     "<button type='button' id='station_" +
     (st.id) +
-    "' class='select_station btn "+station_class+" btn-default station_" + st.id +
+    "' class='select_station btn "+station_class+"  station_" + st.id +
     "' data-transport='" + transport +
     "' data-line='" + (line) +
     "' data-station='" + st.slug +
@@ -128,13 +130,7 @@ var station_class = transport +'_line '+transport+'_line'+line;
 
 }
 
-
-/************************************************
- * 
- * ADD LINE
- * 
- * ***********************************************/
-function addLine(transport = "metros", line) {
+function addLine(transport , line) {
 
 
  $("#list_lines").append(
@@ -470,7 +466,6 @@ function getAPIStations(transport = "metros", line = "1") {
 } //fin getMetrosLignes
 
 
-
 /************************************************
  * 
  * JQUERY UI
@@ -487,16 +482,6 @@ $(document).ready(function() {
 
 
 });
-var stream_ratp_timer = null;
-function startStreamRatp() {
-  ratpStreamRefreshAll();
-  stream_ratp_timer = setInterval(function(){ ratpStreamRefreshAll() }, 35*1000);
-
-}
-
-function stopStreamRatp() {
-    clearInterval(stream_ratp_timer);
-}
 
 
 //Select transport

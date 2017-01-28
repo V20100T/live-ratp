@@ -5,7 +5,10 @@
   padding: 1px;
 }
 
-
+/* Station */
+.bus_line_station {
+  margin: 5px;
+}
 
 
 .bus_line20 {
