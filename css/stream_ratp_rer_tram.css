@@ -1,6 +1,28 @@
+/* en XL */
+.get_line.rers_line,
+.get_line.tramways_line{
+  width: 70px;
+  height: 70px;
+  padding: 10px 16px;
+  font-size: 24px;
+  line-height: 1.33;
+  border-radius: 35px;
+  font-weight: bold;
+}
+
 .rer_line,
+.rers_line,
 .tramways_line,
 .tramway_line{
+ 
+ width: 30px;
+  height: 30px;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 12px;
+  line-height: 1.428571429;
+  border-radius: 15px;
+ 
   line-height: 0px !important;
   background-color: #ffffff;
   font-weight: 900 !important;
@@ -91,12 +113,14 @@
 *
 ***************/
 
+.rers_lineA,
 .rer_lineA {
   color: #E9002D !important;
   border-color: #E9002D !important;
 }
 
-.rer_lineB {
+.rers_lineB,
+.rer_lineB{
   color: #468FCC !important;
   border-color: #468FCC !important;
 }

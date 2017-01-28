@@ -102,7 +102,7 @@ function addStation(transport, line, st, destinations = null) {
     $("#list_destinations").append(
       "<button type='button' id='destinations_" +
       (dest.id_destination) +
-      "' class='select_dest btn btn-default btn-xl destinations-" + dest.slug +
+      "' class='select_dest btn btn-default  destinations-" + dest.slug +
       "' data-dest='" + dest.slug +
       "' >" +
       dest.destination +
@@ -111,12 +111,14 @@ function addStation(transport, line, st, destinations = null) {
   });
 
 
+var station_class = transport +'_line '+transport+'_line'+line;
+
 
   $("#list_stations").append(
 
     "<button type='button' id='station_" +
     (st.id) +
-    "' class='select_station btn btn-default btn-xl station_" + st.id +
+    "' class='select_station btn "+station_class+" btn-default station_" + st.id +
     "' data-transport='" + transport +
     "' data-line='" + (line) +
     "' data-station='" + st.slug +
@@ -135,183 +137,16 @@ function addStation(transport, line, st, destinations = null) {
 function addLine(transport = "metros", line) {
 
 
-
-
-  //console.log('addLine transport => '+transport);
-
-  if (transport == "metros") {
-    addMetrosLine(line);
-  }
-
-  if (transport == "bus") {
-
-    addBusLine(line);
-  }
-
-  if (transport == "tramways") {
-    addTramwaysLine(line);
-  }
-
-  if (transport == "rers") {
-    addRerLine(line);
-  }
-
-  if (transport == "noctiliens") {
-    addNoctilienLine(line);
-  }
-
-}
-
-function addMetrosLine(line) {
-
-  var transport = 'metros';
-  var css_types = {
-    metros: 'metro',
-    buss: 'bus',
-    rers: 'rer',
-    tramways: 'tram'
-
-  };
-  var css_line = line.toLowerCase();
-  var css_type = transport;
-  if (css_types[transport]) {
-    var css_type = css_types[transport];
-  }
-
-
-  $("#list_lines").append(
+ $("#list_lines").append(
     "<button type='button' id='line_" + line +
-    "' class=' get_line btn btn-default btn-circle btn-xl " + transport + "_line" + line +
+    "' class=' get_line btn btn-default " + transport + "_line " + transport + "_line" + line +
     "' data-transport='" + transport +
     "' data-line='" + line +
     "' >" +
     line +
     "</button>");
 
-
 }
-
-function addTramwaysLine(line) {
-
-  var transport = 'tramways';
-  var css_types = {
-    metros: 'metro',
-    buss: 'bus',
-    rers: 'rer',
-    tramways: 'tram',
-    noctiliens: 'noctilien'
-
-  };
-  var css_line = line.toLowerCase();
-  var css_type = transport;
-  if (css_types[transport]) {
-    css_type = css_types[transport];
-  }
-
-  $("#list_lines").append("<button type='button' id='line_" +
-    line +
-    "'class='get_line btn btn-default btn-circle btn-xl tramways_line tramways_line" +
-    line + "'  data-transport='" + transport + "' data-line='" + line +
-    "'>" + line +
-    "</button>");
-
-
-}
-
-function addBusLine(line) {
-
-  var transport = 'bus';
-
-
-  var css_types = {
-    metros: 'metro',
-    buss: 'bus',
-    rers: 'rer',
-    tramways: 'tram'
-
-  };
-  var css_line = line.toLowerCase();
-  var css_type = transport;
-  if (css_types[transport]) {
-    var css_type = css_types[transport];
-  }
-
-/*
-
-  $("#list_lines").append(
-
-    "<button type='button' id='line_" + line +
-    "' class='get_line btn btn-default  btn-xl bus_line bus_line" + line +
-    "' data-transport='" + transport +
-    "' data-line='" + line +
-    "' >" + line +
-    "</button>");
-
-*/
-
-  $("#list_lines").append(
-
-    "<span type='button' id='line_" + line +
-    "' class='get_line btn btn-default  btn-xl bus_line bus_line" + line +
-    "' data-transport='" + transport +
-    "' data-line='" + line +
-    "' >" + line +
-    "</span>");
-
-
-}
-
-function addRerLine(line) {
-
-  var transport = 'rers';
-  var css_types = {
-    metros: 'metro',
-    buss: 'bus',
-    rers: 'rer',
-    tramways: 'tram',
-    noctiliens: 'noctilien'
-
-  };
-  var css_line = line;
-  var css_type = transport;
-  if (css_types[transport]) {
-    css_type = css_types[transport];
-  }
-
-
-  $("#list_lines").append("<button type='button' id='line_" +
-    line +
-    "' class='get_line btn btn-default   btn-circle btn-xl rer_line rer_line" + line +
-    "' data-transport='" + transport +
-    "' data-line='" + line +
-    "' >" + line +
-    "</button>");
-
-
-}
-
-function addNoctilienLine(line) {
-
-  var transport = 'noctiliens';
-
-
-
-
-  $("#list_lines").append(
-
-    
-    "<button type='button' id='line_" +
-    line +
-    "' class='get_line btn btn-default btn-xl "+transport+"_line "+transport+"_line" + line +
-    "' data-transport='" + transport +
-    "' data-line='" + line +
-    "' >" + line +
-    "</button>"
-  );
-
-
-}
-
 
 
 function refreshStreamRatpDatas(rep){
@@ -464,7 +299,7 @@ console.log('ADDDDDDD D stream to existing station');
     '<div class="panel-heading">' +
     '<h3 class="panel-title">' +
     '<button class="delete_streaming pull-right btn-circle" alt="delete streaming" data-ratp_stream_slug="'+stream_slug+'" > X </button>' +
-    '<button id="" class="btn btn-default btn-circle ' + rep.informations.type + '_line ' + rep.informations.type + '_line' + rep.informations.line + ' " type="button" data-transport="' + rep.informations.type + '" data-line="' + rep.informations.line + '">' +
+    '<button id="" class="btn btn-default ' + rep.informations.type + '_line ' + rep.informations.type + '_line' + rep.informations.line + ' " type="button" data-transport="' + rep.informations.type + '" data-line="' + rep.informations.line + '">' +
     rep.informations.line +
     '</button>' +
     rep.informations.station.name +
