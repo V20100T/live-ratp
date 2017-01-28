@@ -1,3 +1,13 @@
+/***************************
+ * 
+ * Config
+ * 
+ * 
+ * *****************************/
+
+var stream_ratp_api_url = 'https://api-ratp.pierre-grimaud.fr/v2/';
+var stream_ratp_time = 1000 * 35;
+
 /************************************************
  * 
  * JS TOOLS
@@ -45,7 +55,6 @@ var $ = jQuery;
 
 
 var stream_ratp_timer = null;
-var stream_ratp_time = 35*1000;
 function startStreamRatp() {
   ratpStreamRefreshAll();
   stream_ratp_timer = setInterval(function(){ ratpStreamRefreshAll() }, stream_ratp_time);
@@ -93,18 +102,16 @@ function clearDestinations() {
  * ***********************************************/
 function addStation(transport, line, st, destinations = null) {
 
-
   console.log(JSON.stringify(destinations));
 
   clearDestinations();
-
 
   $.map(destinations, function(dest, key) {
 
     $("#list_destinations").append(
       "<button type='button' id='destinations_" +
       (dest.id_destination) +
-      "' class='select_dest btn btn-default  destinations-" + dest.slug +
+      "' class='select_dest btn btn-warning "+transport+"_dest destinations-" + dest.slug +
       "' data-dest='" + dest.slug +
       "' >" +
       dest.destination +
@@ -112,9 +119,7 @@ function addStation(transport, line, st, destinations = null) {
 
   });
 
-
-var station_class = transport +'_line_station '+transport+'_line'+line;
-
+  var station_class = transport +'_line_station '+transport+'_line'+line;
 
   $("#list_stations").append(
 
@@ -364,14 +369,14 @@ function refreshAPIStream(transport, line, station, dest) {
   //console.log('getAPIStream  => ' + JSON.stringify(stream_ratp) );
 
   console.log('refreshAPIStream  => ' + JSON.stringify(line) + JSON.stringify(dest));
-  var url = "https://api-ratp.pierre-grimaud.fr/v2/" + transport + "/" + line + "/stations/" + station + "?destination=" + dest;
+  var url = stream_ratp_api_url + transport + "/" + line + "/stations/" + station + "?destination=" + dest;
   
   console.log('refreshAPIStream url => ' + url);
   
   var rep = null;
 
   $.getJSON(url, function(data) {
-    console.log('refreshAPIStream data <<<>>>>> ' + JSON.stringify(data));
+    //console.log('refreshAPIStream data <<<>>>>> ' + JSON.stringify(data));
 
     refreshStreamRatpDatas(data.response);
   });
@@ -386,7 +391,7 @@ function getAPIStream(transport, line, station, dest) {
 
   //https://api-ratp.pierre-grimaud.fr/v2/metros/8/stations/daumesnil?destination=balard
   //var url = "https://api-ratp.pierre-grimaud.fr/v2/"+stream_ratp.transport+"/" + stream_ratp.line + "/stations/"+stream_ratp.station + "?destination=" + stream_ratp.dest;
-  var url = "https://api-ratp.pierre-grimaud.fr/v2/" + transport + "/" + line + "/stations/" + station + "?destination=" + dest;
+  var url = stream_ratp_api_url + transport + "/" + line + "/stations/" + station + "?destination=" + dest;
 
   console.log('url => ' + url);
   
@@ -408,7 +413,7 @@ function getAPILignes(transport = "metros") {
 
   console.log('getAPILignes');
 
-  $.getJSON("https://api-ratp.pierre-grimaud.fr/v2/" + transport + "/",
+  $.getJSON(stream_ratp_api_url + transport + "/",
     function(data) {
       //console.log('data <<<>>>>> ' + JSON.stringify(data
 
@@ -437,7 +442,7 @@ function getAPIStations(transport = "metros", line = "1") {
 
   console.log('getAPIStations');
 
-  $.getJSON("https://api-ratp.pierre-grimaud.fr/v2/" + transport + "/" + line,
+  $.getJSON(stream_ratp_api_url + transport + "/" + line,
     function(data) {
       //console.log('data <<<>>>>> ' + JSON.stringify(data
 
