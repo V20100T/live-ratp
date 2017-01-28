@@ -69,7 +69,7 @@ function stopStreamRatp() {
 
 /************************************************
  * 
- * HTML FROM cleanup
+ * HTML FORM cleanup
  * 
  * ***********************************************/
 function clearLines() {
@@ -299,7 +299,7 @@ console.log('ADDDDDDD D stream to existing station');
     ' <div class="panel panel-default" >' +
     '<div class="panel-heading">' +
     '<h3 class="panel-title">' +
-    '<button class="delete_streaming pull-right btn-circle" alt="delete streaming" data-ratp_stream_slug="'+stream_slug+'" > X </button>' +
+    '<a class="close delete_streaming " href="#" aria-label="Supprimer de la mémoire" title="Supprimer de la mémoire">×</a>' +
     '<button id="" class="btn btn-default ' + rep.informations.type + '_line ' + rep.informations.type + '_line' + rep.informations.line + ' " type="button" data-transport="' + rep.informations.type + '" data-line="' + rep.informations.line + '">' +
     rep.informations.line +
     '</button>' +
@@ -332,16 +332,10 @@ console.log('ADDDDDDD D stream to existing station');
  
     console.log('#stream_slug obj =======> ' +JSON.stringify(obj));
     
-  
-  $.data($('#'+stream_slug), 'stream_ratp_datas', 'superman');
-    
-    $("body").bind("DOMNodeInserted", function() {
-         $(this).find('#'+stream_slug).addClass('my_own_class');
-    });
+ 
 
     $('#'+stream_slug).attr('data-transport', obj.transport);
-    $('#'+stream_slug).addClass('batman !!');
-    $('#'+stream_slug).addClass('batman !!');
+
     
     console.log('#stream_slug 1 =======> ' + JSON.stringify( $.data($('#'+stream_slug), 'stream_ratp_datas')));
     console.log('#stream_slug 2 =======> ' +  $.data($('#btn_'+stream_slug), 'stream_ratp_datas'));
