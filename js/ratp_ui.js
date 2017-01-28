@@ -323,6 +323,8 @@ console.log('ADDDDDDD D stream to existing station');
   
   }
   
+    /*
+    
   var obj = {
     transport : rep.informations.type,
     line: rep.informations.line,
@@ -336,14 +338,14 @@ console.log('ADDDDDDD D stream to existing station');
 
     $('#'+stream_slug).attr('data-transport', obj.transport);
 
-    
+  
     console.log('#stream_slug 1 =======> ' + JSON.stringify( $.data($('#'+stream_slug), 'stream_ratp_datas')));
     console.log('#stream_slug 2 =======> ' +  $.data($('#btn_'+stream_slug), 'stream_ratp_datas'));
      console.log('#stream_slug 1 =======> ' + JSON.stringify( $.data($('#btn_'+stream_slug), 'stream_ratp_datas')));
     console.log('#stream_slug 2 =======> ' +  $.data($('#'+stream_slug), 'stream_ratp_datas'));
     
     console.log('#stream_slug 3 =======> ' + $('#'+stream_slug).data('stream_ratp_datas'));
-    
+    */
   
 
 
@@ -360,15 +362,12 @@ console.log('ADDDDDDD D stream to existing station');
 
 
 function refreshAPIStream(transport, line, station, dest) {
-  //console.log('getAPIStream  => ' + JSON.stringify(stream_ratp) );
 
   console.log('refreshAPIStream  => ' + JSON.stringify(line) + JSON.stringify(dest));
   var url = stream_ratp_api_url + transport + "/" + line + "/stations/" + station + "?destination=" + dest;
   
   console.log('refreshAPIStream url => ' + url);
   
-  var rep = null;
-
   $.getJSON(url, function(data) {
     //console.log('refreshAPIStream data <<<>>>>> ' + JSON.stringify(data));
 
@@ -379,25 +378,16 @@ function refreshAPIStream(transport, line, station, dest) {
 
 
 function getAPIStream(transport, line, station, dest) {
-  //console.log('getAPIStream  => ' + JSON.stringify(stream_ratp) );
 
   console.log('getAPIStream  => ' + JSON.stringify(line) + JSON.stringify(dest));
 
   //https://api-ratp.pierre-grimaud.fr/v2/metros/8/stations/daumesnil?destination=balard
-  //var url = "https://api-ratp.pierre-grimaud.fr/v2/"+stream_ratp.transport+"/" + stream_ratp.line + "/stations/"+stream_ratp.station + "?destination=" + stream_ratp.dest;
   var url = stream_ratp_api_url + transport + "/" + line + "/stations/" + station + "?destination=" + dest;
 
   console.log('url => ' + url);
   
   $.getJSON(url, function(data) {
-    console.log('data <<<>>>>> ' + JSON.stringify(data));
-
-    var list_items = data.response.schedules;
-
-
-    console.log('full uri  list_items <<<>>>>> ' + JSON.stringify(
-      list_items));
-
+    
     buildStreamRatp(data.response);
     
   });
@@ -405,40 +395,28 @@ function getAPIStream(transport, line, station, dest) {
 
 function getAPILignes(transport = "metros") {
 
-  console.log('getAPILignes');
-
   $.getJSON(stream_ratp_api_url + transport + "/",
     function(data) {
-      //console.log('data <<<>>>>> ' + JSON.stringify(data
 
       var list_items = data.response[transport];
 
-      /*
-      console.log('full uri  list_items <<<>>>>> ' + JSON.stringify(
-        list_items));
-      */
-
-      //Dom clear lines    
       clearLines();
 
       $.map(list_items, function(line, key) {
 
-        //console.log('LINE <<<>>>>> ' + JSON.stringify(line.line));
-        //addMetrosLine(line.line);
-
         addLine(transport, line.line);
 
-
       });
+      
     });
-} //fin getMetrosLignes
-function getAPIStations(transport = "metros", line = "1") {
+} 
+
+function getAPIStations(transport, line) {
 
   console.log('getAPIStations');
 
   $.getJSON(stream_ratp_api_url + transport + "/" + line,
     function(data) {
-      //console.log('data <<<>>>>> ' + JSON.stringify(data
 
       var list_items = data.response.stations;
       var destinations = data.response.destinations;
@@ -446,23 +424,15 @@ function getAPIStations(transport = "metros", line = "1") {
       console.log('full uri  list_items <<<>>>>> ' + JSON.stringify(
         list_items));
 
-
-      //Dom clear lines    
       clearStations();
 
       $.map(list_items, function(station, key) {
 
-        //console.log('LINE <<<>>>>> ' + JSON.stringify(line.line));
-        //addMetrosLine(line.line);
-
         addStation(transport, line, station, destinations);
-
-        //addStation(transport, line, station.slug, station.name);
-
 
       });
     });
-} //fin getMetrosLignes
+}
 
 
 /************************************************
@@ -635,12 +605,12 @@ $(document).on('click', '.delete_streaming', function() {
 
 
 });
+
 $(document).on('click', '#local_storage_flush', function() {
 
   flushLS();
 
 });
-
 $(document).on('click', '#stream_ratp_refresh', function() {
 
 ratpStreamRefreshAll();
@@ -755,10 +725,6 @@ function getLS() {
   }
 
   return stream_ratp_list;
-
-}
-
-function addSlugToLS(slug) {
 
 }
 
