@@ -6,18 +6,13 @@
     <title> RATP jquery  - work in progress...</title>
 
 
-    <!--
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/socket.io/1.5.0/socket.io.js"></script>
-   -->
 
 
-    <!-- Optional theme
-http://www.bootstrapcdn.com/bootswatch/
-
-<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/cyborg/bootstrap.min.css" rel="stylesheet" integrity="sha256-ZgJYmqb5jZ8WCDqIYHlUarCVI7NDkBCeFnMW1gfihwY= sha512-yK8VlGnQXDlAH4aaZwd0EfmkYwv/XwZaA7VcT9JDO1YeZSvzu94p7/btLABkerIR26o7uYIiEmY59gQv/w/itA==" crossorigin="anonymous">
-    -->
+            <!-- Optional theme
+        http://www.bootstrapcdn.com/bootswatch/
+        
+        <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/cyborg/bootstrap.min.css" rel="stylesheet" integrity="sha256-ZgJYmqb5jZ8WCDqIYHlUarCVI7NDkBCeFnMW1gfihwY= sha512-yK8VlGnQXDlAH4aaZwd0EfmkYwv/XwZaA7VcT9JDO1YeZSvzu94p7/btLABkerIR26o7uYIiEmY59gQv/w/itA==" crossorigin="anonymous">
+            -->
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
 
@@ -30,203 +25,141 @@ http://www.bootstrapcdn.com/bootswatch/
 
 
     <!--
-<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/cyborg/bootstrap.min.css" rel="stylesheet"  crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/cyborg/bootstrap.min.css" rel="stylesheet"  crossorigin="anonymous">
 
-        <link rel="stylesheet" href="/zeDomotik/zeDomotik/web/bundles/zeremote/bootstrap/theme/cyborg/bootstrap.min.css" />
-
-
--->
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-    <!--
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/dark-hive/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    -->
-
 
     <link rel="stylesheet" href="css/stream_ratp_bus.css  ">
-
     <link rel="stylesheet" href="css/stream_ratp_metro.css  ">
     <link rel="stylesheet" href="css/stream_ratp_rer_tram.css  ">
-
     <link rel="stylesheet" href="css/style.css  ">
 
 
-    <!--
-    <link rel="stylesheet" href="css/MetroDNA/metrodna.css  ">
--->
-
-
-    <style>
-
-    </style>
-
     <script src="js/ratp_ui.js"></script>
-
-    <script>
-    </script>
-
-
 
 </head>
 
 <body>
+    <div class="row" id="alert_container">
+    </div>
+
+    <h1>RATP
+        <small>en Jquery</small>
+    </h1>
+
+
+    <!-- RATP -->
     <div class="container">
+        <div class="row row-fluid">
+
+            <div class="col-md-9">
+                <div class="panel panel-default  ">
+                    <div class="stream_ratp_form_toggle panel-heading">
+                        <button type="button" class=" close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="">&times;</span></button>
+                        <h3 class="panel-title">
+                            Ajouter une stations 
+                        </h3>
+                    </div>
+                    <div class="panel-body">
 
 
+                        <div id="add_metros">
+
+                            <button data-transport="metros" class="get_transport btn btn-small btn-primary">
+                      Metros
+                  </button>
+                            <button data-transport="tramways" class="get_transport btn btn-small btn-primary">
+                      Tram
+                  </button>
+                            <button data-transport="bus" class="get_transport btn btn-small btn-primary">
+                      Bus
+                  </button>
+
+                            <button data-transport="rers" class="get_transport btn btn-small btn-primary">
+                      RER
+                  </button>
+                            <button data-transport="noctiliens" class="get_transport btn btn-small btn-primary">
+                      Noctiliens
+                  </button>
+
+                            <div id="form_add_stream_ratp">
 
 
-        <div class="row" id="alert_container">
-        </div>
-
-
-        <h1>RATP
-            <small>en Jquery</small>
-        </h1>
-
-
-        <!-- RATP -->
-        <div class="container">
-            <div class="row-fluid">
-
-                <div class="col-md-12">
-                    <div class="panel panel-default  ">
-                        <div class="panel-heading">
-
-                            <h3 class="panel-title">
-                                Ajouter une stations
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-
-
-                            <div id="add_metros">
-
-                                <!--
-                                CSS test :
-                                <span class="bus symbole">Bus</span>
-                                <span class="bus ligne22">Ligne 22</span>
-                                <br />
-
-                                <span class="bus_line bus_line24"> 24</span>
-                                <br /> Tram :
-                                <button class="btn btn-circle tramways_line tramways_line3A">
-                                     3A
-                                 </button>
-                                <br /> RER :
-                                <button class="btn btn-circle rer_line rer_lineB">
-                                     B
-                                 </button>
-                                <br />
-
--->
-
-
-
-
-
-                                <button data-transport="metros" class="get_transport btn btn-small btn-primary">
-                          Metros
-                      </button>
-                                <button data-transport="tramways" class="get_transport btn btn-small btn-primary">
-                          Tram
-                      </button>
-                                <button data-transport="bus" class="get_transport btn btn-small btn-primary">
-                          Bus
-                      </button>
-
-                                <button data-transport="rers" class="get_transport btn btn-small btn-primary">
-                          RER
-                      </button>
-                                <button data-transport="noctiliens" class="get_transport btn btn-small btn-primary">
-                          Noctiliens
-                      </button>
-
-                                <div id="form_add_stream_ratp">
-
-
-                                    Lignes :
-                                    <div id="list_lines">
-                                    </div>
-
-                                    Destinations :
-                                    <div id="list_destinations">
-                                    </div>
-
-
-                                    Stations :
-                                    <div id="list_stations">
-                                    </div>
-
-                                    <button id="add_stream_ratp" class="btn btn-danger btn-lg disabled ">Ajouter La station au streaming</button>
-
-
+                                Lignes :
+                                <div id="list_lines">
                                 </div>
+
+                                Destinations :
+                                <div id="list_destinations">
+                                </div>
+
+
+                                Stations :
+                                <div id="list_stations">
+                                </div>
+
+                                <button id="add_stream_ratp" class="btn btn-danger btn-lg disabled ">Ajouter La station au streaming</button>
 
 
                             </div>
 
 
-
                         </div>
+
+
+
                     </div>
+                </div>
 
+            </div> <!-- end col-md- form add  -->
+            
+              <div  id="stream_ratp_control" class="col-md-3">
+                <div class="panel panel-default ">
+                    <div class="panel-heading stream_ratp_control_toggle">
+                        <button  type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h3 class="panel-title"> Controles </h3>
+                    </div>
+                    <div id="stream_ratp_control_body" class="panel-body">
+                        
+                        <button id="local_storage_flush" class="btn btn-default">
+                            Flush memory
+                        </button>
+                        <button id="stream_ratp_refresh" class="btn btn-default">
+                              Reload times schedules
+                        </button>
+                        <button id="stream_ratp_start" class="btn btn-default"> 
+                            Start streaming 
+                        </button>
+                        <button id="stream_ratp_stop" class="btn btn-default"> 
+                            Stop streaming
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <div id="stream_ratp_control" class="row row-fluid">
-
-                <div class="col-md-12">
-                    <button id="local_storage_flush" class="btn btn-default">
-                        Flush memory
-                    </button>
-                    <button id="stream_ratp_refresh" class="btn btn-default">
-                          Reload times schedules
-                    </button>
-                    <button id="stream_ratp_start" class="btn btn-default"> 
-                        Start streaming 
-                    </button>
-                    <button id="stream_ratp_stop" class="btn btn-default"> 
-                        Stop streaming
-                    </button>
-                </div>
-            </div>
-            
-            
-            <div id="div_stream_ratp" class="row row-fluid">
-                <div id="stream_ratp" class="col-md-12">
-                    
-                </div>
-            </div>
-            
-            
+            </div><!-- end controle -->
         </div>
+        
+    
+          
+     
+        
+        <!-- container stations -->
+        <div id="div_stream_ratp" class="row row-fluid">
+            <div id="stream_ratp" class="col-md-12">
+                
+               
+            </div>
+        </div>
+        
+        
     </div>
-
-
-
-    <div class="col-md-4 ">
-
-        LOGS :
-        <section id="zone_log">
-
-        </section>
-
-    </div>
-
-    </div>
-
 
 
 
     <div class="footer">
-
-        Footer
-
-
+            Footer
     </div>
 
 </body>

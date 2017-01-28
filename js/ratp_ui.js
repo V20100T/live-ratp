@@ -448,7 +448,9 @@ $(document).ready(function() {
   loadStreamRaptStorage();
 
   startStreamRatp();
-
+$("#add_metros").parent().toggle();
+  $("#stream_ratp_control_body").toggle();
+  
 
 });
 
@@ -596,6 +598,15 @@ $(document).on('click', '#add_stream_ratp', function() {
 
   //buildStreamRatp(rep);
 
+});
+
+$(document).on('click', '.stream_ratp_form_toggle', function() {
+
+  $("#add_metros").parent().toggle();
+});
+$(document).on('click', '.stream_ratp_control_toggle', function() {
+
+  $("#stream_ratp_control_body").toggle();
 });
 
 $(document).on('click', '.delete_streaming', function() {
