@@ -42,76 +42,6 @@
 </head>
 
 <body>
-    <div class="row" id="alert_container">
-
-
-
-
-
-        <div class="col-md-3 stream_ratp">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h2 class="panel-title">
-                        <a class="close delete_streaming " href="#" aria-label="Supprimer de la mémoire" title="Supprimer de la mémoire">×</a>
-                        <span id="" class="btn btn-default bus_line bus_line133 " type="button" data-transport="bus" data-line="133">
-                            133
-                        </span>
-                        <b>Garges-Sarcelles RER </b>
-                     
-                    </h2>
-                </div>
-                <!--station -->
-                <div id="div_station_bus_133_garges-sarcelles_rer" class="panel-body">
-                    <!--station + direction = streaming -->
-                    <div id="div_stream_ratp_bus_133_garges-sarcelles+rer_le+bourget+rer" class="station div_station_bus_133_garges-sarcelles_rer">
-                        <div id="btn_stream_ratp_bus_133_garges-sarcelles+rer_le+bourget+rer" >
-                            <h4>
-                                <i class="fa fa-arrow-right  " aria-hidden="true"></i>
-                                Le Bourget RER
-                            </h4>
-
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <span class="label label-success">26 mn</span>
-                                        <i class="fa fa-exchange" aria-hidden="true"></i>
-
-                                        <span class="label label-danger">Chateau de vincennes</span>
-                                    </li>
-                                    <li class="list-group-item">
-                                      <span class="label label-success">56 mn</span>
-                                        <span class="label label-danger">Chateau de vincennes</span>
-                                    </li>
-                                </ul>
-
-                        </div>
-                    </div><!-- fin streaming -->
-                    
-                    <div id="div_stream_ratp_bus_133_garges-sarcelles+rer_le+bourget+rer" class="station div_station_bus_133_garges-sarcelles_rer">
-                        <div id="btn_stream_ratp_bus_133_garges-sarcelles+rer_le+bourget+rer" >
-                            <h4><i class="fa fa-arrow-right  " aria-hidden="true"></i>
-Le Bourget RER</h4>
-
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <span class="label label-success">26 mn</span>
-                                        <span class="label label-info">Chateau de vincennes</span>
-                                    </li>
-                                    <li class="list-group-item">
-                                      <span class="label label-primary">56 mn</span>
-                                        <span class="label label-danger">Chateau de vincennes</span>
-                                    </li>
-                                </ul>
-
-                        </div>
-                    </div><!-- fin streaming -->
-                    
-                </div><!-- fin station -->
-            </div>
-        </div>
-
-
-
-    </div>
 
     <h1>RATP
         <small>en Jquery</small>
@@ -132,7 +62,7 @@ Le Bourget RER</h4>
             </button> 
         
         
-            <div class="col-md-9">
+            <div id="add_metros" class="col-md-9">
                 <div class="panel panel-default  ">
                     <div class="stream_ratp_form_toggle panel-heading">
                         <button type="button" class=" close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="">&times;</span></button>
@@ -143,7 +73,6 @@ Le Bourget RER</h4>
                     <div class="panel-body">
 
 
-                        <div id="add_metros">
 
                             <button data-transport="metros" class="get_transport btn btn-small btn-primary">
                       <i class="fa fa-subway" aria-hidden="true"></i>
@@ -189,8 +118,6 @@ Tram
                             </div>
 
 
-                        </div>
-
 
 
                     </div>
@@ -207,7 +134,7 @@ Tram
 
 Controles </h3>
                     </div>
-                    <div id="stream_ratp_control_body" class="panel-body">
+                    <div class="panel-body">
 
                         <button id="local_storage_flush" class="btn btn-default">
                             <i class="fa fa-power-off" aria-hidden="true"></i>

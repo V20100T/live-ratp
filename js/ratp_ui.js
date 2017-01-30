@@ -126,7 +126,8 @@ function getSchedulesStatus(schedules) {
       slug: 'success',
       mess: [
         "Train a l'approche",
-        'mn'
+        'mn',
+        ':'
         ]
     }
   };
@@ -164,6 +165,54 @@ function getSchedulesDestinationCount(schedules) {
   
   return schedules_destinations_count;
 }
+
+
+function getHtmlSchedules(schedules) {
+
+  var schedules_destinations_count = getSchedulesDestinationCount(schedules);
+  var class_status_schedules = getSchedulesStatus(schedules);
+
+  var html_schedules = '';
+  
+
+  $.each(schedules, function(index, schedule) {
+
+    var badge_class = ['default', 'primary', '', 'info'];
+    
+    
+    if (schedules_destinations_count[schedule.destination] != schedules.length 
+    && schedule.destination.length 
+    && schedule.destination != ' ') {
+      
+      html_schedules = html_schedules + 
+      '<li class="list-group-item">'+
+        '<span class="label-message label label-'+class_status_schedules[index]+'" > '+ 
+          schedule.message +
+        ' </span>'+
+        ' <i class="fa fa-exchange" aria-hidden="true"></i> '+
+        ' <span class="label-dest label label-'+rand(badge_class)+'"> '+
+            schedule.destination+
+        ' </span> '+
+      '</li>';
+    }
+    else {
+      html_schedules = html_schedules + 
+      '<li class="list-group-item">'+
+        '<span class="label-message  label label-'+class_status_schedules[index]+'" >'+ 
+          schedule.message +
+        '</span>'+
+      '</li>';    
+      
+    }
+
+
+  });
+  
+  
+  return html_schedules;
+}
+
+
 /************************************************
  * 
  * HTML ADD
@@ -224,40 +273,7 @@ function refreshStreamRatpDatas(rep) {
 
   console.log('+++++++++++++++++ refreshStreamRatpDatas : rep ' + rep);
 
-  var html_schedules = '';
-  var schedules_destinations_count = getSchedulesDestinationCount(rep.schedules);
-  var class_status_schedules = getSchedulesStatus(rep.schedules);
-
-
-  $.each(rep.schedules, function(index, schedule) {
-
-    var badge_class = ['default', 'primary', '', 'info'];
-    
-    
-    if (schedules_destinations_count[schedule.destination] != rep.schedules.length) {
-      html_schedules = html_schedules + 
-      '<li class="list-group-item">'+
-        '<span class="label-message label label-'+class_status_schedules[index]+'" > '+ 
-          schedule.message +
-        ' </span>'+
-        ' <i class="fa fa-exchange" aria-hidden="true"></i> '+
-        ' <span class="label-dest label label-'+rand(badge_class)+'"> '+
-            schedule.destination+
-        ' </span> '+
-      '</li>';
-    }
-    else {
-      html_schedules = html_schedules + 
-      '<li class="list-group-item">'+
-        '<span class="label-message  label label-'+class_status_schedules[index]+'" >'+ 
-          schedule.message +
-        '</span>'+
-      '</li>';    
-      
-    }
-
-
-  });
+  var html_schedules = getHtmlSchedules(rep.schedules);
 
 
   var stream_slug = 'stream_ratp_' + rep.informations.type + '_' + rep.informations.line + '_' + rep.informations.station.slug + '_' + rep.informations.destination.slug;
@@ -298,44 +314,7 @@ function buildStreamRatp(rep) {
 
   console.log('buildStreamRatp : rep ' + rep);
 
-  var html_schedules = '';
-
-  var schedules_destinations_count = getSchedulesDestinationCount(rep.schedules);
-  var class_status_schedules = getSchedulesStatus(rep.schedules);
-
-
-  $.each(rep.schedules, function(index, schedule) {
-
-    var badge_class = ['default', 'primary', '', 'info'];
-    
-    
-    if (schedules_destinations_count[schedule.destination] != rep.schedules.length && schedule.destination.length) {
-      html_schedules = html_schedules + 
-      '<li class="list-group-item">'+
-        '<span class="label-message label label-'+class_status_schedules[index]+'" > '+ 
-          schedule.message +
-        ' </span>'+
-        ' <i class="fa fa-exchange" aria-hidden="true"></i> '+
-        ' <span class="label-dest label label-'+rand(badge_class)+'"> '+
-            schedule.destination+
-        ' </span> '+
-      '</li>';
-    }
-    else {
-      html_schedules = html_schedules + 
-      '<li class="list-group-item">'+
-        '<span class="label-message  label label-'+class_status_schedules[index]+'" >'+ 
-          schedule.message +
-        '</span>'+
-      '</li>';    
-      
-    }
-
-
-  });
-
-  
-
+  var html_schedules = getHtmlSchedules(rep.schedules);
 
   var stream_slug = 'stream_ratp_' + rep.informations.type + '_' + rep.informations.line + '_' + rep.informations.station.slug + '_' + rep.informations.destination.slug;
   var div_station_slug = "div_station_" + rep.informations.type + "_" + rep.informations.line + '_' + rep.informations.station.slug;
@@ -540,8 +519,8 @@ $(document).ready(function() {
   loadStreamRaptStorage();
 
   startStreamRatp();
-  $("#add_metros").parent().toggle();
-  $("#stream_ratp_control_body").toggle();
+  $("#add_metros").toggle();
+  $("#stream_ratp_control").toggle();
 
 
 });
@@ -686,7 +665,6 @@ $(document).on('click', '#add_stream_ratp', function() {
 
   //getAPIStream(obj);
   getAPIStream(transport, line, station, dest);
-  console.log('click add_stream_ratp will buildStreamRatp : rep ' + rep);
 
   //buildStreamRatp(rep);
 
@@ -694,11 +672,11 @@ $(document).on('click', '#add_stream_ratp', function() {
 
 $(document).on('click', '.stream_ratp_form_toggle', function() {
 
-  $("#add_metros").parent().toggle();
+  $("#add_metros").toggle();
 });
 $(document).on('click', '.stream_ratp_control_toggle', function() {
 
-  $("#stream_ratp_control_body").toggle();
+  $("#stream_ratp_control").toggle();
 });
 
 $(document).on('click', '.delete_streaming', function() {
