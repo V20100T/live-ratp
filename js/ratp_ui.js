@@ -174,11 +174,10 @@ function getHtmlSchedules(schedules) {
 
   var html_schedules = '';
   
-
+var html_schedule_simple = '<li class="list-group-item">';
   $.each(schedules, function(index, schedule) {
 
     var badge_class = ['default', 'primary', '', 'info'];
-    
     
     if (schedules_destinations_count[schedule.destination] != schedules.length 
     && schedule.destination.length 
@@ -197,16 +196,17 @@ function getHtmlSchedules(schedules) {
     }
     else {
       html_schedules = html_schedules + 
-      '<li class="list-group-item">'+
-        '<span class="label-message  label label-'+class_status_schedules[index]+'" >'+ 
+      
+        ' <span class="label-message  label label-'+class_status_schedules[index]+'" >'+ 
           schedule.message +
-        '</span>'+
-      '</li>';    
+        ' </span> ';    
       
     }
 
 
   });
+  
+  html_schedule_simple = '</li>';
   
   
   return html_schedules;
