@@ -128,11 +128,11 @@ function addStation(transport, line, st, destinations = null) {
 
     "<button type='button' id='station_" +
     (st.id) +
-    "' class='select_station btn " + station_class + "  station_" + st.id +
+    "' class='select_station btn   station_" + st.id +
     "' data-transport='" + transport +
     "' data-line='" + (line) +
     "' data-station='" + st.slug +
-    "' >" +
+    "' >" +"<span class='badge "+station_class+"'>" + line + "</span>"+
     st.name +
     "</button>");
 
@@ -161,9 +161,51 @@ function refreshStreamRatpDatas(rep) {
   var html_schedules = '';
   var schedules_destinations_count = [];
 
+  var class_status_schedules = [];
+  var status_ordered = {
+    danger: {
+      slug: 'danger',
+      mess: [ 
+        'Service termine',
+        'INFO INDISPO',
+        '..................',
+        'PAS DE SERVICE',
+        'Train arrete'
+      ]
+    },
+    warning: {
+      slug: 'warning',
+      mess: [
+        'Train retarde'
+      ]
+    },
+    success: 
+    {
+      slug: 'success',
+      mess: [
+        "Train a l'approche",
+        'mn'
+        ]
+    }
+  };
+  
+  
+  
   //count destinations, pour ne pas l afficher si c'est la meme pour tous les schedules
   $.each(rep.schedules, function(index, schedule) {
 
+   class_status_schedules[index] = 'info';
+   $.each(status_ordered, function(index_st_ex, status_exemple) {
+     $.each(status_exemple.mess, function(index_mess_ex, mess_exemple) {
+      if(schedule.message.toLowerCase().includes(mess_exemple.toLowerCase()) ) {
+          class_status_schedules[index] = status_exemple.slug;
+      } 
+     });
+      
+   });
+    
+    
+    
     if (schedules_destinations_count[schedule.destination]) {
       schedules_destinations_count[schedule.destination]++;
     }
@@ -175,12 +217,37 @@ function refreshStreamRatpDatas(rep) {
 
   $.each(rep.schedules, function(index, schedule) {
 
+
+    
+    var badge_class = ['default', 'primary', '', 'info'];
+    function rand(items){
+      return items[~~(Math.random() * items.length)];
+    }
+    
+    
     if (schedules_destinations_count[schedule.destination] != rep.schedules.length) {
-      html_schedules = html_schedules + schedule.message + ' ===> ' + schedule.destination + ' <br />';
+      html_schedules = html_schedules + 
+      '<li class="list-group-item">'+
+        '<span class="label-message label label-'+class_status_schedules[index]+'" > '+ 
+          schedule.message +
+        ' </span>'+
+        ' <i class="fa fa-exchange" aria-hidden="true"></i> '+
+        ' <span class="label-dest label label-'+rand(badge_class)+'"> '+
+            schedule.destination+
+        ' </span> '+
+      '</li>';
     }
     else {
-      html_schedules = html_schedules + schedule.message + ' <br />';
+      html_schedules = html_schedules + 
+      '<li class="list-group-item">'+
+        '<span class="label-message  label label-'+class_status_schedules[index]+'" >'+ 
+          schedule.message +
+        '</span>'+
+      '</li>';    
+      
     }
+
+
 
 
   });
@@ -242,15 +309,46 @@ function buildStreamRatp(rep) {
 
   $.each(rep.schedules, function(index, schedule) {
 
+  /*
     if (schedules_destinations_count[schedule.destination] != rep.schedules.length) {
       html_schedules = html_schedules + schedule.message + ' ===> ' + schedule.destination + ' <br />';
     }
     else {
       html_schedules = html_schedules + schedule.message + ' <br />';
     }
+    */
+    
+    var badge_class = ['default', 'primary', 'warning', 'danger', 'info'];
+    function rand(items){
+      return items[~~(Math.random() * items.length)];
+    }
+    
+    
+    if (schedules_destinations_count[schedule.destination] != rep.schedules.length) {
+      html_schedules = html_schedules + 
+      '<li class="list-group-item">'+
+        '<span class="label label-'+rand(badge_class)+'" >'+ 
+          schedule.message +
+        '</span>'+
+        '<i class="fa fa-exchange" aria-hidden="true"></i>'+
+        '<span class="label label-'+rand(badge_class)+'">'+
+            schedule.destination+
+        '</span>'+
+      '</li>';
+    }
+    else {
+      html_schedules = html_schedules + 
+      '<li class="list-group-item">'+
+        '<span class="label label-'+rand(badge_class)+'" >'+ 
+          schedule.message +
+        '</span>'+
+      '</li>';    
+      
+    }
 
 
   });
+  
 
 
   var stream_slug = 'stream_ratp_' + rep.informations.type + '_' + rep.informations.line + '_' + rep.informations.station.slug + '_' + rep.informations.destination.slug;
@@ -281,19 +379,28 @@ function buildStreamRatp(rep) {
 
   console.log('willl test ADD stream to existing station');
   // ADD stream to existing station
+  var html_station = '<!-- station -->' +
+          '<div class="panel-body" id="' + div_station_slug + '">' +
+            '<div class="station ' + div_station_slug + '" id="div_' + stream_slug + '" >' +
+              '<h4 id="' + jq('btn_' + stream_slug) + '">'+
+                '<i class="fa fa-arrow-right  " aria-hidden="true"></i>' +
+                rep.informations.destination.name +
+              '</h4>' +
+              '<ul id="' + stream_slug + '" class="list-group stream_ratp_datas">'+
+                html_schedules +
+              '</ul>' +
+            '</div>' +
+          '</div><!-- fin station -->'
+          ;
+          
+  
   if ($('#' + div_station_slug).length) {
 
     console.log('ADDDDDDD D stream to existing station');
 
 
-    $('#' + div_station_slug).prepend(
-      '<button class="btn btn-lg btn-success" type="button" id="' + jq('btn_' + stream_slug) + '">' +
-      rep.informations.destination.name +
-      '<br>' +
-      '<span id="' + stream_slug + '" class="badge stream_ratp_datas test">' + html_schedules +
-      '</span>' +
-      '</button>'
-    );
+
+    $('#' + div_station_slug).prepend(html_station);
 
 
   }
@@ -302,29 +409,22 @@ function buildStreamRatp(rep) {
 
 
     $("#stream_ratp").prepend(
-      ' <div class="col-md-4 stream_ratp">' +
-      ' <div class="panel panel-default" >' +
-      '<div class="panel-heading">' +
-      '<h3 class="panel-title">' +
-      '<a class="close delete_streaming " href="#" aria-label="Supprimer de la mémoire" title="Supprimer de la mémoire">×</a>' +
-      '<button id="" class="btn btn-default ' + rep.informations.type + '_line ' + rep.informations.type + '_line' + rep.informations.line + ' " type="button" data-transport="' + rep.informations.type + '" data-line="' + rep.informations.line + '">' +
-      rep.informations.line +
-      '</button>' +
-      rep.informations.station.name +
-      '</h3>' +
-      '</div>' +
-      '<div class="panel-body" id="' + div_station_slug + '">' +
-      '<div class="station ' + div_station_slug + '" id="div_' + stream_slug + '" >' +
-      '<button class="btn btn-lg btn-success" type="button" id="' + jq('btn_' + stream_slug) + '">' +
-      rep.informations.destination.name +
-      '<br>' +
-      '<span id="' + stream_slug + '" class="badge stream_ratp_datas test">' + html_schedules +
-      '</span>' +
-      '</button>' +
-      '</div>' +
-      '</div>' +
-      '</div>' +
-      '</div>'
+      '<div class="col-md-3 stream_ratp">' +
+        '<div class="panel panel-default" >' +
+          '<div class="panel-heading">' +
+            '<h3 class="panel-title">' +
+              '<span class="close delete_streaming " href="#" aria-label="Supprimer de la mémoire" title="Supprimer de la mémoire">×</span>' +
+              '<button id="" class="btn ' + rep.informations.type + '_line ' + rep.informations.type + '_line' + rep.informations.line + ' " type="button" data-transport="' + rep.informations.type + '" data-line="' + rep.informations.line + '">' +
+                rep.informations.line +
+              '</button>' +
+              rep.informations.station.name +
+            '</h3>' +
+          '</div>' +
+          html_station +
+        '</div>' +
+      '</div>'  +
+    '</div>'
+ 
     );
 
   }

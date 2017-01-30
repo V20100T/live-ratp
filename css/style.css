@@ -9,6 +9,10 @@ body{
   
 }
 
+.panel-body {
+    padding: 5px;
+}
+
 .delete_streaming {
   background-color: "red" !important;
 }
