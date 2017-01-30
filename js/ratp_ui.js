@@ -34,6 +34,10 @@ function isNullOrUndefined(test) {
 
 }
 
+function rand(items){
+  return items[~~(Math.random() * items.length)];
+}
+    
 function jq(myid) {
 
   // return "#" + myid.replace( /(:|\.|\[|\]|,|=|@)/g, "\\$1" );
@@ -96,8 +100,70 @@ function clearDestinations() {
 
 }
 
+function getSchedulesStatus(schedules) {
+  
+  var class_status_schedules = [];
+  var status_ordered = {
+    danger: {
+      slug: 'danger',
+      mess: [ 
+        'Service termine',
+        'INFO INDISPO',
+        '..................',
+        'PAS DE SERVICE',
+        'Train arrete',
+        'Service terminé ou horaires indisponibles'
+      ]
+    },
+    warning: {
+      slug: 'warning',
+      mess: [
+        'Train retarde'
+      ]
+    },
+    success: 
+    {
+      slug: 'success',
+      mess: [
+        "Train a l'approche",
+        'mn'
+        ]
+    }
+  };
+  
+  $.each(schedules, function(index, schedule) {
+   class_status_schedules[index] = 'info';
+   $.each(status_ordered, function(index_st_ex, status_exemple) {
+     $.each(status_exemple.mess, function(index_mess_ex, mess_exemple) {
+      if(schedule.message.toLowerCase().includes(mess_exemple.toLowerCase()) ) {
+          class_status_schedules[index] = status_exemple.slug;
+      } 
+     });
+      
+   });
+        
+   });
+  
+  return class_status_schedules;
+}
 
-
+function getSchedulesDestinationCount(schedules) {
+  
+  var schedules_destinations_count = [];
+    //count destinations, pour ne pas l afficher si c'est la meme pour tous les schedules
+  $.each(schedules, function(index, schedule) {
+    
+    
+    if (schedules_destinations_count[schedule.destination]) {
+      schedules_destinations_count[schedule.destination]++;
+    }
+    else {
+      schedules_destinations_count[schedule.destination] = 1;
+    }
+  });
+  
+  return schedules_destinations_count;
+}
 /************************************************
  * 
  * HTML ADD
@@ -159,70 +225,13 @@ function refreshStreamRatpDatas(rep) {
   console.log('+++++++++++++++++ refreshStreamRatpDatas : rep ' + rep);
 
   var html_schedules = '';
-  var schedules_destinations_count = [];
-
-  var class_status_schedules = [];
-  var status_ordered = {
-    danger: {
-      slug: 'danger',
-      mess: [ 
-        'Service termine',
-        'INFO INDISPO',
-        '..................',
-        'PAS DE SERVICE',
-        'Train arrete'
-      ]
-    },
-    warning: {
-      slug: 'warning',
-      mess: [
-        'Train retarde'
-      ]
-    },
-    success: 
-    {
-      slug: 'success',
-      mess: [
-        "Train a l'approche",
-        'mn'
-        ]
-    }
-  };
-  
-  
-  
-  //count destinations, pour ne pas l afficher si c'est la meme pour tous les schedules
-  $.each(rep.schedules, function(index, schedule) {
-
-   class_status_schedules[index] = 'info';
-   $.each(status_ordered, function(index_st_ex, status_exemple) {
-     $.each(status_exemple.mess, function(index_mess_ex, mess_exemple) {
-      if(schedule.message.toLowerCase().includes(mess_exemple.toLowerCase()) ) {
-          class_status_schedules[index] = status_exemple.slug;
-      } 
-     });
-      
-   });
-    
-    
-    
-    if (schedules_destinations_count[schedule.destination]) {
-      schedules_destinations_count[schedule.destination]++;
-    }
-    else {
-      schedules_destinations_count[schedule.destination] = 1;
-    }
-  });
+  var schedules_destinations_count = getSchedulesDestinationCount(rep.schedules);
+  var class_status_schedules = getSchedulesStatus(rep.schedules);
 
 
   $.each(rep.schedules, function(index, schedule) {
 
-
-    
     var badge_class = ['default', 'primary', '', 'info'];
-    function rand(items){
-      return items[~~(Math.random() * items.length)];
-    }
     
     
     if (schedules_destinations_count[schedule.destination] != rep.schedules.length) {
@@ -246,8 +255,6 @@ function refreshStreamRatpDatas(rep) {
       '</li>';    
       
     }
-
-
 
 
   });
@@ -293,53 +300,31 @@ function buildStreamRatp(rep) {
 
   var html_schedules = '';
 
-  var schedules_destinations_count = [];
-
-  //count destinations, pour ne pas l afficher si c'est la meme pour tous les schedules
-  $.each(rep.schedules, function(index, schedule) {
-
-    if (schedules_destinations_count[schedule.destination]) {
-      schedules_destinations_count[schedule.destination]++;
-    }
-    else {
-      schedules_destinations_count[schedule.destination] = 1;
-    }
-  });
+  var schedules_destinations_count = getSchedulesDestinationCount(rep.schedules);
+  var class_status_schedules = getSchedulesStatus(rep.schedules);
 
 
   $.each(rep.schedules, function(index, schedule) {
 
-  /*
-    if (schedules_destinations_count[schedule.destination] != rep.schedules.length) {
-      html_schedules = html_schedules + schedule.message + ' ===> ' + schedule.destination + ' <br />';
-    }
-    else {
-      html_schedules = html_schedules + schedule.message + ' <br />';
-    }
-    */
-    
-    var badge_class = ['default', 'primary', 'warning', 'danger', 'info'];
-    function rand(items){
-      return items[~~(Math.random() * items.length)];
-    }
+    var badge_class = ['default', 'primary', '', 'info'];
     
     
-    if (schedules_destinations_count[schedule.destination] != rep.schedules.length) {
+    if (schedules_destinations_count[schedule.destination] != rep.schedules.length && schedule.destination.length) {
       html_schedules = html_schedules + 
       '<li class="list-group-item">'+
-        '<span class="label label-'+rand(badge_class)+'" >'+ 
+        '<span class="label-message label label-'+class_status_schedules[index]+'" > '+ 
           schedule.message +
-        '</span>'+
-        '<i class="fa fa-exchange" aria-hidden="true"></i>'+
-        '<span class="label label-'+rand(badge_class)+'">'+
+        ' </span>'+
+        ' <i class="fa fa-exchange" aria-hidden="true"></i> '+
+        ' <span class="label-dest label label-'+rand(badge_class)+'"> '+
             schedule.destination+
-        '</span>'+
+        ' </span> '+
       '</li>';
     }
     else {
       html_schedules = html_schedules + 
       '<li class="list-group-item">'+
-        '<span class="label label-'+rand(badge_class)+'" >'+ 
+        '<span class="label-message  label label-'+class_status_schedules[index]+'" >'+ 
           schedule.message +
         '</span>'+
       '</li>';    
@@ -348,6 +333,7 @@ function buildStreamRatp(rep) {
 
 
   });
+
   
 
 
