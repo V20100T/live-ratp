@@ -16,3 +16,7 @@ body{
 .delete_streaming {
   background-color: "red" !important;
 }
+
+.select_station {
+  margin: 5px;
+}

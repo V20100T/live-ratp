@@ -243,7 +243,7 @@ function addStation(transport, line, st, destinations = null) {
 
     "<button type='button' id='station_" +
     (st.id) +
-    "' class='select_station btn   station_" + st.id +
+    "' class='select_station btn btn-info  station_" + st.id +
     "' data-transport='" + transport +
     "' data-line='" + (line) +
     "' data-station='" + st.slug +
