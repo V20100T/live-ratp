@@ -136,7 +136,7 @@ function getSchedulesStatus(schedules) {
    class_status_schedules[index] = 'info';
    $.each(status_ordered, function(index_st_ex, status_exemple) {
      $.each(status_exemple.mess, function(index_mess_ex, mess_exemple) {
-      if(schedule.message.toLowerCase().includes(mess_exemple.toLowerCase()) ) {
+      if(schedule.message.toLowerCase().indexOf(mess_exemple.toLowerCase()) ) {
           class_status_schedules[index] = status_exemple.slug;
       } 
      });
