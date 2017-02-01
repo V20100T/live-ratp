@@ -220,7 +220,7 @@ var html_schedule_simple = '<li class="list-group-item">';
  * ***********************************************/
 function addStation(transport, line, st, destinations = null) {
 
-  console.log(JSON.stringify(destinations));
+  //console.log(JSON.stringify(destinations));
 
   clearDestinations();
 
@@ -271,7 +271,7 @@ function addLine(transport, line) {
 function refreshStreamRatpDatas(rep) {
 
 
-  console.log('+++++++++++++++++ refreshStreamRatpDatas : rep ' + rep);
+  //console.log('+++++++++++++++++ refreshStreamRatpDatas : rep ' + rep);
 
   var html_schedules = getHtmlSchedules(rep.schedules);
 
@@ -281,17 +281,17 @@ function refreshStreamRatpDatas(rep) {
   $('#' + stream_slug).html('');
 
   var obj = slugToJson(stream_slug);
-  console.log('=============== refreshStreamRatpDatas slugToJson ' + JSON.stringify(obj));
+  //console.log('=============== refreshStreamRatpDatas slugToJson ' + JSON.stringify(obj));
 
   if (document.getElementById(stream_slug) == null) {
-    console.log('refreshStreamRatpDatas streaming ratp exist PAS ' + stream_slug);
+    //console.log('refreshStreamRatpDatas streaming ratp exist PAS ' + stream_slug);
 
     return false;
   }
 
 
   $('.stream_ratp_datas').each(function() {
-    console.log('id => ' + $(this).attr('id'));
+    //console.log('id => ' + $(this).attr('id'));
 
     var stream_ratp = $(this).attr('id');
 
@@ -312,7 +312,7 @@ function refreshStreamRatpDatas(rep) {
 
 function buildStreamRatp(rep) {
 
-  console.log('buildStreamRatp : rep ' + rep);
+  //console.log('buildStreamRatp : rep ' + rep);
 
   var html_schedules = getHtmlSchedules(rep.schedules);
 
@@ -322,15 +322,15 @@ function buildStreamRatp(rep) {
   div_station_slug = div_station_slug.replace('+', '_');
 
   var obj = slugToJson(stream_slug);
-  console.log('=============== buildStreamRatp slugToJson ' + JSON.stringify(obj));
+  //console.log('=============== buildStreamRatp slugToJson ' + JSON.stringify(obj));
 
 
-  console.log(' test length ' + $('#' + stream_slug).length);
-  console.log(' test length ' + typeof(document.getElementById(stream_slug)));
-  console.log(' test length ' + document.getElementById(stream_slug));
+  //console.log(' test length ' + $('#' + stream_slug).length);
+  //console.log(' test length ' + typeof(document.getElementById(stream_slug)));
+  //console.log(' test length ' + document.getElementById(stream_slug));
   if (document.getElementById(stream_slug) != null) {
 
-    console.log('streaming ratp exist deja ' + stream_slug);
+    //console.log('streaming ratp exist deja ' + stream_slug);
 
     $('#' + stream_slug).fadeOut(10, function() {
       $(this).fadeIn(10);
@@ -342,7 +342,7 @@ function buildStreamRatp(rep) {
 
   addStreamToLocalStorage(stream_slug);
 
-  console.log('willl test ADD stream to existing station');
+  //console.log('willl test ADD stream to existing station');
   // ADD stream to existing station
   var html_station = '<!-- station -->' +
           '<div class="panel-body" id="' + div_station_slug + '">' +
@@ -361,7 +361,7 @@ function buildStreamRatp(rep) {
   
   if ($('#' + div_station_slug).length) {
 
-    console.log('ADDDDDDD D stream to existing station');
+    //console.log('ADDDDDDD D stream to existing station');
 
 
 
@@ -394,32 +394,7 @@ function buildStreamRatp(rep) {
 
   }
 
-  /*
-    
-  var obj = {
-    transport : rep.informations.type,
-    line: rep.informations.line,
-    station: rep.informations.station.slug,
-    destination: rep.informations.destination.slug
-  };
- 
-    console.log('#stream_slug obj =======> ' +JSON.stringify(obj));
-    
- 
-
-    $('#'+stream_slug).attr('data-transport', obj.transport);
-
   
-    console.log('#stream_slug 1 =======> ' + JSON.stringify( $.data($('#'+stream_slug), 'stream_ratp_datas')));
-    console.log('#stream_slug 2 =======> ' +  $.data($('#btn_'+stream_slug), 'stream_ratp_datas'));
-     console.log('#stream_slug 1 =======> ' + JSON.stringify( $.data($('#btn_'+stream_slug), 'stream_ratp_datas')));
-    console.log('#stream_slug 2 =======> ' +  $.data($('#'+stream_slug), 'stream_ratp_datas'));
-    
-    console.log('#stream_slug 3 =======> ' + $('#'+stream_slug).data('stream_ratp_datas'));
-    */
-
-
-
 }
 
 
@@ -434,13 +409,13 @@ function buildStreamRatp(rep) {
 
 function refreshAPIStream(transport, line, station, dest) {
 
-  console.log('refreshAPIStream  => ' + JSON.stringify(line) + JSON.stringify(dest));
+  //console.log('refreshAPIStream  => ' + JSON.stringify(line) + JSON.stringify(dest));
   var url = stream_ratp_api_url + transport + "/" + line + "/stations/" + station + "?destination=" + dest;
 
-  console.log('refreshAPIStream url => ' + url);
+  //console.log('refreshAPIStream url => ' + url);
 
   $.getJSON(url, function(data) {
-    //console.log('refreshAPIStream data <<<>>>>> ' + JSON.stringify(data));
+    ////console.log('refreshAPIStream data <<<>>>>> ' + JSON.stringify(data));
 
     refreshStreamRatpDatas(data.response);
   });
@@ -450,12 +425,12 @@ function refreshAPIStream(transport, line, station, dest) {
 
 function getAPIStream(transport, line, station, dest) {
 
-  console.log('getAPIStream  => ' + JSON.stringify(line) + JSON.stringify(dest));
+  //console.log('getAPIStream  => ' + JSON.stringify(line) + JSON.stringify(dest));
 
   //https://api-ratp.pierre-grimaud.fr/v2/metros/8/stations/daumesnil?destination=balard
   var url = stream_ratp_api_url + transport + "/" + line + "/stations/" + station + "?destination=" + dest;
 
-  console.log('url => ' + url);
+  //console.log('url => ' + url);
 
   $.getJSON(url, function(data) {
 
@@ -484,7 +459,7 @@ function getAPILignes(transport = "metros") {
 
 function getAPIStations(transport, line) {
 
-  console.log('getAPIStations');
+  //console.log('getAPIStations');
 
   $.getJSON(stream_ratp_api_url + transport + "/" + line,
     function(data) {
@@ -492,7 +467,7 @@ function getAPIStations(transport, line) {
       var list_items = data.response.stations;
       var destinations = data.response.destinations;
 
-      console.log('full uri  list_items <<<>>>>> ' + JSON.stringify(
+      //console.log('full uri  list_items <<<>>>>> ' + JSON.stringify(
         list_items));
 
       clearStations();
@@ -531,7 +506,7 @@ $(document).on('click', '.get_transport', function() {
 
   var transport = $(this).data('transport');
 
-  console.log('get_transport =>  ' + transport + ' getData => ' + JSON.stringify($(this).data()));
+  //console.log('get_transport =>  ' + transport + ' getData => ' + JSON.stringify($(this).data()));
 
 
 
@@ -552,8 +527,8 @@ $(document).on('click', '.get_line', function() {
   var transport = $(this).data('transport');
   var line = $(this).data('line');
 
-  console.log('line =>  ' + line);
-  console.log('get_line ==>  =>  ' + line + ' getData => ' + JSON.stringify($(this).data()));
+  //console.log('line =>  ' + line);
+  //console.log('get_line ==>  =>  ' + line + ' getData => ' + JSON.stringify($(this).data()));
 
 
 
@@ -578,7 +553,7 @@ $(document).on('click', '.select_dest', function() {
   var line = $(this).data('line');
   var dest = $(this).data('dest');
 
-  console.log('select_dest =>  ' + dest + ' getData => ' + JSON.stringify($(this).data()));
+  //console.log('select_dest =>  ' + dest + ' getData => ' + JSON.stringify($(this).data()));
 
   $('.select_dest').addClass('disabled ');
   $('.select_dest').removeClass('active selected_dest');
@@ -599,7 +574,7 @@ $(document).on('click', '.select_station', function() {
   var line = $(this).data('line');
   var station = $(this).data('station');
 
-  console.log('select_station =>  ' + station + ' getData => ' + JSON.stringify($(this).data()));
+  //console.log('select_station =>  ' + station + ' getData => ' + JSON.stringify($(this).data()));
 
 
 
@@ -626,12 +601,12 @@ $(document).on('click', '#add_stream_ratp', function() {
   var station = $(this).data('station');
 
 
-  console.log(' add_stream_ratp getData => ' + JSON.stringify($(this).data()));
+  //console.log(' add_stream_ratp getData => ' + JSON.stringify($(this).data()));
 
 
 
 
-  console.log(' parametre  ' + line + transport + station + dest);
+  //console.log(' parametre  ' + line + transport + station + dest);
 
   if (isNullOrUndefined(transport) ||
     isNullOrUndefined(line) ||
@@ -641,7 +616,7 @@ $(document).on('click', '#add_stream_ratp', function() {
 
     $(this).addClass('disabled ');
     $(this).removeClass('active ');
-    console.log('il manque un parametre !!   + line + transport +  station + dest) ' + line + transport + station + dest);
+    //console.log('il manque un parametre !!   + line + transport +  station + dest) ' + line + transport + station + dest);
 
     return false;
   }
@@ -654,9 +629,9 @@ $(document).on('click', '#add_stream_ratp', function() {
     station: station,
     dest: dest
   }]
-  console.log('OK =>  ' + transport + line + station + dest);
-  console.log('stream ratp  =>  ' + stream_ratp);
-  console.log('stream ratp  obj =>  ' + JSON.stringify(obj));
+  //console.log('OK =>  ' + transport + line + station + dest);
+  //console.log('stream ratp  =>  ' + stream_ratp);
+  //console.log('stream ratp  obj =>  ' + JSON.stringify(obj));
 
 
 
@@ -715,7 +690,7 @@ $(document).on('click', '#stream_ratp_stop', function() {
 function ratpStreamRefreshAll() {
 
   $('.stream_ratp_datas').each(function() {
-    console.log('id => ' + $(this).attr('id'));
+    //console.log('id => ' + $(this).attr('id'));
 
     var stream_ratp = slugToJson($(this).attr('id'));
 
@@ -753,8 +728,8 @@ function ratpStreamRefreshAll() {
 function slugToJson(slug) {
   var stream_ratp = slug.split('_');
   // stream_ratp_bus_322_vaillant-couturier_pablo+picasso
-  console.log('sslugToJson lug => ' + slug);
-  console.log('slugToJson stream_ratp => ' + stream_ratp[4] + ' => ' + stream_ratp[5]);
+  //console.log('sslugToJson lug => ' + slug);
+  //console.log('slugToJson stream_ratp => ' + stream_ratp[4] + ' => ' + stream_ratp[5]);
 
   var stream_ratp_obj = {
     action: stream_ratp[0],
@@ -776,7 +751,7 @@ function slugToJson(slug) {
  * ***************************************/
 function flushLS() {
 
-  console.log('flushLS local storage ');
+  //console.log('flushLS local storage ');
   localStorage.setItem("stream_ratp_list", null);
 
 }
@@ -785,22 +760,22 @@ function getLS() {
 
   var stream_ratp_list = localStorage.getItem("stream_ratp_list")
 
-  console.log('getLS local storage  => ' + stream_ratp_list + ' === ' + JSON.stringify(stream_ratp_list));
+  //console.log('getLS local storage  => ' + stream_ratp_list + ' === ' + JSON.stringify(stream_ratp_list));
 
   if (typeof(stream_ratp_list) == 'undefined' || stream_ratp_list == null || stream_ratp_list == 'null') {
-    console.log('getLS local storage vide');
+    //console.log('getLS local storage vide');
 
     return false;
   }
 
   if (isJson(stream_ratp_list)) {
     stream_ratp_list = JSON.parse(stream_ratp_list);
-    console.log('getLS is json ok  ! ');
+    //console.log('getLS is json ok  ! ');
   }
 
   if (!stream_ratp_list.length) {
 
-    console.log('getLS rien dans la memoire ! ');
+    //console.log('getLS rien dans la memoire ! ');
 
     return false;
   }
@@ -820,36 +795,36 @@ function loadStreamRaptStorage() {
 
   if (!stream_ratp_list || typeof(stream_ratp_list) != 'object') {
 
-    console.log('loadStreamRaptStorage rien dans la memoire ! ');
+    //console.log('loadStreamRaptStorage rien dans la memoire ! ');
 
     return false;
   }
-  console.log('loadStreamRaptStorage ==>  stream_ratp_list => ' + JSON.stringify(stream_ratp_list))
+  //console.log('loadStreamRaptStorage ==>  stream_ratp_list => ' + JSON.stringify(stream_ratp_list))
 
 
   $.each(stream_ratp_list, function(index, value) {
 
     if (typeof(value) == 'undefined' || value == null || value == 'null' || value.length == 0 || value.length == 'undefined') {
 
-      console.log('## loadStreamRaptStorage => value not good' + index + ' value:' + JSON.stringify(value));
+      //console.log('## loadStreamRaptStorage => value not good' + index + ' value:' + JSON.stringify(value));
 
       return true;
 
     }
 
     if (JSON.stringify(value) == '{}' || value.length == 'undefined') {
-      console.log('##### loadStreamRaptStorage => value not good' + index + ' value:' + JSON.stringify(value));
+      //console.log('##### loadStreamRaptStorage => value not good' + index + ' value:' + JSON.stringify(value));
       return true;
     }
 
-    console.log('## loadStreamRaptStorage => value string ' + index + ' value:' + JSON.stringify(value) + value.length);
+    //console.log('## loadStreamRaptStorage => value string ' + index + ' value:' + JSON.stringify(value) + value.length);
 
-    console.log('## loadStreamRaptStorage => ' + index + ' value:' + value);
+    //console.log('## loadStreamRaptStorage => ' + index + ' value:' + value);
 
     var stream_ratp = value.split('_');
     // stream_ratp_bus_322_vaillant-couturier_pablo+picasso
-    console.log('value => ' + value);
-    console.log('stream_ratp => ' + stream_ratp[0]);
+    //console.log('value => ' + value);
+    //console.log('stream_ratp => ' + stream_ratp[0]);
 
     var stream_ratp_obj = {
       action: stream_ratp[0],
@@ -874,11 +849,11 @@ function loadStreamRaptStorage() {
     }
 
 
-    console.log('stream_ratp_obj => ' + stream_ratp_obj);
+    //console.log('stream_ratp_obj => ' + stream_ratp_obj);
 
 
     getAPIStream(stream_ratp_obj.transport, stream_ratp_obj.line, stream_ratp_obj.station, stream_ratp_obj.destination);
-    //console.log('loadStreamRaptStorage will buildStreamRatp : rep '+ rep );
+    ////console.log('loadStreamRaptStorage will buildStreamRatp : rep '+ rep );
 
     //buildStreamRatp(rep);
 
@@ -891,7 +866,7 @@ function addStreamToLocalStorage(stream_ratp_slug) {
 
   if (typeof(Storage) == "undefined") {
     // Sorry! No Web Storage support..
-    console.log('Sorry! No Web Storage support..');
+    //console.log('Sorry! No Web Storage support..');
 
     return false;
   }
@@ -901,19 +876,19 @@ function addStreamToLocalStorage(stream_ratp_slug) {
   var stream_ratp_localStorage = getLS();
 
   if (!stream_ratp_localStorage) {
-    console.log('local storage vide init IT');
+    //console.log('local storage vide init IT');
     stream_ratp_localStorage = [{}];
 
   }
 
   if (typeof(stream_ratp_localStorage[stream_ratp_slug]) != 'undefined' || stream_ratp_localStorage[stream_ratp_slug]) {
-    console.log('deja enregistre ');
+    //console.log('deja enregistre ');
     return false;
   }
 
   if (JSON.stringify(stream_ratp_localStorage).indexOf(stream_ratp_slug) > -1) {
 
-    console.log('stream_ratp_slug deja enregistre ' + stream_ratp_slug + ' => ' + stream_ratp_localStorage);
+    //console.log('stream_ratp_slug deja enregistre ' + stream_ratp_slug + ' => ' + stream_ratp_localStorage);
 
     return false;
   }
@@ -925,7 +900,7 @@ function addStreamToLocalStorage(stream_ratp_slug) {
   localStorage.setItem("stream_ratp_list", JSON.stringify(stream_ratp_localStorage));
 
 
-  console.log('#################### local saved stream_ratp_list => ' + JSON.stringify(stream_ratp_localStorage))
+  //console.log('#################### local saved stream_ratp_list => ' + JSON.stringify(stream_ratp_localStorage))
 
 };
 
@@ -933,26 +908,14 @@ function deleteStreamToLocalStorage(stream_ratp_slug) {
 
   var stream_ratp_list = getLS();
 
-  console.log('deleteStreamToLocalStorage :: AVANT stream_ratp_list => ' + JSON.stringify(stream_ratp_list));
-
-  console.log('deleteStreamToLocalStorage :: will delte  => ' + JSON.stringify(stream_ratp_list[1]));
-
 
   var stream_ratp_slug_persist = stream_ratp_slug;
   var key_to_delete = null;
-  console.log('stream_ratp_slug_persist :: will delte  => ' + stream_ratp_slug_persist);
-
 
   $.each(stream_ratp_list, function(key, val) {
 
-
-    console.log('deleteStreamToLocalStorage :: each => ' + stream_ratp_slug_persist + ' slug || ' + val + '__ ' + key + '__ => ' + stream_ratp_list[key]);
-    console.log('deleteStreamToLocalStorage :: each => ' + typeof(val) + '__ ' + key + '__ => ' + typeof(stream_ratp_list[key]));
-    console.log('deleteStreamToLocalStorage :: each => ' + typeof(val) + '__ ' + key + '__ => ' + typeof(stream_ratp_list[key]));
-
-
-
     if (typeof(val) == 'object') {
+      
       return true;
     }
 
@@ -960,9 +923,6 @@ function deleteStreamToLocalStorage(stream_ratp_slug) {
     if (val == stream_ratp_slug) {
 
       key_to_delete = key;
-
-      console.log('############### deleteStreamToLocalStorage :: ok del => ' + val + '__ ' + key + '__ => ' + stream_ratp_list[key]);
-
       deleteLSbyKey(key);
 
       delete stream_ratp_list[key];
@@ -970,20 +930,11 @@ function deleteStreamToLocalStorage(stream_ratp_slug) {
       return false;
     }
 
-    console.log('#-- deleteStreamToLocalStorage not found');
-
   });
-
-  console.log('key_to_delete => after each' + key_to_delete);
 
   delete stream_ratp_list[key_to_delete];
 
-
-  console.log('## deleteStreamToLocalStorage :: stream_ratp_list => ' + JSON.stringify(stream_ratp_list));
-
   localStorage.setItem("stream_ratp_list", JSON.stringify(stream_ratp_list));
-
-
 
 }
 
@@ -993,9 +944,6 @@ function deleteLSbyKey(key) {
 
   delete ls[key];
 
-  console.log('########)))))   deleteStreamToLocalStorage :: stream_ratp_list => ' + ls[key] + JSON.stringify(ls));
-
   localStorage.setItem("stream_ratp_list", JSON.stringify(ls));
-
 
 }
