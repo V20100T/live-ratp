@@ -218,7 +218,7 @@ var html_schedule_simple = '<li class="list-group-item">';
  * HTML ADD
  * 
  * ***********************************************/
-function addStation(transport, line, st, destinations = null) {
+function addStation(transport, line, st, destinations) {
 
   //console.log(JSON.stringify(destinations));
 
@@ -464,7 +464,7 @@ function getAPIStream(transport, line, station, dest) {
   });
 }
 
-function getAPILignes(transport = "metros") {
+function getAPILignes(transport) {
 
   $.getJSON(stream_ratp_api_url + transport + "/",
     function(data) {
