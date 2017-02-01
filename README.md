@@ -13,16 +13,18 @@ Horaires stations ratp en direct
 
 ### @TODO
 
-- clean & factoriser
+- clean & factoriser & design & UI
  
+
+#### fonctions
+
+- etat traffic glogal et par ligne
+- ajout config temps porte-station avec alertes UI
+- altertes visuelle et sonore => youtube
 
 #### design
 
 - UI CSS DESIGN
 - UI mobile petit ecran
 
-#### fonctions
-
-- ajout config temps porte-station avec alertes UI
-- altertes visuelle et sonore => youtube
 
