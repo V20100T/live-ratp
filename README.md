@@ -6,5 +6,23 @@ Horaires stations ratp en direct
 
 > UI basée sur l'API de Pierre Grimaud - Merci à lui
 
-    https://github.com/pgrimaud/horaires-ratp-api
-    
+> https://github.com/pgrimaud/horaires-ratp-api
+
+
+
+
+### @TODO
+
+- clean & factoriser
+ 
+
+#### design
+
+- UI CSS DESIGN
+- UI mobile petit ecran
+
+#### fonctions
+
+- ajout config temps porte-station avec alertes UI
+- altertes visuelle et sonore => youtube
+
