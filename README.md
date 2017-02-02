@@ -8,6 +8,9 @@ Horaires stations ratp en direct
 
 > https://github.com/pgrimaud/horaires-ratp-api
 
+Streaming des horaires des stations.  
+Les stations choisies sont sauvegardées dans les localStorage du navigateur.  
+
 
 
 
