@@ -328,7 +328,7 @@ function buildStreamRatp(rep) {
           '</div><!-- fin station -->'
           ;
          
-       var css_slug = rep.informations.type + '_line' + rep.informations.line ;
+       var css_slug = 'btn-title_'+rep.informations.type + '_line' + rep.informations.line+'_'+  rep.informations.station.name  ;
        var class_css_ratp_line = rep.informations.type + '_line ' + rep.informations.type + '_line' + rep.informations.line ;
        
   // Station div existe deja, on ajoute uniquement le stream
@@ -336,9 +336,9 @@ function buildStreamRatp(rep) {
 
     $('#' + div_station_slug).prepend(html_station);
   
-    if (!$('#title_' + css_slug).length) {
+    if (!$('.' + css_slug).length) {
       $('.title_' + div_station_slug ).prepend(
-        '<button id="title_'+css_slug+'" class="btn ' + class_css_ratp_line + ' " type="button">' +
+        '<button  class="btn ' + class_css_ratp_line + ' '+css_slug+' " type="button">' +
           rep.informations.line +
         '</button>' 
       );
@@ -353,7 +353,7 @@ function buildStreamRatp(rep) {
           '<div class="panel-heading">' +
             '<h3 class="panel-title title_'+div_station_slug+'">' +
               //'<span class="close delete_streaming " data-ratp_stream_slug="'+stream_slug+'"  href="#" aria-label="Supprimer de la mémoire" title="Supprimer de la mémoire">×</span>' +
-              '<button id="title_'+css_slug+'" class="btn ' + class_css_ratp_line + '" type="button" data-transport="' + rep.informations.type + '" data-line="' + rep.informations.line + '">' +
+              '<button class="btn ' + class_css_ratp_line + ' '+css_slug+'" type="button" data-transport="' + rep.informations.type + '" data-line="' + rep.informations.line + '">' +
                 rep.informations.line +
               '</button>' +
               rep.informations.station.name +
@@ -556,7 +556,7 @@ $(document).on('click', '.stream_ratp_control_toggle', function() {
 
 $(document).on('click', '.delete_streaming', function() {
 
-  $(this).closest('.stream_ratp').hide();
+  $(this).closest('.station').hide();
   deleteStreamToLocalStorage($(this).data('ratp_stream_slug'));
 
 
