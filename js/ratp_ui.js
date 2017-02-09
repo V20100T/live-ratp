@@ -328,7 +328,7 @@ function buildStreamRatp(rep) {
           '</div><!-- fin station -->'
           ;
          
-       var css_slug = 'btn-title_'+rep.informations.type + '_line' + rep.informations.line+'_'+  rep.informations.station.name  ;
+       var css_slug = 'btn-title_line' + rep.informations.line+'_'+  rep.informations.station.slug.replace('+', '-')  ;
        var class_css_ratp_line = rep.informations.type + '_line ' + rep.informations.type + '_line' + rep.informations.line ;
        
   // Station div existe deja, on ajoute uniquement le stream
@@ -348,7 +348,7 @@ function buildStreamRatp(rep) {
   } else {
   
     $("#stream_ratp").prepend(
-      '<div class="col-md-3 stream_ratp">' +
+      '<div class="col-md-3 stream_ratp" id="'+rep.informations.station.slug+'">' +
         '<div class="panel panel-default" >' +
           '<div class="panel-heading">' +
             '<h3 class="panel-title title_'+div_station_slug+'">' +
