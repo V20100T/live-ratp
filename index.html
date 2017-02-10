@@ -14,7 +14,7 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
      <!-- Bootstrap -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/darkly/bootstrap.min.css" rel="stylesheet" integrity="sha256-IsefKVCcMUlgpXQgIMRsqbIqC6aP153JkybxTa7W7/8= sha512-mCNEsmR1i3vWAq8hnHfbCCpc6V5fP9t0N1fEZ1wgEPF/IKteFOYZ2uk7ApzMXkT71sDJ00f9+rVMyMyBFwsaQg==" crossorigin="anonymous">
+        <link id="bootswatch_theme" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/darkly/bootstrap.min.css" rel="stylesheet" >
         <!-- Optional theme
             http://www.bootstrapcdn.com/bootswatch/
                 <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/cyborg/bootstrap.min.css" rel="stylesheet"  crossorigin="anonymous">
@@ -42,6 +42,7 @@
 
 
     <script src="js/ratp_ui.js"></script>
+ <script src="js/css_theme_selector.js"></script>
 
 </head>
 
@@ -56,6 +57,12 @@
     <div class="__container">
         <div class="row row-fluid">
 
+            <label id="">Changer le theme</label>
+           <select name="css_theme_selector" id="css_theme_selector-select">
+              <option value="null" selected="true" disabled="disabled" >Changer le theme ...</option>
+            </select>
+
+            
             <button class="btn btn-info stream_ratp_form_toggle">
                 <i class="fa fa-search-plus" aria-hidden="true"></i>
                 Ajouter une stations
