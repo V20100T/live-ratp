@@ -113,7 +113,9 @@ function getSchedulesStatus(schedules) {
         '..................',
         'PAS DE SERVICE',
         'Train arrete',
-        'Service terminé ou horaires indisponibles'      ]
+        'Service terminé ou horaires indisponibles'
+        
+        ]
     },
     warning: {
       slug: 'warning',
@@ -439,6 +441,7 @@ function getAPIStations(transport, line) {
 
 
 $(document).ready(function() {
+
 
   loadStreamRaptStorage();
 
@@ -793,3 +796,4 @@ function deleteLSbyKey(key) {
 
 
 }
+
