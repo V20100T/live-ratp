@@ -407,32 +407,13 @@ function buildStreamRatp(rep) {
     '</div>';
     
  
-var $grid = $('.grid').packery({
-      // options
-      //itemSelector: '.grid-item',
-      //gutter: 5,
-      itemSelector: '.panel-heading',
-      percentPosition: true,
-      columnWidth: 100
-      
-    });
+//var $grid = $('.grid').packery();
     
  
-    $grid.prepend( $items )
+   $('.grid').prepend( $items )
     // add and lay out newly prepended items
     .packery( 'prepended', $items );
-     $grid.packery('layout');
-    
-    //$("#stream_ratp").prepend($items);
-    
-
-$grid.find('.grid-item').each( function( i, gridItem ) {
-  var draggie = new Draggabilly( gridItem );
-  // bind drag events to Packery
-  $grid.packery( 'bindDraggabillyEvents', draggie );
-});
-
- $grid.packery('layout');
+    $('.grid').packery('layout');
 
   }
 }
@@ -504,9 +485,55 @@ function getAPIStations(transport, line) {
  * 
  * ***********************************************/
 
+  var $grid = $('.grid').packery({
+      // options
+      //itemSelector: '.grid-item',
+      //gutter: 5,
+      itemSelector: '.panel-heading',
+      percentPosition: true,
+      columnWidth: 350
+      
+    });
+
+$(document).on('click', '.doDraggable', function() {
+
+  var method = 'bindDraggabillyEvents';
+
+  if($(this).hasClass('draggableOn')) {
+
+    
+     method = 'unbindDraggabillyEvents';
+  }
+  
+  var $grid = $('.grid').packery();
+  $grid.find('.grid-item').each( function( i, gridItem ) {
+    var draggie = new Draggabilly( gridItem );
+    // bind drag events to Packery
+    $grid.packery( method, draggie );
+  });
+  
+  
+  $(this).toggleClass('draggableOn');
+
+
+
+
+});
+$(document).on('click', '.reOrganizeBlocs', function() {
+
+  //var $grid = $('.grid').packery();
+     $('.grid').packery();
+
+
+});
 
 
 $(document).ready(function() {
+  
+
+      $('.grid').packery();
+
+  
   initStreamLoader('Ratp', 'stream_ratp_loading_spinner_span');
 
   loadStreamRaptStorage();
@@ -668,6 +695,7 @@ $(document).on('click', '.stream_ratp_form_toggle', function() {
 
   $("#add_metros").toggle();
 });
+
 $(document).on('click', '.stream_ratp_control_toggle', function() {
 
   $("#stream_ratp_control").toggle();
