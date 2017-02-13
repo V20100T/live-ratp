@@ -20,3 +20,29 @@ body{
 .select_station {
   margin: 5px;
 }
+
+#stream_ratp_loading_spinner_span{
+      top: 2px;
+    left: 2px;
+    position: fixed;
+}
+
+/*
+.grid-item { width: 25%; }
+.grid-item--width2 { width: 50%; }
+/* highlight drag & drop */
+
+/* Draggabilly adds is-dragging */
+.grid-item.is-dragging,
+/* Packery adds class while transitioning to drop position */
+.grid-item.is-positioning-post-drag {
+  background: #C90;
+  z-index: 2; /* keep dragged item on top */
+}
+.packery-drop-placeholder {
+  outline: 3px dashed #444;
+  outline-offset: -6px;
+  /* transition position changing */
+  -webkit-transition: -webkit-transform 0.2s;
+          transition: transform 0.2s;
+}

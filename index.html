@@ -51,7 +51,9 @@
     <!-- icones -->
     <script src="https://use.fontawesome.com/154af993bf.js"></script>
     
-    
+    <script src="https://unpkg.com/packery@2/dist/packery.pkgd.min.js"></script>
+<script src="https://npmcdn.com/draggabilly@2.1/dist/draggabilly.pkgd.min.js"></script>
+
 
     <link rel="stylesheet" href="css/stream_ratp_bus.css  ">
     <link rel="stylesheet" href="css/stream_ratp_metro.css  ">
@@ -65,7 +67,12 @@
 </head>
 
 <body>
-
+    <!--
+    <span id="stream_ratp_loading_spinner_span">
+       <i id="stream_ratp_loading_spinner" class="fa fa-refresh fa-spin fa-fw "></i>
+        Ratp
+    </span>
+    -->
     <h1>RATP
         <small>en Jquery</small>
     </h1>
@@ -73,6 +80,7 @@
 
     <!-- RATP -->
     <div class="__container">
+        
         <div class="row row-fluid">
 
             <label id="">Changer le theme</label>
@@ -187,22 +195,12 @@ Tram
 
 
         <!-- container stations -->
-        <div id="div_stream_ratp" class="row row-fluid">
-            <div id="stream_ratp" class="col-md-12">
-
-
-            </div>
+        <div id="stream_ratp" class="row row-fluid grid">
+            
         </div>
 
 
     </div>
-
-
-
-    <div class="footer">
-        Footer
-    </div>
-
-</body>
-
+    
+  </body>
 </html>

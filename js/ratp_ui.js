@@ -1,3 +1,44 @@
+/* Boost get json avec loader image
+(function($) {
+    $.extend({
+        getJSON: function(url, loadingSelector, data, callback) {
+            if ($.isFunction(data)) {
+                callback = data;
+                data = null;
+            }
+ 
+            var loadingElement = $(loadingSelector);
+            return $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                beforeSend: function() {
+                    loadingElement.addClass('fa-pulse');
+                },
+                complete: function() {
+                    loadingElement.removeClass('fa-pulse');
+                },
+                success: callback,
+                data: data
+            })
+        }
+    })
+})(jQuery);
+*/
+
+//http://packery.metafizzy.co/
+    var $grid = $('.grid').packery({
+      // options
+      itemSelector: '.grid-item',
+      gutter: 5,
+      itemSelector: '.panel-heading',
+      percentPosition: true,
+      columnWidth: 100
+      
+    });
+    
+    
+    
 /***************************
  * 
  * Config
@@ -348,10 +389,9 @@ function buildStreamRatp(rep) {
     
 
   } else {
-  
-    $("#stream_ratp").prepend(
-      '<div class="col-md-3 stream_ratp" id="'+rep.informations.station.slug+'">' +
-        '<div class="panel panel-default" >' +
+    
+    var $items = '<div class="col-md-3 stream_ratp grid-item" id="'+rep.informations.station.slug+'">' +
+        '<div class="panel panel-default " >' +
           '<div class="panel-heading">' +
             '<h3 class="panel-title title_'+div_station_slug+'">' +
               //'<span class="close delete_streaming " data-ratp_stream_slug="'+stream_slug+'"  href="#" aria-label="Supprimer de la mémoire" title="Supprimer de la mémoire">×</span>' +
@@ -364,9 +404,35 @@ function buildStreamRatp(rep) {
           html_station +
         '</div>' +
       '</div>'  +
-    '</div>'
+    '</div>';
+    
  
-    );
+var $grid = $('.grid').packery({
+      // options
+      //itemSelector: '.grid-item',
+      //gutter: 5,
+      itemSelector: '.panel-heading',
+      percentPosition: true,
+      columnWidth: 100
+      
+    });
+    
+ 
+    $grid.prepend( $items )
+    // add and lay out newly prepended items
+    .packery( 'prepended', $items );
+     $grid.packery('layout');
+    
+    //$("#stream_ratp").prepend($items);
+    
+
+$grid.find('.grid-item').each( function( i, gridItem ) {
+  var draggie = new Draggabilly( gridItem );
+  // bind drag events to Packery
+  $grid.packery( 'bindDraggabillyEvents', draggie );
+});
+
+ $grid.packery('layout');
 
   }
 }
@@ -385,7 +451,7 @@ function refreshAPIStream(transport, line, station, dest) {
 
   var url = stream_ratp_api_url + transport + "/" + line + "/stations/" + station + "?destination=" + dest;
 
-  $.getJSON(url, function(data) {
+  $.getJSON(url, '.metro_line', function(data) {
     
     refreshStreamRatpDatas(data.response);
   });
@@ -398,7 +464,7 @@ function getAPIStream(transport, line, station, dest) {
   //https://api-ratp.pierre-grimaud.fr/v2/metros/8/stations/daumesnil?destination=balard
   var url = stream_ratp_api_url + transport + "/" + line + "/stations/" + station + "?destination=" + dest;
 
-  $.getJSON(url, function(data) {
+  $.getJSON(url,  '.metro_line',function(data) {
     buildStreamRatp(data.response);
   });
 }
@@ -441,7 +507,7 @@ function getAPIStations(transport, line) {
 
 
 $(document).ready(function() {
-
+  initStreamLoader('Ratp', 'stream_ratp_loading_spinner_span');
 
   loadStreamRaptStorage();
 
@@ -449,9 +515,59 @@ $(document).ready(function() {
   $("#add_metros").toggle();
   $("#stream_ratp_control").toggle();
 
+  
+   
+/*
+// make all grid-items draggable
+// make all items draggable
+//var $items = $grid.find('.grid-item').draggable();
+// bind drag events to Packery
+//$grid.packery( 'bindUIDraggableEvents', $items );
+function orderItems() {
+  var itemElems = $grid.packery('getItemElements');
+  $( itemElems ).each( function( i, itemElem ) {
+    $( itemElem ).text( i + 1 );
+  });
+}
 
+$grid.on( 'layoutComplete', orderItems );
+$grid.on( 'dragItemPositioned', orderItems );
+*/
+ 
 });
 
+//Ajax loader UI
+//https://api.jquery.com/category/ajax/global-ajax-event-handlers/
+
+function initStreamLoader(name, id) {
+  $('body').append('<span id="' + id + '">'+
+       '<i class="fa fa-refresh fa-spin fa-fw "></i>'+
+        name +
+    '</span>')
+}
+$(document).ajaxStart(function() {
+  
+  var spinner = $( "#stream_ratp_loading_spinner_span" );
+  spinner.css({color:'#9dff00'});
+   if(spinner.is(':animated')) {
+         spinner.stop().animate({opacity:'100'});
+      } else {
+        spinner.show();
+      }
+});
+$(document).ajaxStop(function() {
+     var spinner = $( "#stream_ratp_loading_spinner_span" );
+
+  spinner.css({color:'#00c4ff'}).fadeOut(stream_ratp_time - 1000*2);
+  
+
+  
+});
+$( document ).ajaxError(function() {
+    var spinner = $( "#stream_ratp_loading_spinner_span" );
+
+  spinner.css({color:'#ed1b2a'});
+});
 
 //Select transport
 $(document).on('click', '.get_transport', function() {
