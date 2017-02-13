@@ -497,20 +497,48 @@ function getAPIStations(transport, line) {
 
 $(document).on('click', '.doDraggable', function() {
 
-  var method = 'bindDraggabillyEvents';
+  var bindMethod = 'bindDraggabillyEvents';
+  var enableMethod = 'enable' ;
 
   if($(this).hasClass('draggableOn')) {
 
-    
-     method = 'unbindDraggabillyEvents';
+    enableMethod = 'disable' ;
+     bindMethod = 'unbindDraggabillyEvents';
   }
   
   var $grid = $('.grid').packery();
+  var $items = $grid.find('.grid-item');
+  
+  // init draggabilly
+  $items.draggabilly();
+  // disable draggabilly
+  $items.draggabilly('disable');
+  
+   $items.draggabilly( enableMethod );
+    // bind/unbind with Packery
+    $items.each( function( i, itemElem ) {
+      // get draggabilly instance
+      var draggie = $( itemElem ).data('draggabilly');
+      $grid.packery( bindMethod, draggie );
+    });
+  
+  /*
+  //$grid.find('.grid-item').draggabilly( enableMethod );
+  
   $grid.find('.grid-item').each( function( i, gridItem ) {
-    var draggie = new Draggabilly( gridItem );
+    gridItem.draggabilly();
+    gridItem.draggabilly(enableMethod);
+    
+    
+    //var draggie = new Draggabilly( gridItem );
+   // draggie.draggabilly( enableMethod );
     // bind drag events to Packery
-    $grid.packery( method, draggie );
-  });
+    //$grid.packery( method, draggie );
+    
+     //var draggie = $( gridItem ).data('draggabilly');
+      $('.grid').packery( method, draggie );
+      */
+  //});
   
   
   $(this).toggleClass('draggableOn');
