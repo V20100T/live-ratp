@@ -390,7 +390,7 @@ function buildStreamRatp(rep) {
 
   } else {
     
-    var $items = '<div class="col-md-3 stream_ratp grid-item" id="'+rep.informations.station.slug+'">' +
+    var $items = '<div class="col-xs-6 col-md-3 stream_ratp grid-item" id="'+rep.informations.station.slug+'">' +
         '<div class="panel panel-default " >' +
           '<div class="panel-heading">' +
             '<h3 class="panel-title title_'+div_station_slug+'">' +
@@ -551,6 +551,7 @@ $(document).on('click', '.reOrganizeBlocs', function() {
 
   //var $grid = $('.grid').packery();
      $('.grid').packery();
+     
 
 
 });
@@ -559,7 +560,11 @@ $(document).on('click', '.reOrganizeBlocs', function() {
 $(document).ready(function() {
   
 
-      $('.grid').packery();
+      $('.grid').packery({
+          itemSelector: '.grid-item', 
+  columnWidth: '.grid-sizer',
+  percentPosition: true
+      });
 
   
   initStreamLoader('Ratp', 'stream_ratp_loading_spinner_span');
