@@ -255,8 +255,6 @@ function addStation(transport, line, st, destinations) {
 
 function addLine(transport, line) {
 
-console.log(transport, line);
-
   $("#list_lines").append(
     "<button type='button' id='line_" + line.code +
     "' class=' get_line btn btn-default " + transport + "_line " + transport + "_line" + line.code +
@@ -418,17 +416,12 @@ function getAPILignes(transport) {
 
   $.getJSON(stream_ratp_api_url + 'lines/' + transport,
     function(data) {
-      
-      console.log('data => ' + data.result);
-
       var list_items = data.result[transport];
       clearLines();
       
       console.log(list_items);
       $.map(list_items, function(line, key) {
-        
-        console.log(line, key);
-        
+
         addLine(transport, line);
       });
 
