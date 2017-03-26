@@ -8,7 +8,7 @@
  * 
  * *****************************/
 
-var stream_ratp_api_url = 'https://api-ratp.pierre-grimaud.fr/v2/';
+var stream_ratp_api_url = 'https://api-ratp.pierre-grimaud.fr/v3/';
 var stream_ratp_time = 1000 * 35;
 
 /************************************************
@@ -255,13 +255,15 @@ function addStation(transport, line, st, destinations) {
 
 function addLine(transport, line) {
 
+console.log(transport, line);
+
   $("#list_lines").append(
-    "<button type='button' id='line_" + line +
-    "' class=' get_line btn btn-default " + transport + "_line " + transport + "_line" + line +
+    "<button type='button' id='line_" + line.code +
+    "' class=' get_line btn btn-default " + transport + "_line " + transport + "_line" + line.code +
     "' data-transport='" + transport +
-    "' data-line='" + line +
-    "' >" +
-    line +
+    "' data-line='" + line.code +
+    "' alt='"+line.directions+" "+line.name+"'>" +
+    line.code +
     "</button>");
 
 }
@@ -414,13 +416,20 @@ function getAPIStream(transport, line, station, dest) {
 
 function getAPILignes(transport) {
 
-  $.getJSON(stream_ratp_api_url + transport + "/",
+  $.getJSON(stream_ratp_api_url + 'lines/' + transport,
     function(data) {
+      
+      console.log('data => ' + data.result);
 
-      var list_items = data.response[transport];
+      var list_items = data.result[transport];
       clearLines();
+      
+      console.log(list_items);
       $.map(list_items, function(line, key) {
-        addLine(transport, line.line);
+        
+        console.log(line, key);
+        
+        addLine(transport, line);
       });
 
     });
