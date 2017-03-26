@@ -429,10 +429,22 @@ function getAPILignes(transport) {
 }
 
 function getAPIStations(transport, line) {
-  $.getJSON(stream_ratp_api_url + transport + "/" + line,
+  
+  var destinations = null;
+  
+   $.getJSON(stream_ratp_api_url +"destinations/"+ transport + "/" + line,
     function(data) {
-      var list_items = data.response.stations;
-      var destinations = data.response.destinations;
+      var destinations = data.result.destinations;
+      
+    });
+  
+  
+  $.getJSON(stream_ratp_api_url +"stations/"+ transport + "/" + line,
+    function(data) {
+      var list_items = data.result.stations;
+      //var destinations = data.response.destinations;
+      //var destinations = null;
+      console.log('destinations => ' + destinations);
 
       clearStations();
       
