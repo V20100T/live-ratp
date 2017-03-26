@@ -1,42 +1,4 @@
-/* Boost get json avec loader image
-(function($) {
-    $.extend({
-        getJSON: function(url, loadingSelector, data, callback) {
-            if ($.isFunction(data)) {
-                callback = data;
-                data = null;
-            }
- 
-            var loadingElement = $(loadingSelector);
-            return $.ajax({
-                url: url,
-                type: 'GET',
-                dataType: 'json',
-                beforeSend: function() {
-                    loadingElement.addClass('fa-pulse');
-                },
-                complete: function() {
-                    loadingElement.removeClass('fa-pulse');
-                },
-                success: callback,
-                data: data
-            })
-        }
-    })
-})(jQuery);
-*/
 
-//http://packery.metafizzy.co/
-    var $grid = $('.grid').packery({
-      // options
-      itemSelector: '.grid-item',
-      gutter: 5,
-      itemSelector: '.panel-heading',
-      percentPosition: true,
-      columnWidth: 100
-      
-    });
-    
     
     
 /***************************
@@ -412,8 +374,8 @@ function buildStreamRatp(rep) {
  
    $('.grid').prepend( $items )
     // add and lay out newly prepended items
-    .packery( 'prepended', $items );
-    $('.grid').packery('layout');
+    //.packery( 'prepended', $items );
+    //$('.grid').packery('layout');
 
   }
 }
@@ -485,86 +447,10 @@ function getAPIStations(transport, line) {
  * 
  * ***********************************************/
 
-  var $grid = $('.grid').packery({
-      // options
-      //itemSelector: '.grid-item',
-      //gutter: 5,
-      itemSelector: '.panel-heading',
-      percentPosition: true,
-      columnWidth: 350
-      
-    });
-
-$(document).on('click', '.doDraggable', function() {
-
-  var bindMethod = 'bindDraggabillyEvents';
-  var enableMethod = 'enable' ;
-
-  if($(this).hasClass('draggableOn')) {
-
-    enableMethod = 'disable' ;
-     bindMethod = 'unbindDraggabillyEvents';
-  }
-  
-  var $grid = $('.grid').packery();
-  var $items = $grid.find('.grid-item');
-  
-  // init draggabilly
-  $items.draggabilly();
-  // disable draggabilly
-  $items.draggabilly('disable');
-  
-   $items.draggabilly( enableMethod );
-    // bind/unbind with Packery
-    $items.each( function( i, itemElem ) {
-      // get draggabilly instance
-      var draggie = $( itemElem ).data('draggabilly');
-      $grid.packery( bindMethod, draggie );
-    });
-  
-  /*
-  //$grid.find('.grid-item').draggabilly( enableMethod );
-  
-  $grid.find('.grid-item').each( function( i, gridItem ) {
-    gridItem.draggabilly();
-    gridItem.draggabilly(enableMethod);
-    
-    
-    //var draggie = new Draggabilly( gridItem );
-   // draggie.draggabilly( enableMethod );
-    // bind drag events to Packery
-    //$grid.packery( method, draggie );
-    
-     //var draggie = $( gridItem ).data('draggabilly');
-      $('.grid').packery( method, draggie );
-      */
-  //});
-  
-  
-  $(this).toggleClass('draggableOn');
-
-
-
-
-});
-$(document).on('click', '.reOrganizeBlocs', function() {
-
-  //var $grid = $('.grid').packery();
-     $('.grid').packery();
-     
-
-
-});
 
 
 $(document).ready(function() {
   
-
-      $('.grid').packery({
-          itemSelector: '.grid-item', 
-  columnWidth: '.grid-sizer',
-  percentPosition: true
-      });
 
   
   initStreamLoader('Ratp', 'stream_ratp_loading_spinner_span');
@@ -576,23 +462,6 @@ $(document).ready(function() {
   $("#stream_ratp_control").toggle();
 
   
-   
-/*
-// make all grid-items draggable
-// make all items draggable
-//var $items = $grid.find('.grid-item').draggable();
-// bind drag events to Packery
-//$grid.packery( 'bindUIDraggableEvents', $items );
-function orderItems() {
-  var itemElems = $grid.packery('getItemElements');
-  $( itemElems ).each( function( i, itemElem ) {
-    $( itemElem ).text( i + 1 );
-  });
-}
-
-$grid.on( 'layoutComplete', orderItems );
-$grid.on( 'dragItemPositioned', orderItems );
-*/
  
 });
 
