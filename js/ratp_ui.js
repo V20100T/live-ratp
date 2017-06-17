@@ -1,20 +1,20 @@
 
-    
-    
+
+
 /***************************
- * 
+ *
  * Config
- * 
- * 
+ *
+ *
  * *****************************/
 
 var stream_ratp_api_url = 'https://api-ratp.pierre-grimaud.fr/v3/';
 var stream_ratp_time = 1000 * 35;
 
 /************************************************
- * 
+ *
  * JS TOOLS
- * 
+ *
  * ***********************************************/
 function isJson(json_string) {
   try {
@@ -27,7 +27,7 @@ function isJson(json_string) {
 }
 
 function isNullOrUndefined(test) {
-  
+
   if (typeof(test) == 'undefined' || test == null) {
 
     return true;
@@ -38,10 +38,10 @@ function isNullOrUndefined(test) {
 }
 
 function rand(items){
-  
+
   return items[~~(Math.random() * items.length)];
 }
-    
+
 function jq(myid) {
 
   // return "#" + myid.replace( /(:|\.|\[|\]|,|=|@)/g, "\\$1" );
@@ -56,9 +56,9 @@ var $ = jQuery;
 
 
 /**********************************************
- * 
+ *
  * STREAM TIMER
- * 
+ *
  * *******************************************/
 
 
@@ -79,9 +79,9 @@ function stopStreamRatp() {
 
 
 /************************************************
- * 
+ *
  * HTML FORM cleanup
- * 
+ *
  * ***********************************************/
 function clearLines() {
 
@@ -105,19 +105,19 @@ function clearDestinations() {
 }
 
 function getSchedulesStatus(schedules) {
-  
+
   var class_status_schedules = [];
   var status_ordered = {
     danger: {
       slug: 'danger',
-      mess: [ 
+      mess: [
         'Service termine',
         'INFO INDISPO',
         '..................',
         'PAS DE SERVICE',
         'Train arrete',
         'Service terminé ou horaires indisponibles'
-        
+
         ]
     },
     warning: {
@@ -126,7 +126,7 @@ function getSchedulesStatus(schedules) {
         'Train retarde'
       ]
     },
-    success: 
+    success:
     {
       slug: 'success',
       mess: [
@@ -136,30 +136,30 @@ function getSchedulesStatus(schedules) {
         ]
     }
   };
-  
+
   $.each(schedules, function(index, schedule) {
    class_status_schedules[index] = 'info';
    $.each(status_ordered, function(index_st_ex, status_exemple) {
      $.each(status_exemple.mess, function(index_mess_ex, mess_exemple) {
       if(schedule.message.toLowerCase().indexOf(mess_exemple.toLowerCase()) ) {
           class_status_schedules[index] = status_exemple.slug;
-      } 
+      }
      });
-      
+
    });
-        
+
    });
-  
+
   return class_status_schedules;
 }
 
 function getSchedulesDestinationCount(schedules) {
-  
+
   var schedules_destinations_count = [];
     //count destinations, pour ne pas l afficher si c'est la meme pour tous les schedules
   $.each(schedules, function(index, schedule) {
-    
-    
+
+
     if (schedules_destinations_count[schedule.destination]) {
       schedules_destinations_count[schedule.destination]++;
     }
@@ -167,7 +167,7 @@ function getSchedulesDestinationCount(schedules) {
       schedules_destinations_count[schedule.destination] = 1;
     }
   });
-  
+
   return schedules_destinations_count;
 }
 
@@ -178,18 +178,18 @@ function getHtmlSchedules(schedules) {
   var class_status_schedules = getSchedulesStatus(schedules);
 
   var html_schedules = '';
-  
+
   $.each(schedules, function(index, schedule) {
 
     var badge_class = ['default', 'primary', '', 'info'];
-    
-    if (schedules_destinations_count[schedule.destination] != schedules.length 
-    && schedule.destination.length 
+
+    if (schedules_destinations_count[schedule.destination] != schedules.length
+    && schedule.destination.length
     && schedule.destination != ' ') {
-      
-      html_schedules = html_schedules + 
+
+      html_schedules = html_schedules +
       '<li class="list-group-item">'+
-        '<span class="label-message label label-'+class_status_schedules[index]+'" > '+ 
+        '<span class="label-message label label-'+class_status_schedules[index]+'" > '+
           schedule.message +
         ' </span>'+
         ' <i class="fa fa-exchange" aria-hidden="true"></i> '+
@@ -199,28 +199,30 @@ function getHtmlSchedules(schedules) {
       '</li>';
     }
     else {
-      html_schedules = html_schedules + 
-      
-        ' <span class="label-message  label label-'+class_status_schedules[index]+'" >'+ 
+      html_schedules = html_schedules +
+
+        ' <span class="label-message  label label-'+class_status_schedules[index]+'" >'+
           schedule.message +
-        ' </span> ';    
-      
+        ' </span> ';
+
     }
 
 
   });
-  
-  
+
+
   return html_schedules;
 }
 
 
 /************************************************
- * 
+ *
  * HTML ADD
- * 
+ *
  * ***********************************************/
-function addStation(transport, line, st, destinations) {
+
+
+function addDestinations(destinations) {
 
   clearDestinations();
 
@@ -228,14 +230,20 @@ function addStation(transport, line, st, destinations) {
 
     $("#list_destinations").append(
       "<button type='button' id='destinations_" +
-      (dest.id_destination) +
-      "' class='select_dest btn btn-warning " + transport + "_dest destinations-" + dest.slug +
-      "' data-dest='" + dest.slug +
+      (dest.way) +
+      "' class='select_dest btn btn-warning destinations-" + dest.way +
+      "' data-dest='" + dest.way +
       "' >" +
-      dest.destination +
+      dest.name +
       "</button>");
 
   });
+
+}
+
+function addStation(transport, line, st) {
+
+
 
   var station_class = transport + '_line_station ' + transport + '_line' + line;
 
@@ -296,6 +304,7 @@ function refreshStreamRatpDatas(rep) {
 
 function buildStreamRatp(rep) {
 
+  console.log('buildStreamRatp rep : ', rep );
   var html_schedules = getHtmlSchedules(rep.schedules);
   var stream_slug = 'stream_ratp_' + rep.informations.type + '_' + rep.informations.line + '_' + rep.informations.station.slug + '_' + rep.informations.destination.slug;
   var div_station_slug = "div_station_" + rep.informations.type + '_' + rep.informations.station.slug;
@@ -332,26 +341,26 @@ function buildStreamRatp(rep) {
             '</div>' +
           '</div><!-- fin station -->'
           ;
-         
+
        var css_slug = 'btn-title_line' + rep.informations.line+'_'+  rep.informations.station.slug.replace('+', '-')  ;
        var class_css_ratp_line = rep.informations.type + '_line ' + rep.informations.type + '_line' + rep.informations.line ;
-       
+
   // Station div existe deja, on ajoute uniquement le stream
   if ($('#' + div_station_slug).length) {
 
     $('#' + div_station_slug).prepend(html_station);
-  
+
     if (!$('.' + css_slug).length) {
       $('.title_' + div_station_slug ).prepend(
         '<button  class="btn ' + class_css_ratp_line + ' '+css_slug+' " type="button">' +
           rep.informations.line +
-        '</button>' 
+        '</button>'
       );
     }
-    
+
 
   } else {
-    
+
     var $items = '<div class="col-xs-6 col-md-3 stream_ratp grid-item" id="'+rep.informations.station.slug+'">' +
         '<div class="panel panel-default " >' +
           '<div class="panel-heading">' +
@@ -367,11 +376,11 @@ function buildStreamRatp(rep) {
         '</div>' +
       '</div>'  +
     '</div>';
-    
- 
+
+
 //var $grid = $('.grid').packery();
-    
- 
+
+
    $('.grid').prepend( $items )
     // add and lay out newly prepended items
     //.packery( 'prepended', $items );
@@ -382,9 +391,9 @@ function buildStreamRatp(rep) {
 
 
 /************************************************
- * 
- * API 
- * 
+ *
+ * API
+ *
  * ***********************************************/
 
 
@@ -395,7 +404,7 @@ function refreshAPIStream(transport, line, station, dest) {
   var url = stream_ratp_api_url + transport + "/" + line + "/stations/" + station + "?destination=" + dest;
 
   $.getJSON(url, '.metro_line', function(data) {
-    
+
     refreshStreamRatpDatas(data.response);
   });
 
@@ -405,9 +414,13 @@ function refreshAPIStream(transport, line, station, dest) {
 function getAPIStream(transport, line, station, dest) {
 
   //https://api-ratp.pierre-grimaud.fr/v2/metros/8/stations/daumesnil?destination=balard
-  var url = stream_ratp_api_url + transport + "/" + line + "/stations/" + station + "?destination=" + dest;
+  // /schedules/{type}/{code}/{station}/{way}
+  ///schedules/metros/8/bonne nouvelle/R?_format=json
+  //var url = stream_ratp_api_url + transport + "/" + line + "/stations/" + station + "?destination=" + dest;
+  var url = stream_ratp_api_url + "shedules/" + transport + "/" + line + "/" + station + "/"+ dest;
 
   $.getJSON(url,  '.metro_line',function(data) {
+    console.log('datas : ', data);
     buildStreamRatp(data.response);
   });
 }
@@ -418,7 +431,7 @@ function getAPILignes(transport) {
     function(data) {
       var list_items = data.result[transport];
       clearLines();
-      
+
       console.log(list_items);
       $.map(list_items, function(line, key) {
 
@@ -429,44 +442,46 @@ function getAPILignes(transport) {
 }
 
 function getAPIStations(transport, line) {
-  
+
   var destinations = null;
-  
+
    $.getJSON(stream_ratp_api_url +"destinations/"+ transport + "/" + line,
     function(data) {
-      var destinations = data.result.destinations;
-      
+       //destinations = ;
+       addDestinations(data.result.destinations);
+        console.log('destinations => ' , destinations);
+
     });
-  
-  
+
+
   $.getJSON(stream_ratp_api_url +"stations/"+ transport + "/" + line,
     function(data) {
       var list_items = data.result.stations;
       //var destinations = data.response.destinations;
       //var destinations = null;
-      console.log('destinations => ' + destinations);
+      //console.log('destinations => ' + destinations);
 
       clearStations();
-      
+
       $.map(list_items, function(station, key) {
-        addStation(transport, line, station, destinations);
+        addStation(transport, line, station);
       });
     });
 }
 
 
 /************************************************
- * 
+ *
  * JQUERY UI
- * 
+ *
  * ***********************************************/
 
 
 
 $(document).ready(function() {
-  
 
-  
+
+
   initStreamLoader('Ratp', 'stream_ratp_loading_spinner_span');
 
   loadStreamRaptStorage();
@@ -475,8 +490,8 @@ $(document).ready(function() {
   $("#add_metros").toggle();
   $("#stream_ratp_control").toggle();
 
-  
- 
+
+
 });
 
 //Ajax loader UI
@@ -489,7 +504,7 @@ function initStreamLoader(name, id) {
     '</span>')
 }
 $(document).ajaxStart(function() {
-  
+
   var spinner = $( "#stream_ratp_loading_spinner_span" );
   spinner.css({color:'#9dff00'});
    if(spinner.is(':animated')) {
@@ -502,9 +517,9 @@ $(document).ajaxStop(function() {
      var spinner = $( "#stream_ratp_loading_spinner_span" );
 
   spinner.css({color:'#00c4ff'}).fadeOut(stream_ratp_time - 1000*2);
-  
 
-  
+
+
 });
 $( document ).ajaxError(function() {
     var spinner = $( "#stream_ratp_loading_spinner_span" );
@@ -585,6 +600,8 @@ $(document).on('click', '#add_stream_ratp', function() {
   var line = $(this).data('line');
   var dest = $(this).data('dest');
   var station = $(this).data('station');
+
+console.log('add stream : ', transport, line, dest, station);
 
   if (isNullOrUndefined(transport) ||
     isNullOrUndefined(line) ||
@@ -696,9 +713,9 @@ function slugToJson(slug) {
 
 
 /******************************************************
- * 
+ *
  * Local Storage
- * 
+ *
  * ***************************************/
 function flushLS() {
 
@@ -799,7 +816,7 @@ function addStreamToLocalStorage(stream_ratp_slug) {
 
   }
 
-  if (typeof(stream_ratp_localStorage[stream_ratp_slug]) != 'undefined' 
+  if (typeof(stream_ratp_localStorage[stream_ratp_slug]) != 'undefined'
   || stream_ratp_localStorage[stream_ratp_slug]
   || JSON.stringify(stream_ratp_localStorage).indexOf(stream_ratp_slug) > -1
   ) {
@@ -856,4 +873,3 @@ function deleteLSbyKey(key) {
 
 
 }
-
