@@ -278,8 +278,9 @@ function addLine(transport, line) {
 function refreshStreamRatpDatas(rep) {
 
   var html_schedules = getHtmlSchedules(rep.schedules);
-  var stream_slug = 'stream_ratp_' + rep.informations.type + '_' + rep.informations.line + '_' + rep.informations.station.slug + '_' + rep.informations.destination.slug;
+  var stream_slug = 'stream_ratp_' + rep.informations.transport + '_' + rep.informations.line + '_' + rep.informations.station + '_' + rep.informations.dest;
 
+  //console.log('stream clean : ', stream_slug);
   $('#' + stream_slug).html('');
 
   if (document.getElementById(stream_slug) == null) {
@@ -288,9 +289,13 @@ function refreshStreamRatpDatas(rep) {
     return false;
   }
 
+
+
   $('.stream_ratp_datas').each(function() {
 
     var stream_ratp = $(this).attr('id');
+
+    //console.log('===',stream_ratp, stream_slug);
     if (stream_slug == stream_ratp) {
       $(this).html('');
       $(this).html(html_schedules);
@@ -407,11 +412,18 @@ function buildStreamRatp(rep) {
 
 function refreshAPIStream(transport, line, station, dest) {
 
-  var url = stream_ratp_api_url + transport + "/" + line + "/stations/" + station + "?destination=" + dest;
+  //var url = stream_ratp_api_url + transport + "/" + line + "/stations/" + station + "?destination=" + dest;
+  var url = stream_ratp_api_url + "schedules/" + transport + "/" + line + "/" + station + "/"+ dest;
 
   $.getJSON(url, '.metro_line', function(data) {
 
-    refreshStreamRatpDatas(data.response);
+    data.result.informations = {};
+    data.result.informations.transport = transport;
+    data.result.informations.line = line;
+    data.result.informations.station = station;
+    data.result.informations.dest = dest;
+
+    refreshStreamRatpDatas(data.result);
   });
 
 }
