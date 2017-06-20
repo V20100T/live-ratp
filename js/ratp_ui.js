@@ -304,10 +304,16 @@ function refreshStreamRatpDatas(rep) {
 
 function buildStreamRatp(rep) {
 
+  /*
+  data.informations.transport = transport;
+  data.informations.line = line;
+  data.informations.station = station;
+  data.informations.dest = dest;
+  */
   console.log('buildStreamRatp rep : ', rep );
   var html_schedules = getHtmlSchedules(rep.schedules);
-  var stream_slug = 'stream_ratp_' + rep.informations.type + '_' + rep.informations.line + '_' + rep.informations.station.slug + '_' + rep.informations.destination.slug;
-  var div_station_slug = "div_station_" + rep.informations.type + '_' + rep.informations.station.slug;
+  var stream_slug = 'stream_ratp_' + rep.informations.transport + '_' + rep.informations.line + '_' + rep.informations.station + '_' + rep.informations.dest;
+  var div_station_slug = "div_station_" + rep.informations.transport + '_' + rep.informations.station;
 
   div_station_slug = div_station_slug.replace('+', '_');
   var obj = slugToJson(stream_slug);
@@ -327,11 +333,11 @@ function buildStreamRatp(rep) {
           '<div class="panel-body" id="' + rep.informations.line + div_station_slug + '">' +
             '<div class="station ' + div_station_slug + '" id="'+ div_station_slug + '" >' +
               '<h4 id="' + jq('btn_' + stream_slug) + '">'+
-              '<button id="" class="btn ' + rep.informations.type + '_line ' + rep.informations.type + '_line' + rep.informations.line + ' " type="button" data-transport="' + rep.informations.type + '" data-line="' + rep.informations.line + '">' +
+              '<button id="" class="btn ' + rep.informations.transport + '_line ' + rep.informations.transport + '_line' + rep.informations.line + ' " type="button" data-transport="' + rep.informations.transport + '" data-line="' + rep.informations.line + '">' +
                 rep.informations.line +
               '</button>' +
                 '<i class="fa fa-arrow-right  " aria-hidden="true"></i>' +
-                rep.informations.destination.name +
+                rep.informations.dest +
               '<span class="close delete_streaming " data-ratp_stream_slug="'+stream_slug+'"  href="#" aria-label="Supprimer de la mémoire" title="Supprimer de la mémoire">×</span>' +
 
               '</h4>' +
@@ -342,8 +348,8 @@ function buildStreamRatp(rep) {
           '</div><!-- fin station -->'
           ;
 
-       var css_slug = 'btn-title_line' + rep.informations.line+'_'+  rep.informations.station.slug.replace('+', '-')  ;
-       var class_css_ratp_line = rep.informations.type + '_line ' + rep.informations.type + '_line' + rep.informations.line ;
+       var css_slug = 'btn-title_line' + rep.informations.line+'_'+  rep.informations.station.replace('+', '-')  ;
+       var class_css_ratp_line = rep.informations.transport + '_line ' + rep.informations.transport + '_line' + rep.informations.line ;
 
   // Station div existe deja, on ajoute uniquement le stream
   if ($('#' + div_station_slug).length) {
@@ -361,15 +367,15 @@ function buildStreamRatp(rep) {
 
   } else {
 
-    var $items = '<div class="col-xs-6 col-md-3 stream_ratp grid-item" id="'+rep.informations.station.slug+'">' +
+    var $items = '<div class="col-xs-6 col-md-3 stream_ratp grid-item" id="'+rep.informations.station+'">' +
         '<div class="panel panel-default " >' +
           '<div class="panel-heading">' +
             '<h3 class="panel-title title_'+div_station_slug+'">' +
               //'<span class="close delete_streaming " data-ratp_stream_slug="'+stream_slug+'"  href="#" aria-label="Supprimer de la mémoire" title="Supprimer de la mémoire">×</span>' +
-              '<button class="btn ' + class_css_ratp_line + ' '+css_slug+'" type="button" data-transport="' + rep.informations.type + '" data-line="' + rep.informations.line + '">' +
+              '<button class="btn ' + class_css_ratp_line + ' '+css_slug+'" type="button" data-transport="' + rep.informations.transport + '" data-line="' + rep.informations.line + '">' +
                 rep.informations.line +
               '</button>' +
-              rep.informations.station.name +
+              rep.informations.station +
             '</h3>' +
           '</div>' +
           html_station +
@@ -417,11 +423,18 @@ function getAPIStream(transport, line, station, dest) {
   // /schedules/{type}/{code}/{station}/{way}
   ///schedules/metros/8/bonne nouvelle/R?_format=json
   //var url = stream_ratp_api_url + transport + "/" + line + "/stations/" + station + "?destination=" + dest;
-  var url = stream_ratp_api_url + "shedules/" + transport + "/" + line + "/" + station + "/"+ dest;
+  var url = stream_ratp_api_url + "schedules/" + transport + "/" + line + "/" + station + "/"+ dest;
 
   $.getJSON(url,  '.metro_line',function(data) {
     console.log('datas : ', data);
-    buildStreamRatp(data.response);
+
+    data.result.informations = {};
+    data.result.informations.transport = transport;
+    data.result.informations.line = line;
+    data.result.informations.station = station;
+    data.result.informations.dest = dest;
+
+    buildStreamRatp(data.result);
   });
 }
 
@@ -461,6 +474,7 @@ function getAPIStations(transport, line) {
       //var destinations = null;
       //console.log('destinations => ' + destinations);
 
+      console.log('getAPIStations',list_items);
       clearStations();
 
       $.map(list_items, function(station, key) {
