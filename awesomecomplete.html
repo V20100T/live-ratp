@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Awesomplete</title>
+  <link rel="stylesheet" href="http://leaverou.github.io/awesomplete/awesomplete.css">
+  <script src="http://leaverou.github.io/awesomplete/awesomplete.js"></script>
+
+  <script src="http://underscorejs.org/underscore-min.js"></script>
+
+<style>
+
+#combobox .dropdown-input {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+#combobox .dropdown-btn {
+	vertical-align: top;
+	height: 36.5px;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+#combobox .caret {
+	display: inline-block;
+	width: 0;
+	height: 0;
+	margin-left: 2px;
+	vertical-align: middle;
+	border-top: 4px dashed;
+	border-top: 4px solid;
+	border-right: 4px solid transparent;
+	border-left: 4px solid transparent;
+}
+
+
+</style>
+  <script>
+
+function getRatpApiListItems(type,rep) {
+
+
+  console.log('> start : getMetrosListItems : ', rep);
+  if(!rep.result){
+  return {};
+  }
+  var list = [];
+
+  _.each(rep.result, function(itemList, type){
+    console.log('each : ', type, itemList);
+    var test_list = itemList.map(function(item){
+
+      list.push({
+        label: item['code'] +' - ' + item['name'].normalize('NFD').replace(/[\u0300-\u036f]/g, "") + ' ' + item['directions'],
+        value: item['code']
+      }
+
+      );
+
+/*
+       return {
+         label: item['code'] +' - ' + item['name'] + ' ' + item['directions'],
+         value: item['code']
+       };
+       */
+
+  });
+});
+
+console.log('END each ', list);
+/*
+
+  if(type == 'metros' && rep.result.metros) {
+     var metros_list = rep.result.metros.map(function(item){
+        return {
+          label: item['code'] +' - ' + item['name'] + ' ' + item['directions'],
+          value: item['code']
+        };
+    });
+
+
+    console.log(metros_list);
+  }
+
+  console.log('Bus : ', rep.result.bus );
+  if(rep.result.bus) {
+     var bus_list = rep.result.bus.map(function(item){
+        return {
+          label: item['code'] +' - ' + item['name'] + ' ' + item['directions'],
+          value: item['code']
+        };
+    });
+
+    console.log('bus_list : ', bus_list );
+  }
+
+  list = metros_list.concat(bus_list);
+*/
+
+
+  console.log('<< end : getMetrosListItems : ', list);
+
+
+
+return list;
+};
+
+
+var ajax = new XMLHttpRequest();
+ajax.open("GET", "https://api-ratp.pierre-grimaud.fr/v3/lines", true);
+ajax.onload = function() {
+var list = getRatpApiListItems('metros', JSON.parse(ajax.responseText));
+var comboplete = new Awesomplete(
+  document.querySelector("#metros_input"),
+  {
+    list: list ,
+    minChars: 0,
+    autoFirst: true,
+    //filter: Awesomplete.FILTER_STARTSWITH
+  });
+};
+ajax.send();
+
+
+
+
+Awesomplete.$('#metros_input_dropdown').addEventListener("click", function() {
+if (comboplete.ul.childNodes.length === 0) {
+  comboplete.minChars = 0;
+  comboplete.evaluate();
+}
+else if (comboplete.ul.hasAttribute('hidden')) {
+  comboplete.open();
+}
+else {
+  comboplete.close();
+}
+});
+
+</script>
+
+
+</head>
+<body>
+
+  <section id="ajax-example">
+  	<h2>Ajax example <small>Metros </small></h2>
+    <div class="awesomplete">
+  	<label class="">Metros
+
+      <input  id="metros_input" class="dropdown-input" autocomplete="on" aria-autocomplete="list">
+      <button id="metros_input_dropdown" class="dropdown-btn" type="button">
+        <span class="caret"></span>
+      </button>
+    </label>
+  </div>
+
+
+  	</section>
+
+
+    <label>Type or click dropdown:
+      <div class="awesomplete">
+        <input data-list="CSS, JavaScript, HTML, SVG, ARIA, MathML" class="dropdown-input" autocomplete="off" aria-autocomplete="list">
+        <ul hidden=""></ul>
+        <span class="visually-hidden" role="status" aria-live="assertive" aria-relevant="additions">
+        </span>
+      </div>
+      <button class="dropdown-btn" type="button">
+      <span class="caret"></span>
+    </button>
+    </label>
+
+</body>
+</html>
