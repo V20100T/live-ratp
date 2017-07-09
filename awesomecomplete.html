@@ -9,6 +9,10 @@
 
   <script src="http://underscorejs.org/underscore-min.js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js"></script>
+
+
 <style>
 
 #combobox .dropdown-input {
@@ -34,109 +38,228 @@
 	border-left: 4px solid transparent;
 }
 
+#metros_input{
+  width: 300px;
+}
+
+/*
+MD5 :
+  metros :    673bafb276982f2b05041b24a4637f23
+  bus :       d20f83ee6933aa1ea047fe5cbd9c1fd5
+  tramways :  9833d3bbae95e2379c857e1e7fae9a8c
+  rer :       62c1d166d7d6581d7ccbbbc8d456d68d
+  noctilien : 08a988e642d9c59a58c08ab415989a21
+
+*/
+b.item{
+  font-size: 1.3em;
+}
+i.item{
+  font-size: 0.7em;
+}
+
+/*METROS */
+.item_673bafb276982f2b05041b24a4637f23{
+  color: purple;
+}
+
+
+/*BUS */
+.item_d20f83ee6933aa1ea047fe5cbd9c1fd5{
+  color: red;
+}
+
+/*TRAM */
+.item_9833d3bbae95e2379c857e1e7fae9a8c{
+  color: green;
+}
+
+/*RER */
+.item_62c1d166d7d6581d7ccbbbc8d456d68d{
+  color: blue;
+}
+/*Noctilien */
+b.item_08a988e642d9c59a58c08ab415989a21{
+  color: orange;
+}
+
+
 
 </style>
   <script>
 
-function getRatpApiListItems(type,rep) {
+function getRatpStationsApiListItems(rep) {
+
+    var list = [];
+    console.log('> start station ; : getRatpStationsApiListItems : ', rep);
+    if(rep == 'undefined' || !rep.result){
+      return list;
+    }
+
+    _.each(rep.result.stations,function(station, key){
+      //console.log(key, station);
 
 
-  console.log('> start : getMetrosListItems : ', rep);
-  if(!rep.result){
-  return {};
-  }
+            list.push({
+              label: station['name'].normalize('NFD').replace(/[\u0300-\u036f]/g, ""),
+              value: station['slug'],
+
+            });
+
+
+    });
+
+    return list;
+
+
+}
+function getRatpApiListItems(rep) {
+
+
   var list = [];
+  console.log('> start line : : getRatpApiListItems : ', rep);
+  if(rep == 'undefined' || !rep.result){
+    return list;
+  }
+
 
   _.each(rep.result, function(itemList, type){
-    console.log('each : ', type, itemList);
-    var test_list = itemList.map(function(item){
+    //console.log('each : ', type, itemList);
+     itemList.map(function(item){
 
       list.push({
-        label: item['code'] +' - ' + item['name'].normalize('NFD').replace(/[\u0300-\u036f]/g, "") + ' ' + item['directions'],
-        value: item['code']
+      /*  label: '<b class="item item_'+CryptoJS.MD5(type)+'">'
+                  +item['code']
+                +'</b> - '
+                + item['name'].normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+                + ' <i class="item item_' + CryptoJS.MD5(type) + '">'
+                  + item['directions']+
+                '</i>',*/
+          label: type + item['code']
+                  +' : '
+                  + item['name'].normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+                  + ' >> '
+                  + item['directions']
+                  ,
+        value: type +'_'+ item['code'],
+        type: type,
+        datatype: type
       }
 
       );
 
-/*
-       return {
-         label: item['code'] +' - ' + item['name'] + ' ' + item['directions'],
-         value: item['code']
-       };
-       */
-
   });
 });
 
-console.log('END each ', list);
-/*
-
-  if(type == 'metros' && rep.result.metros) {
-     var metros_list = rep.result.metros.map(function(item){
-        return {
-          label: item['code'] +' - ' + item['name'] + ' ' + item['directions'],
-          value: item['code']
-        };
-    });
-
-
-    console.log(metros_list);
-  }
-
-  console.log('Bus : ', rep.result.bus );
-  if(rep.result.bus) {
-     var bus_list = rep.result.bus.map(function(item){
-        return {
-          label: item['code'] +' - ' + item['name'] + ' ' + item['directions'],
-          value: item['code']
-        };
-    });
-
-    console.log('bus_list : ', bus_list );
-  }
-
-  list = metros_list.concat(bus_list);
-*/
-
-
   console.log('<< end : getMetrosListItems : ', list);
-
-
-
-return list;
+  return list;
 };
 
-
+var input = document.getElementById("lines_input");
 var ajax = new XMLHttpRequest();
 ajax.open("GET", "https://api-ratp.pierre-grimaud.fr/v3/lines", true);
 ajax.onload = function() {
-var list = getRatpApiListItems('metros', JSON.parse(ajax.responseText));
-var comboplete = new Awesomplete(
-  document.querySelector("#metros_input"),
-  {
-    list: list ,
-    minChars: 0,
-    autoFirst: true,
-    //filter: Awesomplete.FILTER_STARTSWITH
-  });
+  var list = getRatpApiListItems(JSON.parse(ajax.responseText));
+  new Awesomplete(
+    document.getElementById("lines_input"),
+    {
+      list: list ,
+      minChars: 0,
+      maxItems: 50,
+      autoFirst: true,
+      //filter: Awesomplete.FILTER_STARTSWITH
+
+    });
+
+    Awesomplete.$.bind(document.getElementById("lines_input"), { "awesomplete-selectcomplete": selectDistrictWithPicker });
+    function selectDistrictWithPicker(evt) {
+      console.log(evt.text);
+      console.log(evt.text.value);
+      console.log(evt.text.label);
+      console.log(evt);
+
+      //document.getElementById("lines_input").value = evt.text.label;
+      console.log('@TODO  : LOAD stations autocompletor !! ');
+
+      document.getElementById("stations_input").value = 'Toi choisir station !';
+
+
+      var line = _.object(['type', 'slug'], evt.text.value.split('_'));
+      line.label = evt.text.label;
+      console.log(line);
+
+      //STATIONS :
+
+      var ajaxStations = new XMLHttpRequest();
+      // GET /stations/{type}/{code}
+      url = "https://api-ratp.pierre-grimaud.fr/v3/stations/"+line.type+'/'+line.slug;
+      console.log(url);
+      ajaxStations.open("GET", url, true);
+      ajaxStations.onload = function() {
+      var listStations = getRatpStationsApiListItems(JSON.parse(ajaxStations.responseText));
+      stationsAwesomplete= new Awesomplete(
+        document.querySelector("#stations_input"),
+        {
+          list: listStations ,
+          minChars: 0,
+          maxItems: 50,
+          autoFirst: true,
+          //filter: Awesomplete.FILTER_STARTSWITH
+        });
+      };
+      ajaxStations.send();
+
+      Awesomplete.$.bind(
+        document.getElementById("stations_input"),
+        { "awesomplete-selectcomplete": selectStationstWithPicker }
+      );
+      function selectStationstWithPicker(evt) {
+        console.log(evt.text);
+        console.log(evt.text.value);
+        console.log(evt.text.label);
+        console.log(evt);
+
+
+
+        console.log('@TODO add scheddles all directions');
+
+        console.log(line,
+          document.getElementById("stations_input").value+evt.text.value);
+
+
+          //GET /schedules/{type}/{code}/{station}/{way}
+          url_a = "https://api-ratp.pierre-grimaud.fr/v3/schedules/"+line.type+'/'+line.slug+'/'+evt.text.value+'/A';
+          url_r = "https://api-ratp.pierre-grimaud.fr/v3/schedules/"+line.type+'/'+line.slug+'/'+evt.text.value+'/R';
+
+          console.log(url_r, url_a);
+          schedule = {
+            type: line.type,
+            line: {
+              slug: line.slug,
+              name: line.label
+            },
+            station : {
+              slug: evt.text.value,
+              name: evt.text.label
+          }
+        };
+
+          console.log(schedule);
+          //recorde shecdule in memory
+          //refresh shecddle from memomry only new wiil be add.
+
+          stationsAwesomplete.destroy();
+      }
+
+
+
+
+
+    }//end function select divpicker
 };
 ajax.send();
 
 
-
-
-Awesomplete.$('#metros_input_dropdown').addEventListener("click", function() {
-if (comboplete.ul.childNodes.length === 0) {
-  comboplete.minChars = 0;
-  comboplete.evaluate();
-}
-else if (comboplete.ul.hasAttribute('hidden')) {
-  comboplete.open();
-}
-else {
-  comboplete.close();
-}
-});
 
 </script>
 
@@ -146,31 +269,23 @@ else {
 
   <section id="ajax-example">
   	<h2>Ajax example <small>Metros </small></h2>
-    <div class="awesomplete">
-  	<label class="">Metros
+  	<label class="">Selectionnez une ligne RATP : (metro, bus, tram, ...)
 
-      <input  id="metros_input" class="dropdown-input" autocomplete="on" aria-autocomplete="list">
-      <button id="metros_input_dropdown" class="dropdown-btn" type="button">
-        <span class="caret"></span>
-      </button>
+      <input  id="lines_input" class="awesomplete" class="dropdown-input" autocomplete="on" aria-autocomplete="list">
+
     </label>
-  </div>
+
+<br />
+    <label class="">Selectionnez une stations RATP :
+
+      <input  id="stations_input" class="dropdown-input" autocomplete="on" aria-autocomplete="list">
+
+    </label>
 
 
   	</section>
 
 
-    <label>Type or click dropdown:
-      <div class="awesomplete">
-        <input data-list="CSS, JavaScript, HTML, SVG, ARIA, MathML" class="dropdown-input" autocomplete="off" aria-autocomplete="list">
-        <ul hidden=""></ul>
-        <span class="visually-hidden" role="status" aria-live="assertive" aria-relevant="additions">
-        </span>
-      </div>
-      <button class="dropdown-btn" type="button">
-      <span class="caret"></span>
-    </button>
-    </label>
 
 </body>
 </html>
