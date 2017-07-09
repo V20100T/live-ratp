@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Autocomplete - Remote datasource</title>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <style>
+  .ui-autocomplete-loading {
+    background: white url("images/ui-anim_basic_16x16.gif") right center no-repeat;
+  }
+  </style>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+
+  $(document).ready(function () {
+
+    function log( message ) {
+      $( "<div>" ).text( message ).prependTo( "#log" );
+      $( "#log" ).scrollTop( 0 );
+    }
+
+
+      var array;
+      $("#birds").autocomplete({
+          source: function (request, response) {
+              if (array) {
+                  response($.ui.autocomplete.filter(array, request.term));
+              } else {
+                  $.ajax({
+                      dataType: "json",
+
+                      type: 'Get',
+                      //contentType: 'application/json; charset=utf-8',
+                      /*xhrFields: {
+                          withCredentials: true
+                      },*/
+                      //crossDomain: true,
+                      cache: true,
+                      url: 'https://api-ratp.pierre-grimaud.fr/v3/lines/metros',
+                      success: function (data) {
+                          array = $.map(data.result.metros, function (item) {
+                              return {
+                                label: item['code'] +' - ' + item['name'] + ' : ' + item['directions'],
+                                value: item['code'],
+                                type: 'metros'
+                              }
+                          });
+
+                          //call the filter here
+                          response($.ui.autocomplete.filter(array, request.term));
+                      },
+                      error: function (data) {
+
+                      }
+                  });
+              }
+          },
+          minLength: 1,
+          open: function () {
+
+          },
+          close: function () {
+
+          },
+          focus: function (event, ui) {
+
+          },
+          select: function (event, ui) {
+            log( "Select : value: " + ui.item.value + " label: " + ui.item.label + ' type : ' + ui.item.type );
+
+          }
+      });
+  });
+
+  </script>
+</head>
+<body>
+
+<div class="ui-widget">
+  <label for="birds">Birds: </label>
+  <input id="birds">
+</div>
+
+<div class="ui-widget" style="margin-top:2em; font-family:Arial">
+  Result:
+  <div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+</div>
+
+
+</body>
+</html>

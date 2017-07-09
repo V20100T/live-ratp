@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Autocomplete - Remote datasource</title>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <style>
+  .ui-autocomplete-loading {
+    background: white url("images/ui-anim_basic_16x16.gif") right center no-repeat;
+  }
+  </style>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    function log( message ) {
+      $( "<div>" ).text( message ).prependTo( "#log" );
+      $( "#log" ).scrollTop( 0 );
+    }
+
+    $( "#birds" ).autocomplete({
+      //source: "https://api-ratp.pierre-grimaud.fr/v3/lines/metros",
+      source: function( request, response ) {
+             $.ajax({
+                 dataType: "json",
+                 type : 'GET',
+                 url: 'https://api-ratp.pierre-grimaud.fr/v3/lines/metros',
+                 //data: 'q=' + prepareInput(this.element.attr('name') + '=' + request.term),
+                 success: function(data) {
+                   $('input.suggest-user').removeClass('ui-autocomplete-loading');  // hide loading image
+
+                   console.log('DATA : ',data);
+
+
+                   response($.map(data.result.metros, function (item) {
+                       return {
+                         label: item['code'] +' - ' + item['name'] + ' ' + item['directions'],
+                         value: item['code']
+                       }
+                   }));
+
+/*
+                   result = [];
+
+                   $.map( data.result.metros, function(item) {
+
+                      console.log(item, item['code'] +' - ' + item['name'] + ' ' + item['directions']);
+
+                      result.push({
+                        label: item['code'] +' - ' + item['name'] + ' ' + item['directions'],
+                        value: item['code']
+                      });
+
+                     response([{
+                         label: item['code'] +' - ' + item['name'] + ' ' + item['directions'],
+                         value: item['code']
+                     }]);
+                  });
+
+                  response = result;
+                  console.log('response : ', response, 'result : ', result);
+
+                  return response;
+
+
+                     /*
+                   return $.map( data.result.metros, function(item) {
+                     response([{
+                         label: item['name'] + ' ' + item['directions'],
+                         value: item['code']
+                     }]);
+
+                  }); */
+
+               },
+               error: function(data) {
+                   $('input.suggest-user').removeClass('ui-autocomplete-loading');
+               }
+             });
+           },
+      minLength: 1,
+      select: function( event, ui ) {
+        log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+      }
+    });
+  } );
+  </script>
+</head>
+<body>
+
+<div class="ui-widget">
+  <label for="birds">Birds: </label>
+  <input id="birds">
+</div>
+
+<div class="ui-widget" style="margin-top:2em; font-family:Arial">
+  Result:
+  <div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+</div>
+
+
+</body>
+</html>
