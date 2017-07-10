@@ -8,9 +8,21 @@
   <script src="http://leaverou.github.io/awesomplete/awesomplete.js"></script>
 
   <script src="http://underscorejs.org/underscore-min.js"></script>
-
+  <script src="https://raw.githubusercontent.com/epeli/underscore.string/master/dist/underscore.string.min.js"></script>
+<!--
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js"></script>
+-->
+
+
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
+     <!-- Bootstrap -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <link id="bootswatch_theme" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/darkly/bootstrap.min.css" rel="stylesheet" >
+
+    <!-- icones -->
+    <script src="https://use.fontawesome.com/154af993bf.js"></script>
 
 
 <style>
@@ -88,6 +100,141 @@ b.item_08a988e642d9c59a58c08ab415989a21{
 </style>
   <script>
 
+  $(document).ready(function() {
+
+    buildSchedules(false);
+
+  });
+
+var schedules = {};
+
+
+function refreshSchedule(sc) {
+
+  _.each(sc.urls, function(url, key){
+    console.log('url', url, key);
+
+    $.getJSON(url ,function(data) {
+      console.log('>> refreshSchedule datas : ' + sc.slug + ' :: '+ key + url , data);
+      if(!data.result.schedules){
+        console.log('no schedules in rep');
+        return false;
+      }
+      sc.urls.key = key;
+      html_schedules = getHtmlSchedules(sc, data.result.schedules);
+      console.log('>>>> ADDD html_schedules',  html_schedules);
+      $('#'+sc.slug).children('.schedules').children(".dest_"+sc.urls.key).html(html_schedules);
+
+
+
+    });
+
+  });
+
+}
+
+
+function getHtmlSchedules(sc, data){
+
+  console.log('>> Start getHtmlSchedules ', sc, data);
+
+
+
+  html = '<!-- schedules ' + sc.slug + ' -->';
+
+  _.each(data, function(stream, key){
+
+    console.log('stream : ', stream, key);
+    if(key == 0) {
+      html = html + stream.destination + ' :';
+    }
+    html = html + '<span class="label label-default">'+
+     stream.message  +
+     '</span> '
+  });
+  html = html + '<!-- fin schedules --> '
+
+  console.log(html);
+
+  return html;
+
+
+}
+
+function getHtmlStation(sc){
+
+
+
+    var html_station = '<!-- station -->' +
+            '<div id="' + slugApiToSlugJQ(sc.slug)+  '">' +
+            '<span class="close delete_streaming " data-ratp_stream_slug="'+slugApiToSlugJQ(sc.slug)+'"  href="#" aria-label="Supprimer de la mémoire" title="Supprimer de la mémoire">×</span>' +
+               '#' +sc.station.name + '<br> '+ sc.line.name +
+               ' '+
+              '<br><a href="'+sc.urls.a+'" target="_blank" >'+sc.urls.a+'</a><br>'+
+              '<a href="'+sc.urls.r+'" target="_blank" >'+sc.urls.r+'</a><br>'+
+              '<div class="schedules">'+
+              '<div class="dest_a"></div><div class="dest_b"></div>'+
+              '</div> '+
+            '</div><!-- fin station -->'
+            ;
+
+            return html_station;
+
+}
+
+function buildSchedule(sc){
+
+  if(sc == null || !sc.slug){
+    return false;
+  }
+
+  if(document.getElementById(slugApiToSlugJQ(sc.slug))) {
+    console.log('deja contruit : ', sc.slug);
+  } else {
+
+    html_station = getHtmlStation(sc);
+    $('#ratp_schedules').append(html_station);
+    refreshSchedule(sc);
+
+
+  }
+}
+
+function buildSchedules(sc){
+  console.log('>> start build schedule');
+
+  if(sc) {
+    buildSchedule(sc);
+    return true;
+  }
+
+  //sinon on charge tout les shecdules du localStorage
+  schedules = getLS();
+
+  console.log('schedules from LS ', schedules);
+
+  _.each(schedules, function(sc,key){
+
+    console.log('>> buildSchedules all from LS ', sc);
+
+    buildSchedules(sc);
+
+  });
+
+
+
+}
+
+function addSchedule(sc){
+
+
+  buildSchedules(sc);
+  addStreamToLocalStorage(sc);
+
+
+}
+
+
 function getRatpStationsApiListItems(rep) {
 
     var list = [];
@@ -127,6 +274,15 @@ function getRatpApiListItems(rep) {
     //console.log('each : ', type, itemList);
      itemList.map(function(item){
 
+
+       typeTransportTranslate = {
+         'metros' : 'metro',
+         'tramways' : 'tram',
+         'bus' : 'bus',
+         'noctiliens' : 'noc'
+       };
+
+
       list.push({
       /*  label: '<b class="item item_'+CryptoJS.MD5(type)+'">'
                   +item['code']
@@ -135,7 +291,10 @@ function getRatpApiListItems(rep) {
                 + ' <i class="item item_' + CryptoJS.MD5(type) + '">'
                   + item['directions']+
                 '</i>',*/
-          label: type + item['code']
+
+
+
+          label: typeTransportTranslate[type] + item['code']
                   +' : '
                   + item['name'].normalize('NFD').replace(/[\u0300-\u036f]/g, "")
                   + ' >> '
@@ -160,7 +319,7 @@ var ajax = new XMLHttpRequest();
 ajax.open("GET", "https://api-ratp.pierre-grimaud.fr/v3/lines", true);
 ajax.onload = function() {
   var list = getRatpApiListItems(JSON.parse(ajax.responseText));
-  new Awesomplete(
+  var lineAwesomplete = new Awesomplete(
     document.getElementById("lines_input"),
     {
       list: list ,
@@ -233,6 +392,7 @@ ajax.onload = function() {
 
           console.log(url_r, url_a);
           schedule = {
+            slug : line.type + '_' + line.slug + '_' + evt.text.value,
             type: line.type,
             line: {
               slug: line.slug,
@@ -241,12 +401,19 @@ ajax.onload = function() {
             station : {
               slug: evt.text.value,
               name: evt.text.label
+          },
+          urls :{
+            a : "https://api-ratp.pierre-grimaud.fr/v3/schedules/"+line.type+'/'+line.slug+'/'+evt.text.value+'/A',
+            r : "https://api-ratp.pierre-grimaud.fr/v3/schedules/"+line.type+'/'+line.slug+'/'+evt.text.value+'/R'
+
           }
         };
 
           console.log(schedule);
+
           //recorde shecdule in memory
           //refresh shecddle from memomry only new wiil be add.
+          addSchedule(schedule);
 
           stationsAwesomplete.destroy();
       }
@@ -256,8 +423,122 @@ ajax.onload = function() {
 
 
     }//end function select divpicker
-};
+
+      lineAwesomplete.open();
+
+};//end ajax onload
 ajax.send();
+ajax.success(
+  lineAwesomplete.open()
+
+);
+document.getElementById("line_input").addEventListener("focus", function(){
+  lineAwesomplete.open();
+});
+
+
+/************************************************
+ *
+ * JS TOOLS
+ *
+ * ***********************************************/
+function isJson(json_string) {
+  try {
+    JSON.parse(json_string);
+  }
+  catch (e) {
+    return false;
+  }
+  return true;
+}
+
+function isNullOrUndefined(test) {
+
+  if (typeof(test) == 'undefined' || test == null) {
+
+    return true;
+  }
+
+  return false;
+
+}
+
+function slugApiToSlugJQ(s){
+  return s.replace('+', '-');
+}
+
+/******************************************************
+ *
+ * Local Storage
+ *
+ * ***************************************/
+
+ var localStorageRatpUI = 'ratp_ui';
+
+function flushLS() {
+
+  localStorage.setItem(localStorageRatpUI, null);
+
+}
+
+function getLS() {
+
+  var stream_ratp_list = localStorage.getItem(localStorageRatpUI)
+
+  console.log('>> getLS', stream_ratp_list);
+
+
+  if (typeof(stream_ratp_list) == 'undefined' || stream_ratp_list == null || stream_ratp_list == 'null') {
+
+    return false;
+  }
+
+  if (isJson(stream_ratp_list)) {
+    stream_ratp_list = JSON.parse(stream_ratp_list);
+  }
+
+  if (!stream_ratp_list.length) {
+
+    return false;
+  }
+
+  return stream_ratp_list;
+
+}
+
+function addStreamToLocalStorage(schedule) {
+
+  stream_ratp_slug = schedule.slug;
+
+  if (typeof(Storage) == "undefined") {
+    // Sorry! No Web Storage support..
+    //console.log('Sorry! No Web Storage support..');
+
+    return false;
+  }
+
+  var stream_ratp_localStorage = getLS();
+
+  if (!stream_ratp_localStorage) {
+    //console.log('local storage vide init IT');
+    stream_ratp_localStorage = [{}];
+
+  }
+
+  if (typeof(stream_ratp_localStorage[stream_ratp_slug]) != 'undefined'
+  || stream_ratp_localStorage[stream_ratp_slug]
+  || JSON.stringify(stream_ratp_localStorage).indexOf(stream_ratp_slug) > -1
+  ) {
+    console.log('deja enregistre ');
+    return false;
+  }
+
+  stream_ratp_localStorage.push(schedule);
+
+  localStorage.setItem(localStorageRatpUI, JSON.stringify(stream_ratp_localStorage));
+
+};
+
 
 
 
@@ -284,6 +565,9 @@ ajax.send();
 
 
   	</section>
+
+    <div id="ratp_schedules">
+    </div>
 
 
 
