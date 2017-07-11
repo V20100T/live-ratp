@@ -1,11 +1,10 @@
-
 /******************************************************
  *
  * Local Storage
  *
  * ***************************************/
 
- var localStorageRatpUI = 'ratp_ui';
+var localStorageRatpUI = 'ratp_ui';
 
 function flushLS() {
   console.log('>> flushLS');
@@ -15,12 +14,20 @@ function flushLS() {
 
 function getLS() {
 
+  if (typeof(Storage) == "undefined") {
+    // Sorry! No Web Storage support..
+    //console.log('Sorry! No Web Storage support..');
+
+    return false;
+  }
+
   stream_ratp_list = localStorage.getItem(localStorageRatpUI)
 
   console.log('>> getLS', stream_ratp_list);
 
 
-  if (typeof(stream_ratp_list) == 'undefined' || stream_ratp_list == null || stream_ratp_list == 'null') {
+  if (typeof(stream_ratp_list) == 'undefined' || stream_ratp_list == null ||
+    stream_ratp_list == 'null') {
 
     return false;
   }
@@ -58,9 +65,9 @@ function addStreamToLocalStorage(schedule) {
 
   }
 
-  if (typeof(stream_ratp_localStorage[stream_ratp_slug]) != 'undefined'
-  || stream_ratp_localStorage[stream_ratp_slug]
-  || JSON.stringify(stream_ratp_localStorage).indexOf(stream_ratp_slug) > -1
+  if (typeof(stream_ratp_localStorage[stream_ratp_slug]) != 'undefined' ||
+    stream_ratp_localStorage[stream_ratp_slug] || JSON.stringify(
+      stream_ratp_localStorage).indexOf(stream_ratp_slug) > -1
   ) {
     console.log('>>> deja enregistre ');
     return false;
@@ -68,14 +75,15 @@ function addStreamToLocalStorage(schedule) {
 
   stream_ratp_localStorage.push(schedule);
 
-  localStorage.setItem(localStorageRatpUI, JSON.stringify(stream_ratp_localStorage));
+  localStorage.setItem(localStorageRatpUI, JSON.stringify(
+    stream_ratp_localStorage));
 
 };
 
 
 function deleteStreamToLocalStorage(stream_ratp_slug) {
 
-  console.log('>> deleteStreamToLocalStorage '+ stream_ratp_slug);
+  console.log('>> deleteStreamToLocalStorage ' + stream_ratp_slug);
   var stream_ratp_list = getLS();
   var key_to_delete = null;
 
@@ -99,8 +107,8 @@ function deleteLSbyKey(key) {
   console.log('>> deleteLSbyKey ' + key);
   var ls = getLS();
   delete ls[key];
-  console.log('>>>  new' , JSON.stringify(ls));
+  console.log('>>>  new', JSON.stringify(ls));
   localStorage.setItem(localStorageRatpUI, JSON.stringify(ls));
-  console.log('>>>  new LS' , JSON.stringify(getLS()));
+  console.log('>>>  new LS', JSON.stringify(getLS()));
 
 }

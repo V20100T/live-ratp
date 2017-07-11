@@ -1,6 +1,3 @@
-
-
-
 /***************************
  *
  * Config
@@ -21,9 +18,8 @@ ajax.onload = function() {
   console.log('>> ajax onload ' + urlLines);
   var list = getRatpApiListItems(JSON.parse(ajax.responseText));
   var lineAwesomplete = new Awesomplete(
-    document.getElementById("lines_input"),
-    {
-      list: list ,
+    document.getElementById("lines_input"), {
+      list: list,
       minChars: 0,
       maxItems: 50,
       autoFirst: true,
@@ -31,16 +27,17 @@ ajax.onload = function() {
 
     });
 
-    Awesomplete.$.bind(
-      document.getElementById("lines_input"),
-       { "awesomplete-selectcomplete": selectLineWithPicker }
-     );
+  Awesomplete.$.bind(
+    document.getElementById("lines_input"), {
+      "awesomplete-selectcomplete": selectLineWithPicker
+    }
+  );
 
 
 
-      lineAwesomplete.open();
+  lineAwesomplete.open();
 
-};//end ajax onload
+}; //end ajax onload
 ajax.send();
 
 function startStreamRatp() {
@@ -60,49 +57,55 @@ function stopStreamRatp() {
 }
 
 
-function ratpStreamRefresh(){
-  $('.station').each(function(i, st){
+function ratpStreamRefresh() {
+  $('.station').each(function(i, st) {
     //console.log(i, st, $(st).attr('id'));
     //console.log('>>>' + slugJQToSlugApi($(st).attr('id')));
-    station = _.object(['type', 'line', 'station'], ($(st).attr('id')).split('_'));
+    station = _.object(['type', 'line', 'station'], ($(st).attr('id')).split(
+      '_'));
 
     //console.log(station,station.station, slugJQToSlugApi(station.station));
 
 
-     sc = setSchedule(
-       station.type+'_'+station.line+'_'+station.station,
-       station.type,
-       {slug: station.line, name: '??'},
-       {slug: slugJQToSlugApi(station.station), name: '??'},
-       {
-         a : stream_ratp_api_url+ 'schedules/'+station.type+'/'+station.line+'/'+station.station+'/A',
-         r : stream_ratp_api_url+ 'schedules/'+station.type+'/'+station.line+'/'+station.station+'/R',
-       }
-     );
+    sc = setSchedule(
+      station.type + '_' + station.line + '_' + station.station,
+      station.type, {
+        slug: station.line,
+        name: '??'
+      }, {
+        slug: slugJQToSlugApi(station.station),
+        name: '??'
+      }, {
+        a: stream_ratp_api_url + 'schedules/' + station.type + '/' +
+          station.line + '/' + station.station + '/A',
+        r: stream_ratp_api_url + 'schedules/' + station.type + '/' +
+          station.line + '/' + station.station + '/R',
+      }
+    );
 
-     refreshSchedule(sc);
+    refreshSchedule(sc);
 
   });
 }
 
 function refreshTraffic() {
   console.log('>> refreshTraffic ');
-    url = stream_ratp_api_url + 'traffic'
-    $.getJSON(url ,function(data) {
-      //console.log('>>> refreshTraffic datas : '+ url , data);
-      if(!data.result){
-         console.log('no result in rep');
-        return false;
-      }
-      _.each(data.result, function(trafficType, type){
-        _.each(trafficType, function(line, key){
-          //console.log('>>> refreshTraffic '+type+line.line);
-          slug = type+'_'+line.line;
-          refreshTrafficUi(getHtmlTraffic(slug, line), slug, line);
+  url = stream_ratp_api_url + 'traffic'
+  $.getJSON(url, function(data) {
+    //console.log('>>> refreshTraffic datas : '+ url , data);
+    if (!data.result) {
+      console.log('no result in rep');
+      return false;
+    }
+    _.each(data.result, function(trafficType, type) {
+      _.each(trafficType, function(line, key) {
+        //console.log('>>> refreshTraffic '+type+line.line);
+        slug = type + '_' + line.line;
+        refreshTrafficUi(getHtmlTraffic(slug, line), slug, line);
 
 
-        });
       });
+    });
 
 
 
@@ -112,17 +115,18 @@ function refreshTraffic() {
 
 function refreshSchedule(sc) {
   //console.log('>> refreshSchedule ' + sc.slug);
-  _.each(sc.urls, function(url, key){
+  _.each(sc.urls, function(url, key) {
     //console.log('>>> url', url, key);
 
-    $.getJSON(url ,function(data) {
-      console.log('>>> refreshSchedule datas : ' + sc.slug + ' :: '+ key +' : ', url );
-      if(!data.result.schedules){
+    $.getJSON(url, function(data) {
+      console.log('>>> refreshSchedule datas : ' + sc.slug + ' :: ' +
+        key + ' : ', url);
+      if (!data.result.schedules) {
         //console.log('no schedules in rep');
         return false;
       }
       sc.urls.key = key;
-      scheduleId =  slugApiToSlugJQ(sc.slug + '_' + key);
+      scheduleId = slugApiToSlugJQ(sc.slug + '_' + key);
       html_schedules = getHtmlSchedules(sc, data.result.schedules);
       //console.log('>>>> ADDD scheduleId : ' + scheduleId);
 
@@ -139,13 +143,13 @@ function refreshSchedule(sc) {
 }
 
 
-function buildSchedule(sc){
+function buildSchedule(sc) {
   console.log('>> buildSchedule', sc);
-  if(sc == null || !sc.slug){
+  if (sc == null || !sc.slug) {
     return false;
   }
 
-  if(document.getElementById(slugApiToSlugJQ(sc.slug))) {
+  if (document.getElementById(slugApiToSlugJQ(sc.slug))) {
     console.log('>>> buildSchedule deja contruit : ', sc.slug);
   } else {
 
@@ -156,24 +160,24 @@ function buildSchedule(sc){
   }
 }
 
-function buildSchedules(sc){
+function buildSchedules(sc) {
   //console.log('>> buildSchedules', sc);
 
-  if(sc) {
+  if (sc) {
     buildSchedule(sc);
     return true;
   }
   //sinon on charge tout les shecdules du localStorage
   schedules = getLS();
 
-  _.each(schedules, function(sc,key){
+  _.each(schedules, function(sc, key) {
     //console.log('>> buildSchedules all from LS ', sc);
     buildSchedules(sc);
   });
 
 }
 
-function addSchedule(sc){
+function addSchedule(sc) {
 
   buildSchedules(sc);
   addStreamToLocalStorage(sc);
@@ -183,64 +187,61 @@ function addSchedule(sc){
 
 function getRatpStationsApiListItems(rep) {
 
-    var list = [];
-    console.log('> start station ; : getRatpStationsApiListItems : ', rep);
-    if(rep == 'undefined' || !rep.result){
-      return list;
-    }
-
-    _.each(rep.result.stations,function(station, key){
-      //console.log(key, station);
-
-
-            list.push({
-              label: station['name'].normalize('NFD').replace(/[\u0300-\u036f]/g, ""),//sans accent pour la recherche
-              value: station['slug'],
-
-            });
-
-
-    });
-
-    return list;
-
-
-}
-function getRatpApiListItems(rep) {
-  list = [];
-  console.log('>> getRatpApiListItems : ', rep);
-  if(rep == 'undefined' || !rep.result){
+  var list = [];
+  console.log('> start station ; : getRatpStationsApiListItems : ', rep);
+  if (rep == 'undefined' || !rep.result) {
     return list;
   }
 
-  _.each(rep.result, function(itemList, type){
+  _.each(rep.result.stations, function(station, key) {
+    //console.log(key, station);
+
+
+    list.push({
+      label: normalizeStr(station['name']),
+      value: station['slug'],
+
+    });
+
+
+  });
+
+  return list;
+
+
+}
+
+function getRatpApiListItems(rep) {
+  list = [];
+  console.log('>> getRatpApiListItems : ', rep);
+  if (rep == 'undefined' || !rep.result) {
+    return list;
+  }
+
+  _.each(rep.result, function(itemList, type) {
     //console.log('each : ', type, itemList);
-     itemList.map(function(item){
-       typeTransportTranslate = {
-         'metros'     : 'M',
-         'tramways'   : 'T',
-         'bus'        : 'B',
-         'noctiliens' : 'N',
-         'rers'       : 'R'
-       };
+    itemList.map(function(item) {
+      typeTransportTranslate = {
+        'metros': 'M',
+        'tramways': 'T',
+        'bus': 'B',
+        'noctiliens': 'N',
+        'rers': 'R'
+      };
 
       list.push({
 
-          label: typeTransportTranslate[type] + item['code']
-                  +' : '
-                  + item['name'].normalize('NFD').replace(/[\u0300-\u036f]/g, "")
-                  + ' >> '
-                  + item['directions']
-                  ,
-        value: type +'_'+ item['code'],
-        type: type,
-        datatype: type
-      }
+          label: typeTransportTranslate[type] + item['code'] + ' : ' +
+            normalizeStr(item['name']) + ' >> ' + item['directions'],
+          value: type + '_' + item['code'],
+          type: type,
+          datatype: type
+        }
 
       );
 
+    });
   });
-});
 
   console.log('<< getRatpApiListItems : ', list);
   return list;
@@ -261,39 +262,40 @@ function selectLineWithPicker(evt) {
   //STATIONS :
   var ajaxStations = new XMLHttpRequest();
   // GET /stations/{type}/{code}
-  url = "https://api-ratp.pierre-grimaud.fr/v3/stations/"+line.type+'/'+line.slug;
+  url = "https://api-ratp.pierre-grimaud.fr/v3/stations/" + line.type + '/' +
+    line.slug;
   //console.log(url);
   ajaxStations.open("GET", url, true);
   ajaxStations.onload = function() {
-    console.log('>> ajaxStations onload '+url);
-  var listStations = getRatpStationsApiListItems(JSON.parse(ajaxStations.responseText));
-  stationsAwesomplete= new Awesomplete(
-    document.querySelector("#stations_input"),
-    {
-      list: listStations ,
-      minChars: 0,
-      maxItems: 50,
-      autoFirst: true,
-      //filter: Awesomplete.FILTER_STARTSWITH
-    });
+    console.log('>> ajaxStations onload ' + url);
+    var listStations = getRatpStationsApiListItems(JSON.parse(ajaxStations.responseText));
+    stationsAwesomplete = new Awesomplete(
+      document.querySelector("#stations_input"), {
+        list: listStations,
+        minChars: 0,
+        maxItems: 50,
+        autoFirst: true,
+        //filter: Awesomplete.FILTER_STARTSWITH
+      });
   };
   ajaxStations.send();
   Awesomplete.$.bind(
-    document.getElementById("stations_input"),
-    { "awesomplete-selectcomplete": selectStationstWithPicker }
+    document.getElementById("stations_input"), {
+      "awesomplete-selectcomplete": selectStationstWithPicker
+    }
   );
 
 
 }
 
-function setSchedule(slug,type,line,station,urls){
+function setSchedule(slug, type, line, station, urls) {
 
   schedule = {
-    slug : slug,
+    slug: slug,
     type: type,
     line: line,
-    station : station,
-    urls :urls
+    station: station,
+    urls: urls
   };
 
   return schedule;
@@ -301,27 +303,27 @@ function setSchedule(slug,type,line,station,urls){
 
 function selectStationstWithPicker(evt) {
   console.log('>> selectStationstWithPicker ' + evt.text.value);
-  line = _.object(['type', 'slug'], $('#stations_input').attr('data-line').split('_'));
+  line = _.object(['type', 'slug'], $('#stations_input').attr('data-line').split(
+    '_'));
   linesLabel = $('#stations_input').attr('data-line-label');
-  schedule =  setSchedule(
-      slugApiToSlugJQ(line.type + '_' + line.slug + '_' + evt.text.value),
-      line.type,
-      {
-        slug: line.slug,
-        name: linesLabel
-      },
-      {
-        slug: evt.text.value,
-        name: evt.text.label
-      },
-      {
-        a : "https://api-ratp.pierre-grimaud.fr/v3/schedules/"+line.type+'/'+line.slug+'/'+evt.text.value+'/A',
-        r : "https://api-ratp.pierre-grimaud.fr/v3/schedules/"+line.type+'/'+line.slug+'/'+evt.text.value+'/R'
+  schedule = setSchedule(
+    slugApiToSlugJQ(line.type + '_' + line.slug + '_' + evt.text.value),
+    line.type, {
+      slug: line.slug,
+      name: linesLabel
+    }, {
+      slug: evt.text.value,
+      name: evt.text.label
+    }, {
+      a: "https://api-ratp.pierre-grimaud.fr/v3/schedules/" + line.type + '/' +
+        line.slug + '/' + evt.text.value + '/A',
+      r: "https://api-ratp.pierre-grimaud.fr/v3/schedules/" + line.type + '/' +
+        line.slug + '/' + evt.text.value + '/R'
 
-      }
-    );
-    console.log('>>> selectStationstWithPicker ',schedule);
-    addSchedule(schedule);
-    selectStationstWithPickerUi();
-    stationsAwesomplete.destroy();
+    }
+  );
+  console.log('>>> selectStationstWithPicker ', schedule);
+  addSchedule(schedule);
+  selectStationstWithPickerUi();
+  stationsAwesomplete.destroy();
 }
