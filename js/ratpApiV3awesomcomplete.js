@@ -12,6 +12,37 @@ var stream_ratp_api_url = 'https://api-ratp.pierre-grimaud.fr/v3/';
 var stream_ratp_time = 1000 * 35;
 
 
+
+var input = document.getElementById("lines_input");
+var ajax = new XMLHttpRequest();
+urlLines = "https://api-ratp.pierre-grimaud.fr/v3/lines";
+ajax.open("GET", urlLines, true);
+ajax.onload = function() {
+  console.log('>> ajax onload ' + urlLines);
+  var list = getRatpApiListItems(JSON.parse(ajax.responseText));
+  var lineAwesomplete = new Awesomplete(
+    document.getElementById("lines_input"),
+    {
+      list: list ,
+      minChars: 0,
+      maxItems: 50,
+      autoFirst: true,
+      //filter: Awesomplete.FILTER_STARTSWITH
+
+    });
+
+    Awesomplete.$.bind(
+      document.getElementById("lines_input"),
+       { "awesomplete-selectcomplete": selectLineWithPicker }
+     );
+
+
+
+      lineAwesomplete.open();
+
+};//end ajax onload
+ajax.send();
+
 function startStreamRatp() {
 
   refreshTraffic();
@@ -67,17 +98,8 @@ function refreshTraffic() {
         _.each(trafficType, function(line, key){
           //console.log('>>> refreshTraffic '+type+line.line);
           slug = type+'_'+line.line;
-          html = '<li id="'+slug+'" class="traffic_line" title="'+line.message+'">'+
-                  slug + ' ' + line.title +
-                  '</li>';
-          $('#traffic').prepend(html);
-          $('.traffic_station_'+slug).html(line.title).attr('title', line.message);
-          /*
-          "line": "7B",
-       "slug": "normal",
-       "title": "Trafic normal",
-       "message": "Trafic normal sur l'ensemble de la ligne."
-       */
+          refreshTrafficUi(getHtmlTraffic(slug, line), slug, line);
+
 
         });
       });
@@ -104,61 +126,18 @@ function refreshSchedule(sc) {
       html_schedules = getHtmlSchedules(sc, data.result.schedules);
       //console.log('>>>> ADDD scheduleId : ' + scheduleId);
 
+      refreshScheduleUi(html_schedules, scheduleId, sc);
+      /*
       $("#"+scheduleId).fadeOut().remove();
       $('#'+sc.slug).children('.schedules').append(html_schedules);
       //pulse($('#'+sc.slug).children('.schedules'))
+      */
     });
 
   });
 
 }
 
-
-function getHtmlSchedules(sc, data){
-
-  //console.log('>> getHtmlSchedules ' + sc.slug + ' : '+ getHeure());
-  scheduleId =  slugApiToSlugJQ(sc.slug + '_' + sc.urls.key);
-  html = '<!-- schedules ' + sc.slug + ' -->'+
-          '<div id="'+ scheduleId +'" class="schedule"><span class="heure">'+ getHeure() + '</span> ';
-
-
-  _.each(data, function(stream, key){
-
-    //console.log('>>> stream : ', stream, key);
-    if(key == 0) {
-      html = html + stream.destination + ' :';
-    }
-    html = html + '<span class="label label-default">'+
-     stream.message  +
-     '</span> '
-  });
-  html = html + '</div><!-- fin schedules --> '
-
-  //console.log('>>> HTML schedule : '+ sc.slug , html);
-
-  return html;
-}
-
-function getHtmlStation(sc){
-  //console.log('>> getHtmlStation ', sc.slug);
-
-    return   '<!-- station -->' +
-            '<div class="station" id="' + slugApiToSlugJQ(sc.slug)+  '">' +
-            '<span class="close delete_streaming " data-ratp_stream_slug="'+slugApiToSlugJQ(sc.slug)+'"  href="#" aria-label="Supprimer de la mémoire" title="Supprimer de la mémoire">×</span>' +
-               '#' +sc.station.name +
-               '<br> '+
-               sc.line.name +' <span class="label label-default traffic_station_'+sc.type+'_'+sc.line.slug+'">-</span>' +
-               ' '+
-              /*'<br><a href="'+sc.urls.a+'" target="_blank" >'+sc.urls.a+'</a><br>'+
-              '<a href="'+sc.urls.r+'" target="_blank" >'+sc.urls.r+'</a><br>'+
-              */'<div class="schedules">'+
-                '<div class="dest_a"></div>'+
-                '<div class="dest_r"></div>'+
-              '</div> '+
-            '<hr></div>'+
-            '<!-- fin station -->'
-            ;
-}
 
 function buildSchedule(sc){
   console.log('>> buildSchedule', sc);
@@ -171,7 +150,8 @@ function buildSchedule(sc){
   } else {
 
     html_station = getHtmlStation(sc);
-    $('#ratp_schedules').prepend(html_station);
+    showHtmlStation(html_station);
+    //$('#ratp_schedules').prepend(html_station);
     refreshSchedule(sc);
   }
 }
@@ -214,7 +194,7 @@ function getRatpStationsApiListItems(rep) {
 
 
             list.push({
-              label: station['name'].normalize('NFD').replace(/[\u0300-\u036f]/g, ""),
+              label: station['name'].normalize('NFD').replace(/[\u0300-\u036f]/g, ""),//sans accent pour la recherche
               value: station['slug'],
 
             });
@@ -237,23 +217,14 @@ function getRatpApiListItems(rep) {
     //console.log('each : ', type, itemList);
      itemList.map(function(item){
        typeTransportTranslate = {
-         'metros'     : 'm',
-         'tramways'   : 't',
-         'bus'        : 'b',
-         'noctiliens' : 'n',
-         'rers'       : 'r'
+         'metros'     : 'M',
+         'tramways'   : 'T',
+         'bus'        : 'B',
+         'noctiliens' : 'N',
+         'rers'       : 'R'
        };
 
       list.push({
-      /*  label: '<b class="item item_'+CryptoJS.MD5(type)+'">'
-                  +item['code']
-                +'</b> - '
-                + item['name'].normalize('NFD').replace(/[\u0300-\u036f]/g, "")
-                + ' <i class="item item_' + CryptoJS.MD5(type) + '">'
-                  + item['directions']+
-                '</i>',*/
-
-
 
           label: typeTransportTranslate[type] + item['code']
                   +' : '
@@ -275,56 +246,16 @@ function getRatpApiListItems(rep) {
   return list;
 };
 
-var input = document.getElementById("lines_input");
-var ajax = new XMLHttpRequest();
-urlLines = "https://api-ratp.pierre-grimaud.fr/v3/lines";
-ajax.open("GET", urlLines, true);
-ajax.onload = function() {
-  console.log('>> ajax onload ' + urlLines);
-  var list = getRatpApiListItems(JSON.parse(ajax.responseText));
-  var lineAwesomplete = new Awesomplete(
-    document.getElementById("lines_input"),
-    {
-      list: list ,
-      minChars: 0,
-      maxItems: 50,
-      autoFirst: true,
-      //filter: Awesomplete.FILTER_STARTSWITH
 
-    });
-
-    Awesomplete.$.bind(
-      document.getElementById("lines_input"),
-       { "awesomplete-selectcomplete": selectDistrictWithPicker }
-     );
-
-
-
-      lineAwesomplete.open();
-
-};//end ajax onload
-ajax.send();
-
-
-
-function selectDistrictWithPicker(evt) {
-  console.log('>> selectDistrictWithPicker ' + evt.text.value);
+function selectLineWithPicker(evt) {
+  console.log('>> selectLineWithPicker ' + evt.text.value);
   //console.log(evt.text.label);
 
   line = _.object(['type', 'slug'], evt.text.value.split('_'));
   line.label = evt.text.label;
   //console.log(line);
 
-  document.getElementById("stations_input").value = 'Toi choisir station !';
-  $('#lines_input').val('');
-  $('#stations_input').focus();
-  $('#stations_input').attr('data-line', evt.text.value);
-  $('#stations_input').attr('data-line-label', evt.text.label);
-    //document.getElementById("lines_input").value = evt.text.label;
-
-    $('#label_stations_input').children('.label-stations').text('Stations ligne '+line.slug);
-    $('#stations_input').val('').focus();
-
+  selectLineWithPickerUi(evt, line);
 
 
   //STATIONS :
@@ -347,15 +278,13 @@ function selectDistrictWithPicker(evt) {
     });
   };
   ajaxStations.send();
-  //$('#stations_input').focus();
-
   Awesomplete.$.bind(
     document.getElementById("stations_input"),
     { "awesomplete-selectcomplete": selectStationstWithPicker }
   );
 
 
-}//end function select divpicker
+}
 
 function setSchedule(slug,type,line,station,urls){
 
@@ -368,26 +297,13 @@ function setSchedule(slug,type,line,station,urls){
   };
 
   return schedule;
-
 }
 
 function selectStationstWithPicker(evt) {
   console.log('>> selectStationstWithPicker ' + evt.text.value);
-  /*console.log(evt.text);
-  console.log(evt.text.value);
-  console.log(evt.text.label);
-  console.log(evt);
-  */
-  //line = $('#stations_input').attr('data-line');
-  var line = _.object(['type', 'slug'], $('#stations_input').attr('data-line').split('_'));
+  line = _.object(['type', 'slug'], $('#stations_input').attr('data-line').split('_'));
   linesLabel = $('#stations_input').attr('data-line-label');
-    //GET /schedules/{type}/{code}/{station}/{way}
-    url_a = "https://api-ratp.pierre-grimaud.fr/v3/schedules/"+line.type+'/'+line.slug+'/'+evt.text.value+'/A';
-    url_r = "https://api-ratp.pierre-grimaud.fr/v3/schedules/"+line.type+'/'+line.slug+'/'+evt.text.value+'/R';
-
-    console.log('>>> selectStationstWithPicker urls:',url_r, url_a);
-
-    schedule =  setSchedule(
+  schedule =  setSchedule(
       slugApiToSlugJQ(line.type + '_' + line.slug + '_' + evt.text.value),
       line.type,
       {
@@ -399,36 +315,13 @@ function selectStationstWithPicker(evt) {
         name: evt.text.label
       },
       {
-        a : url_a,
-        r : url_r
+        a : "https://api-ratp.pierre-grimaud.fr/v3/schedules/"+line.type+'/'+line.slug+'/'+evt.text.value+'/A',
+        r : "https://api-ratp.pierre-grimaud.fr/v3/schedules/"+line.type+'/'+line.slug+'/'+evt.text.value+'/R'
 
       }
     );
-    /*
-    schedule = {
-      slug : slugApiToSlugJQ(line.type + '_' + line.slug + '_' + evt.text.value),
-      type: line.type,
-      line: {
-        slug: line.slug,
-        name: linesLabel
-      },
-      station : {
-        slug: evt.text.value,
-        name: evt.text.label
-    },
-    urls :{
-      a : url_a,
-      r : url_r
-
-    }
-  };
-  */
-
     console.log('>>> selectStationstWithPicker ',schedule);
-
     addSchedule(schedule);
-    $('#stations_input').val('');
-    $('#lines_input').val('').focus();
-
+    selectStationstWithPickerUi();
     stationsAwesomplete.destroy();
 }
