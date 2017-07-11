@@ -60,9 +60,7 @@ function getHeure() {
 
 ////sans accent pour la recherche
 function normalizeStr(s) {
-  console.log('normalizz ' + s);
   return removeDiacritics(s);
-  return s.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
 }
 /*
    Licensed under the Apache License, Version 2.0 (the "License");

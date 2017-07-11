@@ -14,12 +14,13 @@ function flushLS() {
 
 function getLS() {
 
-  if (typeof(Storage) == "undefined") {
+  if (typeof(Storage) == "undefined" || localStorage == null) {
     // Sorry! No Web Storage support..
-    //console.log('Sorry! No Web Storage support..');
+    console.log('Sorry! No Web Storage support..');
 
     return false;
   }
+
 
   stream_ratp_list = localStorage.getItem(localStorageRatpUI)
 
