@@ -32,10 +32,10 @@ function stopStreamRatp() {
 function ratpStreamRefresh(){
   $('.station').each(function(i, st){
     //console.log(i, st, $(st).attr('id'));
-    console.log('>>>' + slugJQToSlugApi($(st).attr('id')));
+    //console.log('>>>' + slugJQToSlugApi($(st).attr('id')));
     station = _.object(['type', 'line', 'station'], ($(st).attr('id')).split('_'));
 
-    console.log(station,station.station, slugJQToSlugApi(station.station));
+    //console.log(station,station.station, slugJQToSlugApi(station.station));
 
 
      sc = setSchedule(
@@ -58,9 +58,9 @@ function refreshTraffic() {
   console.log('>> refreshTraffic ');
     url = stream_ratp_api_url + 'traffic'
     $.getJSON(url ,function(data) {
-      console.log('>>> refreshTraffic datas : '+ url , data);
+      //console.log('>>> refreshTraffic datas : '+ url , data);
       if(!data.result){
-        console.log('no result in rep');
+         console.log('no result in rep');
         return false;
       }
       _.each(data.result, function(trafficType, type){
@@ -89,35 +89,24 @@ function refreshTraffic() {
 }
 
 function refreshSchedule(sc) {
-  console.log('>> refreshSchedule ' + sc.slug);
+  //console.log('>> refreshSchedule ' + sc.slug);
   _.each(sc.urls, function(url, key){
-    console.log('>>> url', url, key);
+    //console.log('>>> url', url, key);
 
     $.getJSON(url ,function(data) {
-      console.log('>>> refreshSchedule datas : ' + sc.slug + ' :: '+ key + url , data);
+      console.log('>>> refreshSchedule datas : ' + sc.slug + ' :: '+ key +' : ', url );
       if(!data.result.schedules){
-        console.log('no schedules in rep');
+        //console.log('no schedules in rep');
         return false;
       }
       sc.urls.key = key;
       scheduleId =  slugApiToSlugJQ(sc.slug + '_' + key);
       html_schedules = getHtmlSchedules(sc, data.result.schedules);
-      console.log('>>>> ADDD scheduleId : ' + scheduleId);
-      if($("#"+scheduleId)){
-        console.log('>>>>>>>>>>>>>>>>> refresh only');
-        $("#"+scheduleId).fadeOut().remove();
-        $('#'+sc.slug).children('.schedules').append(html_schedules);
-        //pulse($('#'+sc.slug).children('.schedules'))
+      //console.log('>>>> ADDD scheduleId : ' + scheduleId);
 
-        return true;
-      }
-
-      console.log('>>> APPEND on : ' +'#'+sc.slug + ' === chlid == '+".dest_"+sc.urls.key);
-      $('#'+sc.slug).children('.schedules').children(".dest_"+sc.urls.key).html(html_schedules);
-
-      //pulse($('#'+sc.slug)); //ok
-      //pulse($('#'+sc.slug).children('.schedules'));
-      //pulse($('#'+sc.slug).children('.schedules').children(".dest_"+sc.urls.key));
+      $("#"+scheduleId).fadeOut().remove();
+      $('#'+sc.slug).children('.schedules').append(html_schedules);
+      //pulse($('#'+sc.slug).children('.schedules'))
     });
 
   });
@@ -127,7 +116,7 @@ function refreshSchedule(sc) {
 
 function getHtmlSchedules(sc, data){
 
-  console.log('>> getHtmlSchedules ' + sc.slug + ' : '+ getHeure());
+  //console.log('>> getHtmlSchedules ' + sc.slug + ' : '+ getHeure());
   scheduleId =  slugApiToSlugJQ(sc.slug + '_' + sc.urls.key);
   html = '<!-- schedules ' + sc.slug + ' -->'+
           '<div id="'+ scheduleId +'" class="schedule"><span class="heure">'+ getHeure() + '</span> ';
@@ -145,13 +134,13 @@ function getHtmlSchedules(sc, data){
   });
   html = html + '</div><!-- fin schedules --> '
 
-  console.log('>>> HTML schedule : '+ sc.slug , html);
+  //console.log('>>> HTML schedule : '+ sc.slug , html);
 
   return html;
 }
 
 function getHtmlStation(sc){
-  console.log('>> getHtmlStation ', sc.slug);
+  //console.log('>> getHtmlStation ', sc.slug);
 
     return   '<!-- station -->' +
             '<div class="station" id="' + slugApiToSlugJQ(sc.slug)+  '">' +
@@ -188,7 +177,7 @@ function buildSchedule(sc){
 }
 
 function buildSchedules(sc){
-  console.log('>> buildSchedules', sc);
+  //console.log('>> buildSchedules', sc);
 
   if(sc) {
     buildSchedule(sc);

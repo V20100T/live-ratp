@@ -15,7 +15,7 @@ function flushLS() {
 
 function getLS() {
 
-  var stream_ratp_list = localStorage.getItem(localStorageRatpUI)
+  stream_ratp_list = localStorage.getItem(localStorageRatpUI)
 
   console.log('>> getLS', stream_ratp_list);
 
@@ -80,7 +80,7 @@ function deleteStreamToLocalStorage(stream_ratp_slug) {
   var key_to_delete = null;
 
   $.each(stream_ratp_list, function(key, val) {
-    console.log(val, key);
+    //console.log(val, key);
     if (typeof(val) == 'object' && val.slug && val.slug == stream_ratp_slug) {
       deleteLSbyKey(key);
       return false;
