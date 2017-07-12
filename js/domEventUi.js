@@ -194,6 +194,16 @@ function getFaIcoByType(type) {
 
 function showHtmlStation(sc) {
 
+
+  //traffic only for metros', 'tramways', 'rers BY the api
+  traffic_label = '';
+  if (_.contains(['metros', 'tramways', 'rers'], sc.type)) {
+    traffic_label = '<span class="label label-default traffic_station_' + sc.type +
+      '_' + sc.line.slug + '">-</span>';
+  }
+
+
+
   html = '<!-- station -->' +
 
     '<div  class="station" id="' + slugApiToSlugJQ(sc.slug) + '">' +
@@ -209,23 +219,20 @@ function showHtmlStation(sc) {
     '">' +
     sc.line.slug +
     '</button>' +
-    sc.line.name + ' <span class="label label-default traffic_station_' + sc.type +
-    '_' + sc.line.slug + '">-</span>' +
+    sc.line.name + traffic_label +
     ' ' +
     /*'<br><a href="'+sc.urls.a+'" target="_blank" >'+sc.urls.a+'</a><br>'+
     '<a href="'+sc.urls.r+'" target="_blank" >'+sc.urls.r+'</a><br>'+
     */
     '<div class="schedules"></div> ' +
-    '</div>' +
+    '<hr></div>' +
     '<!-- fin station -->';
-
-
 
   html = '<div class="st_' + slugApiToSlugJQ(sc.station.slug) + '" id="' +
     //slugApiToSlugJQ(sc.station.slug)
     '">' +
     html +
-    '<hr></div>';
+    '</div>';
   $('#ratp_schedules').prepend(html);
 
 

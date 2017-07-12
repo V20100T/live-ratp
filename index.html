@@ -84,37 +84,37 @@ Favico Générator :
       Controles
   </button>
 
-    <button class="btn btn-info test">
-        <i class="fa fa-cog fa-spin" aria-hidden="true"></i>
-        test
-    </button>
 
   	<h2>Ajax example <small>Metros </small></h2>
-      <form>
-        <div class="awesomplete form-group row">
+
+    <div id='form_ratp_add'>
+      <form class="form-inline">
+        <div class="awesomplete form-group">
         	<label for="lines_input" id="label_lines_input" class="">
-            Ligne RATP : (metro, bus, tram, rer, noctilien )
-
+            Ligne RATP :
             </label>
-            <input  placeholder="Astuce: [m5] pour metro ligne 5; [bx] pour bus, [t] pour tram" type="text" id="lines_input" class="form-control dropdown-input" autocomplete="on" aria-autocomplete="list">
+            <input  id="lines_input" class="form-control dropdown-input col-sm-10"  placeholder="Astuce: [m5] pour metro ligne 5; [bx] pour bus, [t] pour tram" type="text" autocomplete="on" aria-autocomplete="list">
             <i class="fa fa-info" aria-hidden="true" data-toggle="tooltip" title="Astuce : m5 pour metros 5, b24 pour le bus 24"></i>
+            <small id="passwordHelpInline" class="text-muted">
+              Metro, bus, tram, rer, noctilien
+            </small>
           </div>
+          <br />
 
-
-            <br />
-              <div class="form-group row awesomplete">
+              <div class="form-group awesomplete">
                 <label for="stations_input" id="label_stations_input" class="">
                   <span class="label-stations">
-                    Selectionnez une stations RATP :
+                    Stations :
                   </span>
                   </label>
-                  <input  id="stations_input" placeholder="Tapez une lettre pour choisir une station" class=" form-control dropdown-input" autocomplete="on" aria-autocomplete="list">
+                  <input  id="stations_input" class=" form-control dropdown-input" placeholder="Tapez une lettre pour choisir une station"  autocomplete="on" aria-autocomplete="list">
                   <i class="fa fa-info" aria-hidden="true" data-toggle="tooltip" title="Astuce :"></i>
                   <small id="passwordHelpInline" class="text-muted">
                     Autocomplete commence à la 1ere lettre tappée.
                   </small>
               </div>
           </form>
+        </div>
 
     <div class="row row-fluid">
 
