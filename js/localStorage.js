@@ -86,10 +86,13 @@ function deleteStreamToLocalStorage(stream_ratp_slug) {
 
   console.log('>> deleteStreamToLocalStorage ' + stream_ratp_slug);
   var stream_ratp_list = getLS();
-  var key_to_delete = null;
 
   $.each(stream_ratp_list, function(key, val) {
     //console.log(val, key);
+    if (val == null) {
+      deleteLSbyKey(key);
+      return true;
+    }
     if (typeof(val) == 'object' && val.slug && val.slug == stream_ratp_slug) {
       deleteLSbyKey(key);
       return false;
@@ -97,9 +100,9 @@ function deleteStreamToLocalStorage(stream_ratp_slug) {
     return true;
   });
 
-  delete stream_ratp_list[key_to_delete];
+  //delete stream_ratp_list[key_to_delete];
 
-  localStorage.setItem(localStorageRatpUI, JSON.stringify(stream_ratp_list));
+  //localStorage.setItem(localStorageRatpUI, JSON.stringify(stream_ratp_list));
 
 
 }

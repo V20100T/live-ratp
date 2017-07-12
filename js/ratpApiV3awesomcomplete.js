@@ -114,7 +114,7 @@ function refreshTraffic() {
 }
 
 function refreshSchedule(sc) {
-  //console.log('>> refreshSchedule ' + sc.slug);
+  console.log('>> refreshSchedule ' + sc.slug);
   _.each(sc.urls, function(url, key) {
     //console.log('>>> url', url, key);
 
@@ -172,7 +172,7 @@ function buildSchedules(sc) {
 
   _.each(schedules, function(sc, key) {
     //console.log('>> buildSchedules all from LS ', sc);
-    buildSchedules(sc);
+    buildSchedule(sc);
   });
 
 }
