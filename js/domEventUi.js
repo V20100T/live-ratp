@@ -159,7 +159,8 @@ function getLabelByTrafficMessage(mess, line) {
 }
 
 function refreshTrafficUi(html, slug, line) {
-  $('#traffic').html(html);
+  //$('#traffic').html('');
+  $('#traffic').prepend(html);
   $('.traffic_station_' + slug)
     .html(line.title)
     .attr('title', line.message);

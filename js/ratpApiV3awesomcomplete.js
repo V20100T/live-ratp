@@ -90,6 +90,7 @@ function ratpStreamRefresh() {
 
 function refreshTraffic() {
   console.log('>> refreshTraffic ');
+  $('#traffic').html('');
   url = stream_ratp_api_url + 'traffic'
   $.getJSON(url, function(data) {
     //console.log('>>> refreshTraffic datas : '+ url , data);
