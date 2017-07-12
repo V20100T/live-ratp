@@ -153,8 +153,8 @@ function buildSchedule(sc) {
     console.log('>>> buildSchedule deja contruit : ', sc.slug);
   } else {
 
-    html_station = getHtmlStation(sc);
-    showHtmlStation(html_station);
+    //html_station = getHtmlStation(sc);
+    showHtmlStation(sc);
     //$('#ratp_schedules').prepend(html_station);
     refreshSchedule(sc);
   }
@@ -228,11 +228,11 @@ function getRatpApiListItems(rep) {
         'noctiliens': 'N',
         'rers': 'R'
       };
-
       list.push({
-
-          label: typeTransportTranslate[type] + item['code'] + ' : ' +
-            normalizeStr(item['name']) + ' >> ' + item['directions'],
+          label: typeTransportTranslate[type] + item['code'] +
+            // ' : ' +
+            //normalizeStr(item['name']) +
+            ' >> ' + item['directions'],
           value: type + '_' + item['code'],
           type: type,
           datatype: type

@@ -27,32 +27,10 @@ body{
     position: fixed;
 }
 
-
-
-
-
-#combobox .dropdown-input {
-	border-top-right-radius: 0;
-	border-bottom-right-radius: 0;
-}
-#combobox .dropdown-btn {
-	vertical-align: top;
-	height: 36.5px;
-	border-top-left-radius: 0;
-	border-bottom-left-radius: 0;
+.heure{
+  font-size: 0.7em;
 }
 
-#combobox .caret {
-	display: inline-block;
-	width: 0;
-	height: 0;
-	margin-left: 2px;
-	vertical-align: middle;
-	border-top: 4px dashed;
-	border-top: 4px solid;
-	border-right: 4px solid transparent;
-	border-left: 4px solid transparent;
-}
 
 #metros_input{
   width: 300px;
