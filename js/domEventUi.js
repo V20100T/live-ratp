@@ -158,9 +158,10 @@ function getLabelByTrafficMessage(mess, line) {
   return label;
 }
 
-function refreshTrafficUi(html, slug, line) {
+function refreshTrafficUi(slug, line) {
+  slug = slug.toLowerCase();
   //$('#traffic').html('');
-  $('#traffic').prepend(html);
+  $('#traffic').prepend(getHtmlTraffic(slug, line));
   $('.traffic_station_' + slug)
     .html(line.title)
     .attr('title', line.message);
@@ -172,6 +173,14 @@ function refreshTrafficUi(html, slug, line) {
   $('.traffic_station_' + slug).addClass('label-' + getLabelByTrafficMessage(
     line.title, line))
 
+}
+
+function getHtmlTraffic(slug, line) {
+  return '<li id="' + slug + '" class=" traffic_line " title="' +
+    line.message +
+    '" data-status="' + line.title + '">' +
+    slug + ' ' + line.title +
+    '</li>';
 }
 
 function refreshScheduleUi(html_schedules, scheduleId, sc) {
@@ -258,11 +267,4 @@ function selectStationstWithPickerUi() {
 
   $('#stations_input').val('');
   $('#lines_input').val('').focus();
-}
-
-function getHtmlTraffic(slug, line) {
-  return '<li id="' + slug + '" class="traffic_line" title="' + line.message +
-    '">' +
-    slug + ' ' + line.title +
-    '</li>';
 }

@@ -102,7 +102,7 @@ function refreshTraffic() {
       _.each(trafficType, function(line, key) {
         //console.log('>>> refreshTraffic '+type+line.line);
         slug = type + '_' + line.line;
-        refreshTrafficUi(getHtmlTraffic(slug, line), slug, line);
+        refreshTrafficUi(slug, line);
 
 
       });
