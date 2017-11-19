@@ -248,9 +248,9 @@
                         </form>
                     </div>
 
-                            <br />
-                            <br />
-                            <br />
+                    <br />
+                    <br />
+                    <br />
 
                     <div class="content-padded">
                         <button class="btn btn-positive btn-block"><a href="#addStationModal">Fermer</a></button>
@@ -269,27 +269,78 @@
 
         <div class="content content-padded">
 
-            <ul id="traffic">
-            </ul>
-
-            <ul id="ratp_schedules" class="table-view">
-            </ul>
 
 
-            <div class="card">
-                <ul class="table-view">
-                    <li class="table-view-cell">
-                        <a class="navigate-right" href="settings.html" data-transition="slide-in">
-                            Ajouter une station
-                        </a>
-                    </li>
-                    <li class="table-view-cell">
-                        <a class="navigate-right" href="settings.html" data-transition="slide-in">
-                            Configuration
-                        </a>
-                    </li>
+            <div id="stream_ratp_control_settings" class="col-md-3">
+                <div class="panel panel-default ">
+                    <div class="panel-heading stream_ratp_control_toggle">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h3 class="panel-title"> <i class="fa fa-cogs  fa-spin fa-fw" aria-hidden="true"></i>
+                            Controles
+                        </h3>
+                    </div>
+                    <div class="panel-body">
 
-                </ul>
+                        <button id="stream_ratp_refresh" class="btn btn-default">
+                            <i class="fa fa-refresh fa-spin fa-fw " aria-hidden="true"></i>
+                            Recharger les horaires
+                        </button>
+
+                        <button id="stream_ratp_start" class="btn btn-default">
+                            <i class="fa fa-play" aria-hidden="true"></i>
+                            Streaming
+                        </button>
+                        <button id="stream_ratp_stop" class="btn btn-default">
+                            <i class="fa fa-stop" aria-hidden="true"></i>
+                            Streaming
+                        </button>
+                        <button id="local_storage_flush" class="btn btn-default">
+                            <i class="fa fa-power-off" aria-hidden="true"></i>
+                            Vider la memoire
+                        </button>
+
+
+                    </div>
+                </div>
+            </div>
+            <!-- end controle -->
+
+
+
+            <div id='form_ratp_add'>
+                <form class="input-group">
+                    <div class="awesomplete form-group">
+                        <h3>
+                            Recherches une ligne RATP, puis une station pour en voir les prochains passages.
+                        </h3>
+                        <label for="lines_input" id="label_lines_input" class="">
+                            Ligne RATP :
+                        </label>
+                        <br>
+                        <input  id="lines_input" class="form-control dropdown-input col-sm-10"  placeholder="Exemple : m5, b26, t3b ..." title="[m]etro, [b]us, [t]ram, [n]octilien, [r]er [RATP uniquement]" type="search" autocomplete="on" aria-autocomplete="list">
+                        <br>
+                        <i class="fa fa-info" aria-hidden="true" data-toggle="tooltip" title="Astuce : m5 pour [m]etros 5, b24 pour le [b]us 24 ..."></i>
+                        <small id="passwordHelpInline" class="text-muted">
+                            [m]etro, [b]us, [t]ram, [n]octilien, [r]er [RATP uniquement] <br/>
+
+                        </small>
+                    </div>
+                    <br />
+
+
+                    <div class="form-group awesomplete">
+                        <label for="stations_input" id="label_stations_input" class="">
+                            <span class="label-stations">
+                                Stations :
+                            </span>
+                        </label>
+                        <input  id="stations_input" type="search" class=" form-control dropdown-input" placeholder="Recherchez une station"  autocomplete="on" aria-autocomplete="list">
+                        <i class="fa fa-info" aria-hidden="true" data-toggle="tooltip" title="Astuce :"></i>
+                        <small id="passwordHelpInline" class="text-muted">
+                            Autocomplete commence à la 1ere lettre tappée.
+                        </small>
+                    </div>
+                </form>
             </div>
 
         </div>
