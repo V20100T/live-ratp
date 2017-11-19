@@ -338,7 +338,7 @@ function buildStreamRatp(rep) {
 
   addStreamToLocalStorage(stream_slug);
 
-  var html_station = '<!-- station -->' +
+  var html_station = '<!--  ratpUI station -->' +
     '<div class="panel-body" id="' + rep.informations.line + div_station_slug +
     '">' +
     '<div class="station ' + div_station_slug + '" id="' + div_station_slug +

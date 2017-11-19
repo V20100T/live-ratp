@@ -1,172 +1,420 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title> RATP jquery - work in progress...</title>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title> RATP jquery - work in progress...</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- http://paulferrett.com/fontawesome-favicon/
-  <link rel="shortcut icon" href="./favicon-ticket.ico">
--->
+        <!-- http://paulferrett.com/fontawesome-favicon/
+        <link rel="shortcut icon" href="./favicon-ticket.ico">
+        -->
 
-<!--
-Image Générator :
-   http://fa2png.io/
-Favico Générator :
-   http://realfavicongenerator.net/favicon_result?file_id=p1b8nsimarimu1s8j198f168mjdm6#.WJ-xBfI9iSo
+        <!--
+        Image Générator :
+           http://fa2png.io/
+        Favico Générator :
+           http://realfavicongenerator.net/favicon_result?file_id=p1b8nsimarimu1s8j198f168mjdm6#.WJ-xBfI9iSo
+        
+        -->
+        <link rel="shortcut icon" href="./favicon/favicon.ico">
+        <link rel="apple-touch-icon" sizes="180x180" href="./favico/apple-touch-icon.png">
+        <link rel="icon" type="image/png" href="./favico/favicon-32x32.png" sizes="32x32">
+        <link rel="icon" type="image/png" href="./favico/favicon-16x16.png" sizes="16x16">
+        <link rel="manifest" href="./favico/manifest.json">
+        <link rel="mask-icon" href="./favico/safari-pinned-tab.svg" color="#5bbad5">
+        <link rel="shortcut icon" href="./favico/favicon.ico">
+        <meta name="msapplication-config" content="./favico/browserconfig.xml">
+        <meta name="theme-color" content="#ffffff">
 
--->
-<link rel="shortcut icon" href="./favicon/favicon.ico">
-<link rel="apple-touch-icon" sizes="180x180" href="./favico/apple-touch-icon.png">
-<link rel="icon" type="image/png" href="./favico/favicon-32x32.png" sizes="32x32">
-<link rel="icon" type="image/png" href="./favico/favicon-16x16.png" sizes="16x16">
-<link rel="manifest" href="./favico/manifest.json">
-<link rel="mask-icon" href="./favico/safari-pinned-tab.svg" color="#5bbad5">
-<link rel="shortcut icon" href="./favico/favicon.ico">
-<meta name="msapplication-config" content="./favico/browserconfig.xml">
-<meta name="theme-color" content="#ffffff">
+        <link rel="stylesheet" href="js/awesomplete/awesomplete.css">
+        <script src="js/awesomplete/awesomplete.js"></script>
 
-  <link rel="stylesheet" href="js/awesomplete/awesomplete.css">
-  <script src="js/awesomplete/awesomplete.js"></script>
-
-  <script src="js/underscore-min.js"></script>
-<!--
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js"></script>
--->
-
-
-
-    <script src="js/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
-     <!-- Bootstrap -->
-     <link  id="bootswatch_theme" href="css/bootstrap.min.css" rel="stylesheet" >
-        <script src="css/bootstrap.min.js"></script>
-   <!--
-        <link id="bootswatch_theme" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/darkly/bootstrap.min.css" rel="stylesheet" >
--->
-    <!-- icones -->
-    <script src="css/154af993bf.js"></script>
-
-    <link rel="stylesheet" href="css/stream_ratp_bus.css  ">
-    <link rel="stylesheet" href="css/stream_ratp_metro.css  ">
-    <link rel="stylesheet" href="css/stream_ratp_rer_tram.css  ">
-    <link rel="stylesheet" href="css/style.css  ">
-    <link rel="stylesheet" href="css/style_media_query.css  ">
-
-    <script src="js/localStorage.js"></script>
-    <script src="js/tools.js"></script>
-    <script src="js/ratpApiV3awesomcomplete.js"></script>
-    <script src="js/css_theme_selector.js"></script>
-
-    <script src="js/domEventUi.js"></script>
-
-<style>
+        <script src="js/underscore-min.js"></script>
+        <!--
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js"></script>
+        -->
 
 
-</style>
-  <script>
+        <!-- Sets initial viewport load and disables zooming  -->
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+
+        <!-- Makes your prototype chrome-less once bookmarked to your phone's home screen -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+        <!-- Bootstrap -->
+        <!--        <link  id="bootswatch_theme" href="css/bootstrap.min.css" rel="stylesheet" >
+                <script src="css/bootstrap.min.js"></script>-->
+        <!--
+             <link id="bootswatch_theme" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/darkly/bootstrap.min.css" rel="stylesheet" >
+        -->
+
+        <!-- Include the compiled Ratchet CSS -->
+        <link href="./css/ratchet.css" rel="stylesheet">
+
+        <!-- Optionally, include either the iOS or Android theme -->
+        <link href="./css/ratchet-theme-ios.css" rel="stylesheet">
+
+        <link href="./css/icofont/css/icofont.css" rel="stylesheet">
+        <!--<link rel="stylesheet" href="./css/font-awesome-4.7.0/css/font-awesome.min.css">-->
+
+        <!-- Include the compiled Ratchet JS -->
+        <script src="./js/ratchet.js"></script>
+
+        <script
+            src="https://code.jquery.com/jquery-3.2.1.js"
+            integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+        crossorigin="anonymous"></script>
+
+
+        <script src="js/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
+
+        <!-- icones -->
+        <script src="css/154af993bf.js"></script>
+
+        <link rel="stylesheet" href="css/stream_ratp_bus.css  ">
+        <link rel="stylesheet" href="css/stream_ratp_metro.css  ">
+        <link rel="stylesheet" href="css/stream_ratp_rer_tram.css  ">
+        <link rel="stylesheet" href="css/style.css  ">
+        <link rel="stylesheet" href="css/style_media_query.css  ">
+
+        <script src="js/localStorage.js"></script>
+        <script src="js/tools.js"></script>
+        <script src="js/ratpApiV3awesomcomplete.js"></script>
+        <script src="js/css_theme_selector.js"></script>
+
+        <script src="js/domEventUi.js"></script>
+
+        <style>
+
+
+        </style>
+        <script>
 
 
 
-</script>
+        </script>
 
 
-</head>
-<body>
-  <h1>RATP
-      <small>via api <a href="https://api-ratp.pierre-grimaud.fr/v3/documentation" target="_blank">pierre-grimaud v3</a></small>
-  </h1>
+    </head>
+    <body>
+
+        <!-- Make sure all your bars are the first things in your <body> -->
+        <header class="bar bar-nav">
+            <span class="pull-left" id="div_date"></span>
+            <span class="pull-left" id="div_horloge"></span>
+
+            <a class="icon icon-gear pull-right" href="#settingsModal"></a>
+            <a class="icon icon-plus pull-left" href="#addStationModal"></a>
+
+            <h1 class="title">
+                LIVE RATP
+            </h1>
 
 
-  <button class="btn btn-info stream_ratp_control_toggle">
-      <i class="fa fa-cog fa-spin" aria-hidden="true"></i>
-      Controles
-  </button>
 
-    <div id='form_ratp_add'>
-      <form class="form-inline">
-        <div class="awesomplete form-group">
-          <h3>
-            Recherches une ligne RATP, puis une station pour en voir les prochains passages.
-          </h3>
-        	<label for="lines_input" id="label_lines_input" class="">
-            Ligne RATP :
-            </label>
-            <input  id="lines_input" class="form-control dropdown-input col-sm-10"  placeholder="Exemple : m5, b26, t3b ..." title="[m]etro, [b]us, [t]ram, [n]octilien, [r]er [RATP uniquement]" type="text" autocomplete="on" aria-autocomplete="list">
-            <i class="fa fa-info" aria-hidden="true" data-toggle="tooltip" title="Astuce : m5 pour [m]etros 5, b24 pour le [b]us 24 ..."></i>
-            <small id="passwordHelpInline" class="text-muted">
-              [m]etro, [b]us, [t]ram, [n]octilien, [r]er [RATP uniquement] <br/>
+            <!-- Settings Modal -->
+            <div id="settingsModal" class="modal">
+                <header class="bar bar-nav">
+                    <a class="icon icon-close pull-right" href="#settingsModal"></a>
+                    <h1 class="title">Settings Example</h1>
+                </header>
 
-            </small>
-          </div>
-          <br />
+                <div class="content">
 
-              <div class="form-group awesomplete">
-                <label for="stations_input" id="label_stations_input" class="">
-                  <span class="label-stations">
-                    Stations :
-                  </span>
-                  </label>
-                  <input  id="stations_input" class=" form-control dropdown-input" placeholder="Recherchez une station"  autocomplete="on" aria-autocomplete="list">
-                  <i class="fa fa-info" aria-hidden="true" data-toggle="tooltip" title="Astuce :"></i>
-                  <small id="passwordHelpInline" class="text-muted">
-                    Autocomplete commence à la 1ere lettre tappée.
-                  </small>
-              </div>
-          </form>
+
+                    <div id="stream_ratp_control_settings" class="col-md-3">
+                        <div class="panel panel-default ">
+                            <div class="panel-heading stream_ratp_control_toggle">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h3 class="panel-title"> <i class="fa fa-cogs  fa-spin fa-fw" aria-hidden="true"></i>
+                                    Controles
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+
+                                <label id="">Changer le theme</label>
+                                <select name="css_theme_selector" id="css_theme_selector-select">
+                                    <option value="null" selected="true" disabled="disabled" >Changer le theme ...</option>
+                                </select>
+
+                                <button id="stream_ratp_refresh" class="btn btn-default">
+                                    <i class="fa fa-refresh fa-spin fa-fw " aria-hidden="true"></i>
+                                    Recharger les horaires
+                                </button>
+
+                                <button id="stream_ratp_start" class="btn btn-default">
+                                    <i class="fa fa-play" aria-hidden="true"></i>
+                                    Streaming
+                                </button>
+                                <button id="stream_ratp_stop" class="btn btn-default">
+                                    <i class="fa fa-stop" aria-hidden="true"></i>
+                                    Streaming
+                                </button>
+                                <button id="local_storage_flush" class="btn btn-default">
+                                    <i class="fa fa-power-off" aria-hidden="true"></i>
+                                    Vider la memoire
+                                </button>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end controle -->
+
+
+                    <form class="input-group">
+                        <input type="text" placeholder="Full name">
+                        <input type="email" placeholder="Email">
+                        <input type="text" placeholder="Username">
+                    </form>
+
+                    <h5 class="content-padded">App settings</h5>
+
+                    <ul class="table-view">
+                        <li class="table-view-cell media">
+                            <span class="media-object pull-left icon icon-sound"></span>
+                            <div class="media-body">
+                                Enable sounds
+                            </div>
+                            <div class="toggle">
+                                <div class="toggle-handle"></div>
+                            </div>
+                        </li>
+                        <li class="table-view-cell media">
+                            <span class="media-object pull-left icon icon-person"></span>
+                            <div class="media-body">
+                                Parental controls
+                            </div>
+                            <div class="toggle">
+                                <div class="toggle-handle"></div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="content-padded">
+                        <button class="btn btn-positive btn-block">Save settings</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div id="addStationModal" class="modal">
+                <header class="bar bar-nav">
+                    <a class="icon icon-close pull-right" href="#addStationModal"></a>
+                    <h1 class="title">Ajouter une station</h1>
+                </header>
+
+                <div class="content">
+
+
+                    <div id='form_ratp_add'>
+                        <form class="form-inline">
+                            <div class="awesomplete form-group">
+                                <h3>
+                                    Recherches une ligne RATP, puis une station pour en voir les prochains passages.
+                                </h3>
+                                <label for="lines_input" id="label_lines_input" class="">
+                                    Ligne RATP :
+                                </label>
+                                <input  id="lines_input" class="form-control dropdown-input col-sm-10"  placeholder="Exemple : m5, b26, t3b ..." title="[m]etro, [b]us, [t]ram, [n]octilien, [r]er [RATP uniquement]" type="text" autocomplete="on" aria-autocomplete="list">
+                                <i class="fa fa-info" aria-hidden="true" data-toggle="tooltip" title="Astuce : m5 pour [m]etros 5, b24 pour le [b]us 24 ..."></i>
+                                <small id="passwordHelpInline" class="text-muted">
+                                    [m]etro, [b]us, [t]ram, [n]octilien, [r]er [RATP uniquement] <br/>
+
+                                </small>
+                            </div>
+                            <br />
+
+                            <div class="form-group awesomplete">
+                                <label for="stations_input" id="label_stations_input" class="">
+                                    <span class="label-stations">
+                                        Stations :
+                                    </span>
+                                </label>
+                                <input  id="stations_input" class=" form-control dropdown-input" placeholder="Recherchez une station"  autocomplete="on" aria-autocomplete="list">
+                                <i class="fa fa-info" aria-hidden="true" data-toggle="tooltip" title="Astuce :"></i>
+                                <small id="passwordHelpInline" class="text-muted">
+                                    Autocomplete commence à la 1ere lettre tappée.
+                                </small>
+                            </div>
+                        </form>
+                    </div>
+
+
+
+                    <form class="input-group">
+                        <input type="text" placeholder="Full name">
+                        <input type="email" placeholder="Email">
+                        <input type="text" placeholder="Username">
+                    </form>
+
+                    <h5 class="content-padded">App settings</h5>
+
+                    <ul class="table-view">
+                        <li class="table-view-cell media">
+                            <span class="media-object pull-left icon icon-sound"></span>
+                            <div class="media-body">
+                                Enable sounds
+                            </div>
+                            <div class="toggle">
+                                <div class="toggle-handle"></div>
+                            </div>
+                        </li>
+                        <li class="table-view-cell media">
+                            <span class="media-object pull-left icon icon-person"></span>
+                            <div class="media-body">
+                                Parental controls
+                            </div>
+                            <div class="toggle">
+                                <div class="toggle-handle"></div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="content-padded">
+                        <button class="btn btn-positive btn-block">Save settings</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </header>
+
+        <!-- Block button in standard bar fixed below top bar -->
+        <!--        <div class="bar bar-standard bar-header-secondary">
+                    <button class="btn btn-block">Ajouter une station</button>
+                </div>-->
+
+        <div class="content content-padded">
+
+
+
+
+
+            <ul id="traffic">
+            </ul>
+
+            <ul id="ratp_schedules" class="table-view">
+            </ul>
+      
+
+            <div class="card">
+                <ul class="table-view">
+                    <li class="table-view-cell">
+                        <a class="navigate-right" href="../two.html" data-transition="slide-in">
+                            Ajouter une station
+                        </a>
+                    </li>
+                    <li class="table-view-cell">
+                        <a class="navigate-right" href="../two.html" data-transition="slide-in">
+                            Configuration
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+
+            <ul class="table-view">
+                <li class="table-view-cell table-view-divider">Recommended movies</li>
+                <li class="table-view-cell media">
+                    <a class="navigate-right" href="choose-theater.html" data-transition="slide-in">
+                        <img class="media-object pull-left" src="http://placehold.it/64x64" alt="Placeholder image for Argo's poster">
+                        <div class="media-body">
+                            Argo
+                            <p>Lorem ipsum dolor sit amet, consectetur.</p>
+                        </div>
+                    </a>
+                </li>
+                <li class="table-view-cell media">
+                    <a class="navigate-right" href="choose-theater.html" data-transition="slide-in">
+                        <img class="media-object pull-left" src="http://placehold.it/64x64" alt="Placeholder image for Skyfall's poster">
+                        <div class="media-body">
+                            Skyfall: 007
+                            <p>Lorem ipsum dolor sit amet, consectetur.</p>
+                        </div>
+                    </a>
+                </li>
+
+
+
+
+            </ul>
+
+            <ul class="table-view">
+                <li class="table-view-cell media station" id="metros_1_bastille_test">
+                    <a class="pull-right icon icon-close close delete_streaming " data-ratp_stream_slug="metros_1_bastille"></a>
+                    <!--<i class="fa fa-subway" aria-hidden="true"></i>-->
+                    <h4>
+                        <button class=" metros_line metros_line1" type="button" data-transport="metros" data-line="1">1</button>
+                        Bastille
+                        <span class="badge badge-positive traffic_station traffic_station_metros_1 " title="Trafic normal sur l'ensemble de la ligne.">Trafic normal</span>
+                    </h4>
+                    <p>M1 &gt;&gt; La Defense / Chateau de Vincennes</p>
+                    <div class="schedules">
+                            <div id="metros_1_bastille_r_test" class="  media schedule schedule_r">
+                                <div class="media-body">
+                                    <h6>
+                                        Chateau de Vincennes  <span class="small heure">20:13:02</span> 
+                                    </h6>
+                                    <p>
+                                         <button class="btn btn-negative">8 mn</button>
+                                         <button class="btn btn-positive">8 mn</button>
+                                         <button class="btn btn-default">8 mn</button>
+                                         <button class="btn btn-primary">8 mn</button>
+                                    </p>
+                                </div>
+                            </div>
+                            <div id="metros_1_bastille_a_test" class="  media schedule schedule_a">
+                                <div class="media-body">
+                                    <h6>
+                                        La Defense (Grande Arche) <span class="small heure">20:13:02</span> 
+                                    </h6>
+                                    <p>
+                                        <button class="btn btn-negative">8 mn</button>
+                                         <button class="btn btn-positive">8 mn</button>
+                                         <button class="btn btn-default">8 mn</button>
+                                         <button class="btn btn-primary">8 mn</button>
+                                    </p>
+                                </div>
+                            </div><!-- fin schedules --> 
+                    </div> 
+                </li>
+
+            </ul>
+            <br>
+            <br>
+            <br>
         </div>
 
-    <div class="row row-fluid">
-
-    <div id="stream_ratp_control" class="col-md-3">
-        <div class="panel panel-default ">
-            <div class="panel-heading stream_ratp_control_toggle">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h3 class="panel-title"> <i class="fa fa-cogs  fa-spin fa-fw" aria-hidden="true"></i>
-                    Controles
-                </h3>
-            </div>
-            <div class="panel-body">
-
-              <label id="">Changer le theme</label>
-             <select name="css_theme_selector" id="css_theme_selector-select">
-                <option value="null" selected="true" disabled="disabled" >Changer le theme ...</option>
-              </select>
-
-                 <button id="stream_ratp_refresh" class="btn btn-default">
-                    <i class="fa fa-refresh fa-spin fa-fw " aria-hidden="true"></i>
-                      Recharger les horaires
-                </button>
-
-                <button id="stream_ratp_start" class="btn btn-default">
-                    <i class="fa fa-play" aria-hidden="true"></i>
-                    Streaming
-                </button>
-                <button id="stream_ratp_stop" class="btn btn-default">
-                    <i class="fa fa-stop" aria-hidden="true"></i>
-                    Streaming
-                </button>
-                <button id="local_storage_flush" class="btn btn-default">
-                    <i class="fa fa-power-off" aria-hidden="true"></i>
-                    Vider la memoire
-                </button>
 
 
-            </div>
-        </div>
-    </div>
-    <!-- end controle -->
-  </div>
+        <nav class="bar bar-tab">
+            <a class="tab-item active" href="index.php">
+                <span class="icon icon-home"></span>
+                <span class="tab-label">Home</span>
+            </a>
+            <a class="tab-item" href="remotes_slide.php">
+                <i class="icon icofont icofont-train-line"></i>
+                <span class="tab-label">Metro</span>
+            </a>
+            <a class="tab-item" href="ratp.php">
+                <i class="icon fa fa-bus"></i>
+                <span class="tab-label">Bus</span>
+            </a>
+            <a class="tab-item" href="#">
+                <i class="icon fa fa-subway"></i>
+                <span class="tab-label">Tram et RER</span>
+            </a>
+            <a class="tab-item" href="#">
+                <span class="icon icon-gear"></span>
+                <span class="tab-label">Settings</span>
+            </a>
+        </nav>
 
-  <div class="row-fluid">
-    <ul id="traffic">
-    </ul>
-  </div>
-    <div id="ratp_schedules" class="container">
-    </div>
-
-
-
-</body>
+    </body>
 </html>

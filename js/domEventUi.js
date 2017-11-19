@@ -50,7 +50,8 @@ $(document).on('click', '#stream_ratp_stop', function() {
 function getLabelByScheduleMessage(mess) {
   var status_ordered = {
     danger: {
-      slug: 'danger',
+//      slug: 'danger',
+      slug: 'negative',
       mess: [
         'Service termine',
         'INFO INDISPO',
@@ -63,15 +64,17 @@ function getLabelByScheduleMessage(mess) {
       ]
     },
     warning: {
-      slug: 'warning',
+//      slug: 'warning',
+      slug: 'primary',
       mess: [
         'Train retarde'
       ]
     },
     success: {
-      slug: 'success',
+      slug: 'positive',
       mess: [
         "Train a l'approche",
+        "Train a quai",
         'mn',
         ':'
       ]
@@ -83,9 +86,12 @@ function getLabelByScheduleMessage(mess) {
     mess_details = _.object(['min', 'text'], mess.split(
       ' '));
     if (mess_details.min > 3 && mess_details.min < 10) {
-      return 'success';
+      return 'positive';
     }
-    return 'info';
+     if (mess_details.min > 15) {
+      return 'negative';
+    }
+    return 'primary';
   }
   var label = 'default';
   _.each(status_ordered, function(status, key) {
@@ -105,24 +111,43 @@ function getHtmlSchedules(sc, data) {
 
   //console.log('>> getHtmlSchedules ' + sc.slug + ' : '+ getHeure());
   scheduleId = slugApiToSlugJQ(sc.slug + '_' + sc.urls.key);
-  html = '<!-- schedules ' + sc.slug + ' -->' +
-    '<div id="' + scheduleId + '" class="schedule"><span class="heure">' +
-    getHeure() + '</span> ';
-
+//  html = '<!-- schedules ' + sc.slug + ' * '+scheduleId+ ' -->' +
+//    '<div id="' + scheduleId + '" class="schedule"><span class="heure">' +
+//    getHeure() + '</span> ';
+//    
+html = 
+//        '<!-- schedules ' + sc.slug + ' * '+scheduleId+ ' -->' +
+    '<div id="' + scheduleId + '" class="media schedule">'+
+        '<div class="media-body">'+
+            '<h6>'+ data[0].destination + 
+                '&nbsp;&nbsp;<span class="heure">' + getHeure() + '</span> ' +
+            '</h6> '+
+            '<p>';
+    
 
   _.each(data, function(stream, key) {
 
     //console.log('>>> stream : ', stream, key);
-    if (key == 0) {
-      html = html + stream.destination + ' :';
-    }
-    html = html + '<span class="label label-' + getLabelByScheduleMessage(
+//    if (key == 0) {
+//      html = html + stream.destination + ' :';
+//    }
+//    html = html + '<span class="label label-' + getLabelByScheduleMessage(
+//        stream.message) +
+//      '">' +
+//      stream.message +
+//      '</span> ';
+      
+    html = html + '<button class="btn btn-' + getLabelByScheduleMessage(
         stream.message) +
       '">' +
       stream.message +
-      '</span> '
+      '</button> ';
+      
+      
+      
   });
-  html = html + '</div><!-- fin schedules --> '
+//  html = html + '</div><!-- fin schedules --> '
+  html = html + '</p></div> </div> <!-- fin schedules --> ';
 
   //console.log('>>> HTML schedule : '+ sc.slug , html);
 
@@ -208,35 +233,54 @@ function showHtmlStation(sc) {
   //traffic only for metros', 'tramways', 'rers BY the api
   traffic_label = '';
   if (_.contains(['metros', 'tramways', 'rers'], sc.type)) {
-    traffic_label = '<span class="label label-default traffic_station_' + sc.type +
+    traffic_label = '<span class="badge badge-positive  traffic_station_' + sc.type +
       '_' + sc.line.slug + '">-</span>';
   }
 
 
 
-  html = '<!-- station -->' +
+//  html = '<!-- domUI station -->' +
+//
+//    '<div  class="station" id="' + slugApiToSlugJQ(sc.slug) + '">' +
+//    '<span class="close delete_streaming " data-ratp_stream_slug="' +
+//    slugApiToSlugJQ(sc.slug) +
+//    '"  href="#" aria-label="Supprimer de la mémoire" title="Supprimer de la mémoire">×</span>' +
+//    '<i class="fa fa-' + getFaIcoByType(sc.type) + '" aria-hidden="true"></i> ' +
+//
+//    sc.station.name +
+//    '<br> ' +
+//    '<button class="btn ' + sc.type + '_line ' + sc.type + '_line' + sc.line.slug +
+//    '" type="button" data-transport="' + sc.type + '" data-line="' + sc.line.slug +
+//    '">' +
+//    sc.line.slug +
+//    '</button>' +
+//    sc.line.name + traffic_label +
+//    ' ' +
+//    /*'<br><a href="'+sc.urls.a+'" target="_blank" >'+sc.urls.a+'</a><br>'+
+//    '<a href="'+sc.urls.r+'" target="_blank" >'+sc.urls.r+'</a><br>'+
+//    */
+//    '<div class="schedules"></div> ' +
+//    '<hr></div>' +
+//    '<!-- fin station  domUI -->';
 
-    '<div  class="station" id="' + slugApiToSlugJQ(sc.slug) + '">' +
-    '<span class="close delete_streaming " data-ratp_stream_slug="' +
+
+    html = '<li class="table-view-cell media station" id="' + slugApiToSlugJQ(sc.slug) + '">' +
+            '<a class="pull-right icon icon-close close delete_streaming " data-ratp_stream_slug="' +
     slugApiToSlugJQ(sc.slug) +
-    '"  href="#" aria-label="Supprimer de la mémoire" title="Supprimer de la mémoire">×</span>' +
-    '<i class="fa fa-' + getFaIcoByType(sc.type) + '" aria-hidden="true"></i> ' +
+    '" ></a>'+
+                '<h4>'+
+                '<button class=" ' + sc.type + '_line ' + sc.type + '_line' + sc.line.slug +
+                '" type="button" data-transport="' + sc.type + '" data-line="' + sc.line.slug +
+                '">' + sc.line.slug +
+                '</button> ' + 
+                sc.station.name + ' '+ traffic_label +
+              ' </h4> '+
+              ' <p> '+
+              sc.line.name + 
+              '</p><div class="schedules"></div> ' +
 
-    sc.station.name +
-    '<br> ' +
-    '<button class="btn ' + sc.type + '_line ' + sc.type + '_line' + sc.line.slug +
-    '" type="button" data-transport="' + sc.type + '" data-line="' + sc.line.slug +
-    '">' +
-    sc.line.slug +
-    '</button>' +
-    sc.line.name + traffic_label +
-    ' ' +
-    /*'<br><a href="'+sc.urls.a+'" target="_blank" >'+sc.urls.a+'</a><br>'+
-    '<a href="'+sc.urls.r+'" target="_blank" >'+sc.urls.r+'</a><br>'+
-    */
-    '<div class="schedules"></div> ' +
-    '<hr></div>' +
-    '<!-- fin station -->';
+            '</li>';
+                
 
   html = '<div class="st_' + slugApiToSlugJQ(sc.station.slug) + '" id="' +
     //slugApiToSlugJQ(sc.station.slug)

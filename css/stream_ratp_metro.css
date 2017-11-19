@@ -17,6 +17,7 @@
   font-size: 12px;
   line-height: 1.428571429;
   border-radius: 15px; 
+  border: none;
 }
 /* Station */
 .metros_line_station {

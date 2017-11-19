@@ -4,10 +4,10 @@
   box-sizing: border-box;
 }
 
-body{
+/*body{
   margin:40px;
 
-}
+}*/
 
 .panel-body {
     padding: 5px;
@@ -42,4 +42,36 @@ b.item{
 }
 i.item{
   font-size: 0.7em;
+}
+
+/*.schedule_r{
+    background-color: cornsilk;
+}
+
+.schedule_a{
+    background-color: #ecccca;
+}*/
+
+.traffic_station{
+    position: static !important;
+    padding: 7px;
+}
+
+
+.schedule h6{
+    color : black;
+}
+
+.table-view-cell {
+    padding: 10px 10px;
+}
+
+.delete_streaming{
+margin-right: 0px !important;
+
+margin-top: -10px !important;
+}
+
+.station{
+    border-bottom: 1px solid black !important;
 }
