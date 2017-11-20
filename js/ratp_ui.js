@@ -534,7 +534,6 @@ $(document).ready(function() {
   $("#stream_ratp_control").toggle();
 
 
-
 });
 
 //Ajax loader UI

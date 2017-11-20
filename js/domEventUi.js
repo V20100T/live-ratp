@@ -1,3 +1,14 @@
+$(document).on('click touch', '.showConfig', function() {
+
+  $('#form_ratp_config').slideToggle();
+
+});
+$(document).on('click touch', '.showAddStation', function() {
+
+  $('#form_ratp_add').slideToggle();
+
+});
+
 $(document).on('click', '.test', function() {
 
   Awesomplete.$.bind(
@@ -14,14 +25,19 @@ $(document).on('click', '.test', function() {
 });
 
 
-$(document).ready(function() {
-
-  $("#stream_ratp_control").toggle();
+function init(){
+      $("#stream_ratp_control").toggle();
   $('#lines_input').val("").focus();
   buildSchedules(false);
   //refreshTraffic();
   startStreamRatp();
   $('#traffic').toggle();
+
+}
+
+$(document).ready(function() {
+
+    init();
 
 });
 
