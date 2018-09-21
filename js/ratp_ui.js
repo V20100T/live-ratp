@@ -5,7 +5,8 @@
  *
  * *****************************/
 
-var stream_ratp_api_url = 'https://api-ratp.pierre-grimaud.fr/v3/';
+//var stream_ratp_api_url = 'https://api-ratp.pierre-grimaud.fr/v3/';
+var stream_ratp_api_url = 'http://192.168.99.100:8082/ratp/';
 var stream_ratp_time = 1000 * 35;
 
 /************************************************

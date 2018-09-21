@@ -5,14 +5,17 @@
  *
  * *****************************/
 
-var stream_ratp_api_url = 'https://api-ratp.pierre-grimaud.fr/v3/';
+//var stream_ratp_api_url = 'https://api-ratp.pierre-grimaud.fr/v3/';
+var stream_ratp_api_url = 'http://192.168.99.100:8082/ratp/';
 var stream_ratp_time = 1000 * 35;
 
 
 
 var input = document.getElementById("lines_input");
 var ajax = new XMLHttpRequest();
-urlLines = "https://api-ratp.pierre-grimaud.fr/v3/lines";
+//urlLines = "https://api-ratp.pierre-grimaud.fr/v3/lines";
+urlLines = "http://192.168.99.100:8082/ratp/lines";
+
 ajax.open("GET", urlLines, true);
 ajax.onload = function() {
   console.log('>> ajax onload ' + urlLines);
@@ -263,8 +266,8 @@ function selectLineWithPicker(evt) {
   //STATIONS :
   var ajaxStations = new XMLHttpRequest();
   // GET /stations/{type}/{code}
-  url = "https://api-ratp.pierre-grimaud.fr/v3/stations/" + line.type + '/' +
-    line.slug;
+  //url = "https://api-ratp.pierre-grimaud.fr/v3/stations/" + line.type + '/' + line.slug;
+  url = "http://192.168.99.100:8082/ratp/stations/" + line.type + '/' + line.slug;
   //console.log(url);
   ajaxStations.open("GET", url, true);
   ajaxStations.onload = function() {
@@ -316,10 +319,12 @@ function selectStationstWithPicker(evt) {
       slug: evt.text.value,
       name: evt.text.label
     }, {
-      a: "https://api-ratp.pierre-grimaud.fr/v3/schedules/" + line.type + '/' +
-        line.slug + '/' + evt.text.value + '/A',
-      r: "https://api-ratp.pierre-grimaud.fr/v3/schedules/" + line.type + '/' +
-        line.slug + '/' + evt.text.value + '/R'
+      /*
+	  a: "https://api-ratp.pierre-grimaud.fr/v3/schedules/" + line.type + '/' + line.slug + '/' + evt.text.value + '/A',
+      r: "https://api-ratp.pierre-grimaud.fr/v3/schedules/" + line.type + '/' + line.slug + '/' + evt.text.value + '/R'
+	  */
+	  a: "http://192.168.99.100:8082/ratp/schedules/" + line.type + '/' + line.slug + '/' + evt.text.value + '/A',
+      r: "http://192.168.99.100:8082/ratp/schedules/" + line.type + '/' + line.slug + '/' + evt.text.value + '/R'
 
     }
   );
